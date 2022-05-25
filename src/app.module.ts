@@ -1,10 +1,8 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
-import { DonationsController } from './donations/donations.controller';
-import { DonationsService } from './donations/donations.service';
+import { DonationModule } from './donations/donations.module';
 
 @Module({
-  imports: [],
-  controllers: [DonationsController],
-  providers: [DonationsService],
+  imports: [ConfigModule.forRoot(), DonationModule],
 })
 export class AppModule {}

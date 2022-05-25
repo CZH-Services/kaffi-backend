@@ -26,8 +26,8 @@ export class DonationsController {
     description: 'Donations records',
     type: [DonationResponse],
   })
-  findAll(): DonationResponse[] {
-    return this.donationsService.findAll();
+  async findAll(): Promise<DonationResponse[]> {
+    return await this.donationsService.findAll();
   }
 
   @Get(':id')
@@ -35,8 +35,9 @@ export class DonationsController {
   @ApiOperation({ summary: 'Get a donation by ID' })
   @ApiOkResponse({ description: "A user's donation", type: DonationResponse })
   @ApiForbiddenResponse({ description: "You're not allowed in here." })
-  findOne(@Param('id') id: number): DonationResponse {
-    return this.donationsService.findOne(id);
+  async findOne(@Param('id') id: number): Promise<DonationResponse> {
+    // one thing missing are the validators
+    return await this.donationsService.findOne(id);
   }
 
   @Post()
@@ -47,7 +48,8 @@ export class DonationsController {
     type: DonationResponse,
   })
   @ApiBadRequestResponse({ description: 'Bad request' })
-  donate(@Body() donation: CreateDonation): DonationResponse {
-    return this.donationsService.create(donation);
+  async donate(@Body() donation: CreateDonation): Promise<void> {
+    // one thing missing are the validators
+    await this.donationsService.insertDonation(donation);
   }
 }

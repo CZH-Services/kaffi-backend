@@ -1,36 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { Donation } from './models/donation';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DonationResponse } from './dto/donationResponse';
+import { DonationRepository } from './donations.repository';
 import { CreateDonation } from './dto/createDonation';
+import { Donation } from './entities/donation';
 
 @Injectable()
 export class DonationsService {
-  private readonly donations: Donation[] = [
-    { id: 1, name: 'Hussein Khamis', amount: 10 },
-    { id: 2, name: 'Charbel Soufia', amount: 100 },
-    { id: 3, name: 'Zeinab Zeitoun', amount: 10 },
-  ];
-  private lastIndex: number = 4;
+  constructor(private readonly donationRepository: DonationRepository) {}
 
-  findAll(): DonationResponse[] {
-    return this.donations.map(
-      (donation: Donation) => <DonationResponse>donation,
-    );
+  async findAll(): Promise<DonationResponse[]> {
+    const donations = await this.donationRepository.findAll();
+    return donations.map((donation) => <DonationResponse>donation);
   }
 
-  findOne(id: number): DonationResponse {
-    const donation = this.donations.find((donation) => donation.id === id);
+  async findOne(id: number): Promise<DonationResponse> {
+    const donation = await this.donationRepository.findOne(id);
     if (!donation) {
-      throw Error('Donation not found');
+      // not sure if it works as we can't even fetch one..
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
     return <DonationResponse>donation;
   }
 
-  create(donation: CreateDonation): DonationResponse {
-    const newDonation = <Donation>donation;
-    newDonation.id = this.lastIndex;
-    this.lastIndex += 1;
-    this.donations.push(newDonation);
-    return <DonationResponse>donation;
+  async insertDonation(donation: CreateDonation): Promise<void> {
+    await this.donationRepository.insertDonation(<Donation>donation);
   }
 }
