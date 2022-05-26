@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Donation } from './entities/donation';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class DonationRepository {
   constructor(private readonly database: DatabaseService) {}
 

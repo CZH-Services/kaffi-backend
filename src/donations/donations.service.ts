@@ -1,10 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { DonationResponse } from './dto/donationResponse';
 import { DonationRepository } from './donations.repository';
 import { CreateDonation } from './dto/createDonation';
 import { Donation } from './entities/donation';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class DonationsService {
   constructor(private readonly donationRepository: DonationRepository) {}
 
