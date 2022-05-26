@@ -16,8 +16,7 @@ export class DonationsService {
   async findOne(id: number): Promise<DonationResponse> {
     const donation = await this.donationRepository.findOne(id);
     if (!donation) {
-      // not sure if it works as we can't even fetch one..
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Donation not Found', HttpStatus.NOT_FOUND);
     }
     return <DonationResponse>donation;
   }

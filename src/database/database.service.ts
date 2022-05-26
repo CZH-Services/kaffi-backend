@@ -16,7 +16,7 @@ export class DatabaseService {
     });
   }
 
-  async query(query: string): Promise<any> {
-    return this.pool.query(query);
+  async query(query: string, params: any[] = []): Promise<any> {
+    return this.pool.query(query, params);
   }
 }

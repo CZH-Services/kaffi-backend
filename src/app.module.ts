@@ -3,6 +3,6 @@ import { Module } from '@nestjs/common';
 import { DonationModule } from './donations/donations.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DonationModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DonationModule],
 })
 export class AppModule {}

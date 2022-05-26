@@ -21,11 +21,9 @@ export class DonationRepository {
   }
 
   async findOne(id: number): Promise<Donation> {
-    return this.database
-      .query('SELECT * FROM Donation WHERE id = ' + id)
+    return await this.database
+      .query('SELECT * FROM Donation WHERE id = $1', [id])
       .then((res) => {
-        console.log(res);
-
         if (res.rows.length === 1) {
           return <Donation>res.rows[0];
         }

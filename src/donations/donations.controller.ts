@@ -6,13 +6,13 @@ import {
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { DonationsService } from './donations.service';
 import { CreateDonation } from './dto/createDonation';
 import { DonationResponse } from './dto/donationResponse';
+import { GetDonation } from './dto/getDonation';
 
 @ApiTags('Donations')
 @Controller('donations')
@@ -31,13 +31,11 @@ export class DonationsController {
   }
 
   @Get(':id')
-  @ApiQuery({ name: 'id' })
   @ApiOperation({ summary: 'Get a donation by ID' })
   @ApiOkResponse({ description: "A user's donation", type: DonationResponse })
   @ApiForbiddenResponse({ description: "You're not allowed in here." })
-  async findOne(@Param('id') id: number): Promise<DonationResponse> {
-    // one thing missing are the validators
-    return await this.donationsService.findOne(id);
+  async findOne(@Param() id: GetDonation): Promise<DonationResponse> {
+    return await this.donationsService.findOne(id.id);
   }
 
   @Post()
@@ -49,7 +47,6 @@ export class DonationsController {
   })
   @ApiBadRequestResponse({ description: 'Bad request' })
   async donate(@Body() donation: CreateDonation): Promise<void> {
-    // one thing missing are the validators
     await this.donationsService.insertDonation(donation);
   }
 }
