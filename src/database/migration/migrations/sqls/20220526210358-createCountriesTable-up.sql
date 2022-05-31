@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS countries (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     name JSON
 )
