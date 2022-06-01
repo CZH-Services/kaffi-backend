@@ -32,12 +32,30 @@ export class WebinarService {
   }
 
   async updateWebinar(info: UpdateWebinarRequest): Promise<boolean> {
+    const highestRank = <number>(
+      await this.webinarRepository.getHighestWebinarRanks()
+    );
+    if (info.rank > highestRank || info.rank <= 0) {
+      throw new HttpException('Invalid Rank', HttpStatus.NOT_FOUND);
+    }
+
+    const prevWebinar = await this.webinarRepository.findOne(<number>info.id);
+    if (!prevWebinar) {
+      throw new HttpException('Webinar not Found', HttpStatus.NOT_FOUND);
+    }
+    if (info.rank !== prevWebinar.rank) {
+      const increment = info.rank > prevWebinar.rank;
+      const minRank = increment ? prevWebinar.rank + 1 : info.rank;
+      const maxRank = increment ? info.rank : prevWebinar.rank - 1;
+      await this.webinarRepository.updateWebinarsRank(
+        minRank,
+        maxRank,
+        increment,
+      );
+    }
     const updateResponse = await this.webinarRepository.updateWebinar(
       <UpdateWebinarRequest>info,
     );
-    if (!updateResponse) {
-      throw new HttpException('Webinar not Found', HttpStatus.NOT_FOUND);
-    }
     return <boolean>updateResponse;
   }
 }

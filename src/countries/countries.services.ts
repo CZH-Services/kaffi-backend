@@ -4,10 +4,14 @@ import { Country } from './entities/country';
 import { GetCountryResponse } from './dto/getCountryResponse';
 import { InsertCountryRequest } from './dto/insertCountryRequest';
 import { UpdateCountryRequest } from './dto/updateCountryRequest';
+import { WebinarRepository } from 'src/webinars/webinars.repository';
 
 @Injectable()
 export class CountriesService {
-  constructor(private readonly countryRepository: CountryRepository) {}
+  constructor(
+    private readonly countryRepository: CountryRepository,
+    private readonly webinarRepository: WebinarRepository,
+  ) {}
 
   async findAll(): Promise<GetCountryResponse[]> {
     const countries = await this.countryRepository.findAll();
@@ -40,6 +44,15 @@ export class CountriesService {
   }
 
   async deleteCountry(id: number): Promise<boolean> {
+    const countryWebinar = await this.webinarRepository.getCountryWebinar(
+      <number>id,
+    );
+    if (countryWebinar) {
+      throw new HttpException(
+        'Country is linked to a webinar',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const deleteResponse = await this.countryRepository.deleteCountry(
       <number>id,
     );

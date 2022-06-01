@@ -17,6 +17,21 @@ export class WebinarRepository {
       });
   }
 
+  async findOne(id: number): Promise<GetWebinarResponse> {
+    return this.database
+      .query(
+        'SELECT w.id AS id, w.rank AS rank, w.youtubeUrl AS youtubeUrl, w.countryIconUrl AS countryIconUrl, c.name AS country, \
+        c.id AS countryId FROM webinars AS w INNER JOIN countries AS c on w.countryId = c.id WHERE w.id = $1',
+        [id],
+      )
+      .then((res) => {
+        if (res.rows.length === 1) {
+          return <GetWebinarResponse>res.rows[0];
+        }
+        return undefined;
+      });
+  }
+
   async getCountryWebinar(countryId: number): Promise<GetWebinarResponse> {
     return this.database
       .query(
@@ -47,12 +62,29 @@ export class WebinarRepository {
   async updateWebinar(data: UpdateWebinarRequest): Promise<boolean> {
     return this.database
       .query(
-        'UPDATE webinars SET youtubeUrl = $1, countryIconUrl = $2 WHERE id = $3',
-        [data.youtubeUrl, data.countryIconUrl, data.id],
+        'UPDATE webinars SET youtubeUrl = $1, countryIconUrl = $2, rank = $3 WHERE id = $4',
+        [data.youtubeUrl, data.countryIconUrl, data.rank, data.id],
       )
       .then((res) => {
         return res.rowCount > 0;
       });
+  }
+
+  async updateWebinarsRank(
+    minRank: number,
+    maxRank: number,
+    increment: boolean,
+  ): Promise<void> {
+    if (increment) {
+      return this.database.query(
+        'UPDATE webinars SET rank = rank - 1 WHERE rank >= $1 AND rank <= $2',
+        [minRank, maxRank],
+      );
+    }
+    return this.database.query(
+      'UPDATE webinars SET rank = rank + 1 WHERE rank >= $1 AND rank <= $2',
+      [minRank, maxRank],
+    );
   }
 
   async getHighestWebinarRanks(): Promise<number> {
