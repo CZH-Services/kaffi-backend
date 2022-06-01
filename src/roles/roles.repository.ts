@@ -18,17 +18,6 @@ export class RolesRepository {
       });
   }
 
-  async getRoleById(id: number): Promise<Role> {
-    return this.database
-      .query('SELECT * FROM KaffiRole WHERE id = $1;', [id])
-      .then((res) => {
-        if (res.rows.length === 1) {
-          return <Role>res.rows[0];
-        }
-        return undefined;
-      });
-  }
-
   async getRoleByName(name: string): Promise<Role> {
     return this.database
       .query('SELECT * FROM KaffiRole WHERE name = $1', [name])
@@ -46,19 +35,19 @@ export class RolesRepository {
     });
   }
 
-  async updateRole(id: number, role: Role): Promise<boolean> {
+  async updateRole(role: Role): Promise<boolean> {
     return this.database
-      .query(`UPDATE KaffiRole SET name = '${role.name}' WHERE id = ${id}`)
-      .then(() => {
-        return true;
+      .query(`UPDATE KaffiRole SET name = '${role.name}' WHERE id = ${role.id}`)
+      .then((res) => {
+        return res.rowCount > 0;
       });
   }
 
   async deleteRole(id: number): Promise<boolean> {
     return this.database
       .query(`DELETE FROM KaffiRole WHERE id = ${id}`)
-      .then(() => {
-        return true;
+      .then((res) => {
+        return res.rowCount > 0;
       });
   }
 }

@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { DonationModule } from './donations/donations.module';
 import { UserModule } from './user/user.module';
 import { RoleModule } from './roles/role.module';
+import { CommitteeModule } from './committee/committee.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { RoleModule } from './roles/role.module';
     DonationModule,
     UserModule,
     RoleModule,
+    CommitteeModule,
   ],
 })
 export class AppModule {}

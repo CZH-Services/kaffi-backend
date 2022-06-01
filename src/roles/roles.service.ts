@@ -24,23 +24,18 @@ export class RolesServices {
   }
 
   async updateRole(role: UpdateRole): Promise<boolean> {
-    const existingRole = await this.rolesRepository.getRoleById(role.id);
-    if (!existingRole) {
+    const updated = await this.rolesRepository.updateRole(<Role>role);
+    if (!updated) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
-    const updatedRole = await this.rolesRepository.updateRole(
-      role.id,
-      <Role>role,
-    );
-    return updatedRole;
+    return updated;
   }
 
   async deleteRole(id: number): Promise<boolean> {
-    const existingRole = await this.rolesRepository.getRoleById(id);
-    if (!existingRole) {
+    const deleted = await this.rolesRepository.deleteRole(id);
+    if (!deleted) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
-    const deletedRole = await this.rolesRepository.deleteRole(id);
-    return deletedRole;
+    return deleted;
   }
 }

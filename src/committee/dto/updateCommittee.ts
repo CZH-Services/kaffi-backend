@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateRole {
-  @ApiProperty({ example: 'Admin', required: true })
+export class UpdateCommittee {
+  @ApiProperty({ example: 'Social Media', required: true })
   @IsString({ message: 'Name should be a string' })
   @IsNotEmpty({ message: "Name shouldn't be empty" })
   readonly name: string;
