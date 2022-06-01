@@ -47,10 +47,6 @@ export class CountriesController {
     description: 'country',
     type: GetCountryResponse,
   })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
   async findOne(@Param() info: GetCountryRequest): Promise<GetCountryResponse> {
     return await this.countriesService.findOne(<number>info.id);
   }

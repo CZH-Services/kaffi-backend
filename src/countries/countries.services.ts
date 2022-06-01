@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CountryRepository } from './countries.repository';
 import { Country } from './entities/country';
 import { GetCountryResponse } from './dto/getCountryResponse';
-import { GetCountryRequest } from './dto/getCountryRequest';
 import { InsertCountryRequest } from './dto/insertCountryRequest';
 import { UpdateCountryRequest } from './dto/updateCountryRequest';
 
