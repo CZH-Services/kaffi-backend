@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { DonationModule } from './donations/donations.module';
 import { CountryModule } from './countries/countries.module';
 import { WebinarModule } from './webinars/webinars.module';
+import { UserModule } from './user/user.module';
+import { RoleModule } from './roles/role.module';
 
 @Module({
   imports: [
@@ -10,6 +12,8 @@ import { WebinarModule } from './webinars/webinars.module';
     DonationModule,
     CountryModule,
     WebinarModule,
+    UserModule,
+    RoleModule,
   ],
 })
 export class AppModule {}
