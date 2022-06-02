@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS WebinarSteps (
     rank INTEGER,
     title JSON,
     paragraph JSON,
-    webinarId INTEGER,
-    CONSTRAINT fk_webinar FOREIGN KEY(webinarId) REFERENCES webinars(id)
+    "webinarId" INTEGER,
+    CONSTRAINT fk_webinar FOREIGN KEY("webinarId") REFERENCES webinars(id)
 )

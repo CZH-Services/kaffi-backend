@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Country } from './entities/country';
-import { InsertCountryRequest } from './dto/insertCountryRequest';
 
 @Injectable()
 export class CountryRepository {

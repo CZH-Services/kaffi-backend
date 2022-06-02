@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class InsertCountryRequest {
-  @ApiProperty({ example: JSON.stringify({ en: 'Lebanon' }) })
+  @ApiProperty({ example: { en: 'Lebanon' } })
   name: Object;
 }

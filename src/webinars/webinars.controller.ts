@@ -20,9 +20,16 @@ import {
 import { GetCountryResponse } from 'src/countries/dto/getCountryResponse';
 import { UpdateCountryRequest } from 'src/countries/dto/updateCountryRequest';
 import { AddWebinarRequest } from './dto/addWebinarRequest';
+import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
+import { DeleteWebinarRequest } from './dto/deleteWebinarRequest';
 import { GetCountryWebinarRequest } from './dto/getCountryWebinarRequest';
 import { GetWebinarResponse } from './dto/getWebinarResponse';
+import { GetWebinarStepRequest } from './dto/getWebinarStepRequest';
+import { GetWebinarStepsRequest } from './dto/getWebinarStepsRequest';
 import { UpdateWebinarRequest } from './dto/updateWebinarRequest';
+import { UpdateWebinarStepRequest } from './dto/updateWebinarStepRequest';
+import { WebinarStep } from './entities/webinarStep';
+import { WebinarRepository } from './webinars.repository';
 import { WebinarService } from './webinars.service';
 
 @ApiTags('webinars')
@@ -70,10 +77,10 @@ export class WebinarsController {
   }
 
   @Put()
-  @ApiOperation({ summary: 'create a new webinar' })
+  @ApiOperation({ summary: 'update a webinar' })
   @ApiOkResponse({
     status: 200,
-    description: 'webinar added',
+    description: 'webinar updated',
     type: Boolean,
   })
   @ApiResponse({
@@ -82,5 +89,87 @@ export class WebinarsController {
   })
   async updateWebinar(@Body() info: UpdateWebinarRequest): Promise<boolean> {
     return await this.webinarService.updateWebinar(<UpdateWebinarRequest>info);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'delete a new webinar' })
+  @ApiOkResponse({
+    status: 200,
+    description: 'webinar deleted',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  async deleteWebinar(@Body() info: DeleteWebinarRequest): Promise<boolean> {
+    return await this.webinarService.deleteWebinar(<number>info.id);
+  }
+
+  @Get(':id/steps')
+  @ApiOperation({ summary: 'Get webinar steps' })
+  @ApiResponse({
+    status: 200,
+    description: 'Webinar steps records',
+    type: [WebinarStep],
+  })
+  async getAllWebinarSteps(
+    @Param() info: GetWebinarStepsRequest,
+  ): Promise<WebinarStep[]> {
+    return await this.webinarService.getAllWebinarSteps(<number>info.id);
+  }
+
+  @Get('steps/:id')
+  @ApiOperation({ summary: 'Get webinar step' })
+  @ApiResponse({
+    status: 200,
+    description: 'Webinar step record',
+    type: WebinarStep,
+  })
+  async getWebinarStep(
+    @Param() info: GetWebinarStepRequest,
+  ): Promise<WebinarStep> {
+    return await this.webinarService.getWebinarStep(<number>info.id);
+  }
+
+  @Post('steps')
+  @ApiOperation({ summary: 'create a new webinar step' })
+  @ApiOkResponse({
+    status: 200,
+    description: 'webinar step added',
+    type: Boolean,
+  })
+  async addWebinarStep(@Body() info: AddWebinarStepRequest): Promise<boolean> {
+    return await this.webinarService.addWebinarStep(
+      <AddWebinarStepRequest>info,
+    );
+  }
+
+  @Put('steps')
+  @ApiOperation({ summary: 'update a webinar step' })
+  @ApiOkResponse({
+    status: 200,
+    description: 'webinar step updated',
+    type: Boolean,
+  })
+  async updateWebinarStep(
+    @Body() info: UpdateWebinarStepRequest,
+  ): Promise<boolean> {
+    return await this.webinarService.updateWebinarStep(
+      <UpdateWebinarStepRequest>info,
+    );
+  }
+
+  @Delete('steps/:id')
+  @ApiOperation({ summary: 'delete a webinar step' })
+  @ApiOkResponse({
+    status: 200,
+    description: 'webinar step deleted',
+    type: Boolean,
+  })
+  async deleteWebinarStep(
+    @Body() info: DeleteWebinarRequest,
+  ): Promise<boolean> {
+    return await this.webinarService.deleteWebinarStep(<number>info.id);
   }
 }
