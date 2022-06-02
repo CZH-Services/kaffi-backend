@@ -2,7 +2,7 @@ import { Injectable, Scope } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Role } from './entities/role';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class RolesRepository {
   constructor(private readonly database: DatabaseService) {}
 

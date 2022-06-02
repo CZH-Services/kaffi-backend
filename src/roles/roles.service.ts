@@ -5,7 +5,7 @@ import { UpdateRole } from './dto/updateRole';
 import { Role } from './entities/role';
 import { RolesRepository } from './roles.repository';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class RolesServices {
   constructor(private readonly rolesRepository: RolesRepository) {}
 

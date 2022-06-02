@@ -5,7 +5,7 @@ import { CreateCommittee } from './dto/createCommittee';
 import { UpdateCommittee } from './dto/updateCommittee';
 import { Committee } from './entities/committee';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class CommittesServices {
   constructor(private readonly committesRepository: CommitteesRepository) {}
 
