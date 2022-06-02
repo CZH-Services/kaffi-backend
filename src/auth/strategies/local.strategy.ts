@@ -7,14 +7,17 @@ import { AuthServices } from '../auth.services';
 // later on, we will add another strategy which is a gmail strategy
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authServices: AuthServices) {
-    super();
+  constructor(private readonly authServices: AuthServices) {
+    super({
+      usernameField: 'email', // Passport local uses usernames by default, but we want to use emails
+      passwordField: 'password',
+    });
   }
 
   async validate(email: string, password: string): Promise<any> {
     const user = await this.authServices.validateUser(email, password);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({ message: 'Unauthorized' });
     }
     return user;
   }
