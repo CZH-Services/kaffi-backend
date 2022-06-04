@@ -22,7 +22,7 @@ export class CommitteesRepository {
     return this.database
       .query('SELECT * FROM Committee WHERE name = $1', [name])
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <Committee>res.rows[0];
         }
         return undefined;
