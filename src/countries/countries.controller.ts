@@ -24,8 +24,8 @@ import { GetCountryResponse } from './dto/getCountryResponse';
 import { InsertCountryRequest } from './dto/insertCountryRequest';
 import { UpdateCountryRequest } from './dto/updateCountryRequest';
 
-@ApiTags('countries')
-@Controller('Countries')
+@ApiTags('Countries')
+@Controller('countries')
 export class CountriesController {
   constructor(private readonly countriesService: CountriesService) {}
 

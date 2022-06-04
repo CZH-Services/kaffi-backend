@@ -8,17 +8,11 @@ import {
   Delete,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
-  ApiBody,
-  ApiCreatedResponse,
-  ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetCountryResponse } from 'src/countries/dto/getCountryResponse';
-import { UpdateCountryRequest } from 'src/countries/dto/updateCountryRequest';
 import { AddWebinarRequest } from './dto/addWebinarRequest';
 import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
 import { DeleteWebinarRequest } from './dto/deleteWebinarRequest';
@@ -32,7 +26,7 @@ import { WebinarStep } from './entities/webinarStep';
 import { WebinarRepository } from './webinars.repository';
 import { WebinarService } from './webinars.service';
 
-@ApiTags('webinars')
+@ApiTags('Webinars')
 @Controller('webinars')
 export class WebinarsController {
   constructor(private readonly webinarService: WebinarService) {}
