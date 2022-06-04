@@ -6,7 +6,7 @@ import { ProgramDescription } from '../entities/programDescription';
 export class DescriptionRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createDescription(description: ProgramDescription) {
+  async createDescription(description: ProgramDescription): Promise<boolean> {
     return this.databaseService
       .query(
         `INSERT INTO ProgramDescription(programId, rank, description) VALUES($1, $2, $3);`,
@@ -17,7 +17,7 @@ export class DescriptionRepository {
       });
   }
 
-  async getDescriptions(programId: number) {
+  async getDescriptions(programId: number): Promise<ProgramDescription[]> {
     return this.databaseService
       .query(`SELECT * FROM ProgramDescription WHERE programId = $1;`, [
         programId,
@@ -27,7 +27,7 @@ export class DescriptionRepository {
       });
   }
 
-  async getDescription(id: number) {
+  async getDescription(id: number): Promise<ProgramDescription> {
     return this.databaseService
       .query(`SELECT * FROM ProgramDescription WHERE id = $1;`, [id])
       .then((res) => {

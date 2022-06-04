@@ -32,7 +32,7 @@ export class DescriptionsServices {
     return <ProgramDescriptionResponse[]>descriptions;
   }
 
-  async deleteProgramDescription(id: number) {
+  async deleteProgramDescription(id: number): Promise<boolean> {
     const exists = await this.descriptionRepository.getDescription(id);
     if (!exists) {
       throw new NotFoundException('Description not found');
@@ -40,7 +40,9 @@ export class DescriptionsServices {
     return await this.descriptionRepository.deleteDescription(id);
   }
 
-  async updateProgramDescription(newDescription: UpdateProgramDescription) {
+  async updateProgramDescription(
+    newDescription: UpdateProgramDescription,
+  ): Promise<boolean> {
     const exists = await this.descriptionRepository.getDescription(
       newDescription.id,
     );

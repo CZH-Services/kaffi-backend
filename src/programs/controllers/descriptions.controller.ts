@@ -100,7 +100,7 @@ export class ProgramDescriptionsController {
   })
   async updateProgramDescription(
     @Body() programDescription: UpdateProgramDescription,
-  ) {
+  ): Promise<boolean> {
     return this.programDescriptionServices.updateProgramDescription(
       programDescription,
     );
