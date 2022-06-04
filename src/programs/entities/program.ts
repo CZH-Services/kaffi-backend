@@ -1,8 +1,8 @@
 export class Program {
   id: number;
-  name: Object;
-  description: Object;
+  name: object;
+  description: object;
   icon: string;
-  highlights: Object;
-  criteriaDescription: Object;
+  highlights: object;
+  criteriaDescription: object;
 }

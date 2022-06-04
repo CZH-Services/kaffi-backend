@@ -17,7 +17,7 @@ import { CriteriaServices } from '../services/criteria.service';
 
 @ApiTags('Program Criteria')
 @Controller('programCriteria')
-export class ProgramCriteriaController {
+export class CriteriaController {
   constructor(private readonly programCriterionServices: CriteriaServices) {}
 
   @Post()

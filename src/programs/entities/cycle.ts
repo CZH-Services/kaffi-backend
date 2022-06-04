@@ -1,4 +1,4 @@
-export class ProgramCycle {
+export class Cycle {
   id: number;
   programId: number;
   active: boolean;

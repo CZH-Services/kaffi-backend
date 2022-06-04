@@ -17,7 +17,7 @@ import { DescriptionsServices } from '../services/descriptions.service';
 
 @ApiTags('Program Descriptions')
 @Controller('programDescriptions')
-export class ProgramDescriptionsController {
+export class DescriptionsController {
   constructor(
     private readonly programDescriptionServices: DescriptionsServices,
   ) {}

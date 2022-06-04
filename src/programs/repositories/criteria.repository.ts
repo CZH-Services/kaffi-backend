@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { ProgramCriterion } from '../entities/programCriterion';
+import { Criterion } from '../entities/criterion';
 
 @Injectable()
 export class CriteriaRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createCriterion(criterion: ProgramCriterion): Promise<boolean> {
+  async createCriterion(criterion: Criterion): Promise<boolean> {
     return this.databaseService
       .query(
         `INSERT INTO ProgramCriterion(programId, rank, description) VALUES($1, $2, $3);`,
@@ -17,22 +17,22 @@ export class CriteriaRepository {
       });
   }
 
-  async getCriteria(programId: number): Promise<ProgramCriterion[]> {
+  async getCriteria(programId: number): Promise<Criterion[]> {
     return this.databaseService
       .query(`SELECT * FROM ProgramCriterion WHERE programId = $1;`, [
         programId,
       ])
       .then((res) => {
-        return <ProgramCriterion[]>res.rows;
+        return <Criterion[]>res.rows;
       });
   }
 
-  async getCriterion(id: number): Promise<ProgramCriterion> {
+  async getCriterion(id: number): Promise<Criterion> {
     return this.databaseService
       .query(`SELECT * FROM ProgramCriterion WHERE id = $1;`, [id])
       .then((res) => {
         if (res.rowCount > 0) {
-          return <ProgramCriterion>res.rows[0];
+          return <Criterion>res.rows[0];
         }
         return undefined;
       });
@@ -46,7 +46,7 @@ export class CriteriaRepository {
       });
   }
 
-  async updateCriterion(newCriterion: ProgramCriterion): Promise<boolean> {
+  async updateCriterion(newCriterion: Criterion): Promise<boolean> {
     return this.databaseService
       .query(
         `UPDATE ProgramCriterion SET rank = $1, description = $2 WHERE id = $3;`,

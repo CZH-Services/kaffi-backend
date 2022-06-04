@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS ProgramCycle (
     id serial PRIMARY KEY,
     programId integer,
     active boolean,
-    submition timestamp,
+    submission timestamp,
     deadline timestamp,
     results timestamp,
     CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id) ON DELETE CASCADE

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { ProgramDescription } from '../entities/programDescription';
+import { Description } from '../entities/description';
 
 @Injectable()
 export class DescriptionRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createDescription(description: ProgramDescription): Promise<boolean> {
+  async createDescription(description: Description): Promise<boolean> {
     return this.databaseService
       .query(
         `INSERT INTO ProgramDescription(programId, rank, description) VALUES($1, $2, $3);`,
@@ -17,22 +17,22 @@ export class DescriptionRepository {
       });
   }
 
-  async getDescriptions(programId: number): Promise<ProgramDescription[]> {
+  async getDescriptions(programId: number): Promise<Description[]> {
     return this.databaseService
       .query(`SELECT * FROM ProgramDescription WHERE programId = $1;`, [
         programId,
       ])
       .then((res) => {
-        return <ProgramDescription[]>res.rows;
+        return <Description[]>res.rows;
       });
   }
 
-  async getDescription(id: number): Promise<ProgramDescription> {
+  async getDescription(id: number): Promise<Description> {
     return this.databaseService
       .query(`SELECT * FROM ProgramDescription WHERE id = $1;`, [id])
       .then((res) => {
         if (res.rowCount > 0) {
-          return <ProgramDescription>res.rows[0];
+          return <Description>res.rows[0];
         }
         return undefined;
       });
@@ -46,7 +46,7 @@ export class DescriptionRepository {
       });
   }
 
-  async updateDescription(newDescription: ProgramDescription) {
+  async updateDescription(newDescription: Description) {
     return this.databaseService
       .query(
         `UPDATE ProgramDescription SET rank = $1, description = $2 WHERE id = $3;`,

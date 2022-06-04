@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AddProgramCriteria } from '../dto/criteria/addProgramCriterion';
 import { ProgramCriterionResponse } from '../dto/criteria/programCriteriaResponse';
 import { UpdateProgramCriterion } from '../dto/criteria/updateProgramCriterion';
-import { ProgramCriterion } from '../entities/programCriterion';
+import { Criterion } from '../entities/criterion';
 import { CriteriaRepository } from '../repositories/criteria.repository';
 import { ProgramServices } from './programs.service';
 
@@ -15,9 +15,7 @@ export class CriteriaServices {
 
   async addProgramCriterion(criterion: AddProgramCriteria): Promise<boolean> {
     await this.programServices.getProgram(criterion.programId);
-    return await this.criteriaRepository.createCriterion(
-      <ProgramCriterion>criterion,
-    );
+    return await this.criteriaRepository.createCriterion(<Criterion>criterion);
   }
 
   async getProgramCriteria(
@@ -44,7 +42,7 @@ export class CriteriaServices {
       throw new NotFoundException('Criterion not found');
     }
     return await this.criteriaRepository.updateCriterion(
-      <ProgramCriterion>newCriterion,
+      <Criterion>newCriterion,
     );
   }
 }
