@@ -24,7 +24,7 @@ export class RolesController {
   @ApiResponse({
     status: 200,
     description: 'Role created',
-    type: RoleResponse,
+    type: Boolean,
   })
   @ApiResponse({
     status: 400,
@@ -34,8 +34,8 @@ export class RolesController {
     status: 401,
     description: 'Unauthorized',
   })
-  async createOne(@Body() role: CreateRole): Promise<RoleResponse> {
-    return await this.rolesServices.createRole(role);
+  async createOne(@Body() role: CreateRole): Promise<boolean> {
+    return this.rolesServices.createRole(role);
   }
 
   @Get()
@@ -50,10 +50,10 @@ export class RolesController {
     description: 'Unauthorized',
   })
   async findAll(): Promise<RoleResponse[]> {
-    return await this.rolesServices.getRoles();
+    return this.rolesServices.getRoles();
   }
 
-  @Put('/:id')
+  @Put()
   @ApiOperation({ summary: 'Update a role' })
   @ApiResponse({
     status: 200,
@@ -65,10 +65,10 @@ export class RolesController {
     description: 'Unauthorized',
   })
   async update(@Body() role: UpdateRole): Promise<boolean> {
-    return await this.rolesServices.updateRole(role);
+    return this.rolesServices.updateRole(role);
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   @ApiOperation({ summary: 'Delete a role' })
   @ApiResponse({
     status: 200,

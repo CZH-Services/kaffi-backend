@@ -30,7 +30,7 @@ export class WebinarRepository {
         [id],
       )
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <GetWebinarResponse>res.rows[0];
         }
         return undefined;
@@ -45,7 +45,7 @@ export class WebinarRepository {
         [countryId],
       )
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <GetWebinarResponse>res.rows[0];
         }
         return undefined;
@@ -108,7 +108,7 @@ export class WebinarRepository {
     return this.database
       .query('SELECT MAX(rank) AS max from webinars')
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <number>res.rows[0].max;
         }
         return 0;
@@ -143,7 +143,7 @@ export class WebinarRepository {
     return this.database
       .query('SELECT * FROM WebinarSteps WHERE id = $1', [id])
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <WebinarStep>res.rows[0];
         }
         return undefined;
@@ -207,7 +207,7 @@ export class WebinarRepository {
         [webinarId],
       )
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <number>res.rows[0].max;
         }
         return 0;

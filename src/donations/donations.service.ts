@@ -4,7 +4,7 @@ import { DonationRepository } from './donations.repository';
 import { CreateDonation } from './dto/createDonation';
 import { Donation } from './entities/donation';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class DonationsService {
   constructor(private readonly donationRepository: DonationRepository) {}
 

@@ -2,6 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ProgramsModule } from './programs/programs.module';
+import { programsSwaggerConfiguration } from './programs/programs.swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,15 +15,18 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   // Swagger configuration
+  const baseRoute = 'api';
   const config = new DocumentBuilder()
     .setTitle('Kaffi')
     .setDescription('Kaffi API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {});
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT);
+  programsSwaggerConfiguration(`${baseRoute}/programs`, app);
 
+  await app.listen(process.env.PORT);
 }
 bootstrap();

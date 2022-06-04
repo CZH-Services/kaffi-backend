@@ -16,7 +16,7 @@ export class CountryRepository {
     return this.database
       .query('SELECT * FROM countries WHERE id = $1', [id])
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <Country>res.rows[0];
         }
         return undefined;
