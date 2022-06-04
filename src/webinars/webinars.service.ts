@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { AddWebinarRequest } from './dto/addWebinarRequest';
 import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
 import { GetWebinarResponse } from './dto/getWebinarResponse';
@@ -39,7 +44,7 @@ export class WebinarService {
       await this.webinarRepository.getHighestWebinarRanks()
     );
     if (info.rank > highestRank || info.rank <= 0) {
-      throw new HttpException('Invalid Rank', HttpStatus.NOT_FOUND);
+      throw new ForbiddenException('Invalid Rank');
     }
 
     const prevWebinar = await this.webinarRepository.findOne(<number>info.id);

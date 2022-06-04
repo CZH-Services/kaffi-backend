@@ -1,10 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsInt } from 'class-validator';
+import { IsBoolean, IsDateString, IsInt } from 'class-validator';
 
 export class UpdateProgramCycle {
   @ApiProperty({ type: Number, example: 1, required: true })
   @IsInt({ message: 'Cycle id must be a number' })
   id: number;
+
+  @ApiProperty({
+    type: Object,
+    example: JSON.stringify({ lang: 'Fall' }),
+    required: true,
+  })
+  name: object;
 
   @ApiProperty({ type: Number, example: 1, required: true })
   @IsInt({ message: 'Program id must be a number' })
@@ -15,14 +22,14 @@ export class UpdateProgramCycle {
   active: boolean;
 
   @ApiProperty({ type: Date, example: new Date(), required: true })
-  @IsDate({ message: 'Submission date must be a date' })
+  @IsDateString({ message: 'Submission date must be a date' })
   submission: Date;
 
   @ApiProperty({ type: Date, example: new Date(), required: true })
-  @IsDate({ message: 'Deadline date must be a date' })
+  @IsDateString({ message: 'Deadline date must be a date' })
   deadline: Date;
 
   @ApiProperty({ type: Date, example: new Date(), required: true })
-  @IsDate({ message: 'Results date must be a date' })
+  @IsDateString({ message: 'Results date must be a date' })
   results: Date;
 }

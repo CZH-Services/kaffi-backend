@@ -11,14 +11,21 @@ export class UpdateProgram {
     example: JSON.stringify({ lang: 'Computer Science' }),
     required: true,
   })
-  name: Object;
+  name: object;
+
+  @ApiProperty({
+    type: Object,
+    example: JSON.stringify({ lang: 'Caption ' }),
+    required: true,
+  })
+  caption: object;
 
   @ApiProperty({
     type: Object,
     example: JSON.stringify({ lang: 'Program description' }),
     required: true,
   })
-  description: Object;
+  description: object;
 
   @ApiProperty({
     type: String,
@@ -32,14 +39,5 @@ export class UpdateProgram {
     example: JSON.stringify({ lang: 'Program highlights' }),
     required: true,
   })
-  highlights: Object;
-
-  @ApiProperty({
-    type: Object,
-    example: JSON.stringify({
-      lang: 'Program criteria description',
-      required: true,
-    }),
-  })
-  criteriaDescription: Object;
+  highlights: object;
 }

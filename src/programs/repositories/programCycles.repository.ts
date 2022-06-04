@@ -9,9 +9,10 @@ export class ProgramCyclesRepository {
   async addCycle(cycle: ProgramCycle): Promise<boolean> {
     return this.databaseService
       .query(
-        'INSERT INTO ProgramCycle(programId, active, submission, deadline, results) VALUES($1, $2, $3, $4, $5);',
+        'INSERT INTO ProgramCycle("programId", name, active, submission, deadline, results) VALUES($1, $2, $3, $4, $5, $6);',
         [
           cycle.programId,
+          cycle.name,
           cycle.active,
           cycle.submission,
           cycle.deadline,
@@ -37,7 +38,7 @@ export class ProgramCyclesRepository {
   async getActiveCycle(programId: number): Promise<ProgramCycle> {
     return this.databaseService
       .query(
-        `SELECT * FROM ProgramCycle WHERE active = TRUE and programId = $1;`,
+        `SELECT * FROM ProgramCycle WHERE active = TRUE and "programId" = $1;`,
         [programId],
       )
       .then((res) => {
@@ -50,7 +51,7 @@ export class ProgramCyclesRepository {
 
   async getProgramCycles(programId: number): Promise<ProgramCycle[]> {
     return this.databaseService
-      .query(`SELECT * FROM ProgramCycle WHERE programId = $1;`, [programId])
+      .query(`SELECT * FROM ProgramCycle WHERE "programId" = $1;`, [programId])
       .then((res) => {
         if (res.rowCount > 0) {
           return <ProgramCycle[]>res.rows;
@@ -61,7 +62,7 @@ export class ProgramCyclesRepository {
 
   async deactivateProgramCycles(programId: number): Promise<boolean> {
     return this.databaseService
-      .query(`UPDATE ProgramCycle SET active = FALSE WHERE programId = $1;`, [
+      .query(`UPDATE ProgramCycle SET active = FALSE WHERE "programId" = $1;`, [
         programId,
       ])
       .then((res) => {
@@ -72,8 +73,9 @@ export class ProgramCyclesRepository {
   async updateCycle(newCycle: ProgramCycle): Promise<boolean> {
     return this.databaseService
       .query(
-        `UPDATE ProgramCycle SET active = $1, submission = $2, deadline = $3, results = $4 WHERE id = $5;`,
+        `UPDATE ProgramCycle SET name = $1, active = $2, submission = $3, deadline = $4, results = $5 WHERE id = $6;`,
         [
+          newCycle.name,
           newCycle.active,
           newCycle.submission,
           newCycle.deadline,

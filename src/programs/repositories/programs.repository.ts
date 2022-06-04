@@ -9,13 +9,13 @@ export class ProgramRepository {
   async createProgram(program: Program): Promise<boolean> {
     return this.database
       .query(
-        `INSERT INTO Program(name, description, icon, highlights, criteriaDescription) VALUES($1, $2, $3, $4, $5);`,
+        `INSERT INTO Program(name, caption, description, icon, highlights) VALUES($1, $2, $3, $4, $5);`,
         [
           program.name,
+          program.caption,
           program.description,
           program.icon,
           program.highlights,
-          program.criteriaDescription,
         ],
       )
       .then((res) => {
@@ -37,13 +37,13 @@ export class ProgramRepository {
   async updateProgram(program: Program): Promise<boolean> {
     return this.database
       .query(
-        `UPDATE Program SET name = $1, description = $2, icon = $3, highlights = $4, criteriaDescription = $5 WHERE id = $6;`,
+        `UPDATE Program SET name = $1, caption = $2, description = $3, icon = $4, highlights = $5 WHERE id = $6;`,
         [
           program.name,
+          program.caption,
           program.description,
           program.icon,
           program.highlights,
-          program.criteriaDescription,
           program.id,
         ],
       )

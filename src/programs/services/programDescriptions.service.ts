@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AddProgramDescription } from '../dto/descriptions/addProgramDescription';
 import { ProgramDescriptionResponse } from '../dto/descriptions/programDescriptionResponse';
 import { UpdateProgramDescription } from '../dto/descriptions/updateProgramDescription';
@@ -16,19 +20,24 @@ export class ProgramDescriptionsServices {
   async addProgramDescription(
     description: AddProgramDescription,
   ): Promise<boolean> {
-    await this.programServices.getProgram(description.programId);
+    await this.programServices.getRowProgram(description.programId);
+    const rank =
+      await this.descriptionRepository.getHighestProgramDescriptionRank(
+        description.programId,
+      );
+    const newDescription = <ProgramDescription>description;
+    newDescription.rank = rank + 1;
     return await this.descriptionRepository.createDescription(
-      <ProgramDescription>description,
+      <ProgramDescription>newDescription,
     );
   }
 
   async getProgramDescriptions(
     programId: number,
   ): Promise<ProgramDescriptionResponse[]> {
-    await this.programServices.getProgram(programId);
-    const descriptions = await this.descriptionRepository.getDescriptions(
-      programId,
-    );
+    await this.programServices.getRowProgram(programId);
+    const descriptions =
+      await this.descriptionRepository.getProgramDescriptions(programId);
     return <ProgramDescriptionResponse[]>descriptions;
   }
 
@@ -41,16 +50,43 @@ export class ProgramDescriptionsServices {
   }
 
   async updateProgramDescription(
-    newDescription: UpdateProgramDescription,
+    updatedDescription: UpdateProgramDescription,
   ): Promise<boolean> {
-    const exists = await this.descriptionRepository.getDescription(
-      newDescription.id,
+    const description = await this.descriptionRepository.getDescription(
+      updatedDescription.id,
     );
-    if (!exists) {
+
+    if (!description) {
       throw new NotFoundException('Description not found');
     }
+
+    const maxRank =
+      await this.descriptionRepository.getHighestProgramDescriptionRank(
+        description.programId,
+      );
+
+    if (updatedDescription.rank > maxRank || updatedDescription.rank <= 0) {
+      throw new ForbiddenException('Invalid rank');
+    }
+
+    if (updatedDescription.rank !== description.rank) {
+      const increment = updatedDescription.rank > description.rank;
+      const minRank = increment
+        ? description.rank + 1
+        : updatedDescription.rank;
+      const maxRank = increment
+        ? updatedDescription.rank
+        : description.rank - 1;
+      await this.descriptionRepository.updateProgramDescriptionsRanks(
+        description.programId,
+        minRank,
+        maxRank,
+        !increment,
+      );
+    }
+
     return await this.descriptionRepository.updateDescription(
-      <ProgramDescription>newDescription,
+      <ProgramDescription>updatedDescription,
     );
   }
 }

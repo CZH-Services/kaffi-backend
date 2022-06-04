@@ -8,13 +8,19 @@ export class ProgramResponse {
     type: Object,
     example: JSON.stringify({ lang: 'Computer Science' }),
   })
-  name: Object;
+  name: object;
+
+  @ApiProperty({
+    type: Object,
+    example: JSON.stringify({ lang: 'Caption' }),
+  })
+  caption: object;
 
   @ApiProperty({
     type: Object,
     example: JSON.stringify({ lang: 'Program description' }),
   })
-  description: Object;
+  description: object;
 
   @ApiProperty({ type: String, example: 'https://www.example.com/icon.png' })
   icon: string;
@@ -23,11 +29,5 @@ export class ProgramResponse {
     type: Object,
     example: JSON.stringify({ lang: 'Program highlights' }),
   })
-  highlights: Object;
-
-  @ApiProperty({
-    type: Object,
-    example: JSON.stringify({ lang: 'Program criteria description' }),
-  })
-  criteriaDescription: Object;
+  highlights: object;
 }

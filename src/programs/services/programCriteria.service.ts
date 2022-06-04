@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AddProgramCriteria } from '../dto/criteria/addProgramCriterion';
 import { ProgramCriterionResponse } from '../dto/criteria/programCriteriaResponse';
 import { UpdateProgramCriterion } from '../dto/criteria/updateProgramCriterion';
@@ -14,17 +18,24 @@ export class ProgramCriteriaServices {
   ) {}
 
   async addProgramCriterion(criterion: AddProgramCriteria): Promise<boolean> {
-    await this.programServices.getProgram(criterion.programId);
+    await this.programServices.getRowProgram(criterion.programId);
+    const rank = await this.criteriaRepository.getHighestProgramCriterionRank(
+      criterion.programId,
+    );
+    const newCriterion = <ProgramCriterion>criterion;
+    newCriterion.rank = rank + 1;
     return await this.criteriaRepository.createCriterion(
-      <ProgramCriterion>criterion,
+      <ProgramCriterion>newCriterion,
     );
   }
 
   async getProgramCriteria(
     programId: number,
   ): Promise<ProgramCriterionResponse[]> {
-    await this.programServices.getProgram(programId);
-    const criteria = await this.criteriaRepository.getCriteria(programId);
+    await this.programServices.getRowProgram(programId);
+    const criteria = await this.criteriaRepository.getProgramCriteria(
+      programId,
+    );
     return <ProgramCriterionResponse[]>criteria;
   }
 
@@ -37,14 +48,39 @@ export class ProgramCriteriaServices {
   }
 
   async updateProgramCriterion(
-    newCriterion: UpdateProgramCriterion,
+    updatedCriterion: UpdateProgramCriterion,
   ): Promise<boolean> {
-    const exists = await this.criteriaRepository.getCriterion(newCriterion.id);
-    if (!exists) {
+    const criterion = await this.criteriaRepository.getCriterion(
+      updatedCriterion.id,
+    );
+
+    if (!criterion) {
       throw new NotFoundException('Criterion not found');
     }
+
+    const maxRank =
+      await this.criteriaRepository.getHighestProgramCriterionRank(
+        criterion.programId,
+      );
+
+    if (updatedCriterion.rank > maxRank || updatedCriterion.rank <= 0) {
+      throw new ForbiddenException('Invalid rank');
+    }
+
+    if (updatedCriterion.rank !== criterion.rank) {
+      const increment = updatedCriterion.rank > criterion.rank;
+      const minRank = increment ? criterion.rank + 1 : updatedCriterion.rank;
+      const maxRank = increment ? updatedCriterion.rank : criterion.rank - 1;
+      await this.criteriaRepository.updateProgramCriteriaRanks(
+        criterion.programId,
+        minRank,
+        maxRank,
+        !increment,
+      );
+    }
+
     return await this.criteriaRepository.updateCriterion(
-      <ProgramCriterion>newCriterion,
+      <ProgramCriterion>updatedCriterion,
     );
   }
 }

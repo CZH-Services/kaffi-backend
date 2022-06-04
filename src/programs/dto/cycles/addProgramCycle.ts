@@ -1,10 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsDateString, IsInt } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 
 export class AddProgramCycle {
   @ApiProperty({ type: Number, example: 1, required: true })
   @IsInt({ message: 'Program id must be a number' })
   programId: number;
+
+  @ApiProperty({
+    type: Object,
+    example: JSON.stringify({ lang: 'Fall' }),
+    required: true,
+  })
+  name: object;
 
   @ApiProperty({ type: Boolean, example: true, required: true })
   @IsBoolean({ message: 'Is active must be a boolean' })

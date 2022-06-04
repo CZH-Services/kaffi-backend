@@ -1,38 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ProgramCycleResponse } from '../cycles/programCycleResponse';
 
-export class CreateProgram {
+export class RowProgramResponse {
+  @ApiProperty({ type: Number, example: 1 })
+  id: number;
+
   @ApiProperty({
     type: Object,
     example: JSON.stringify({ lang: 'Computer Science' }),
-    required: true,
   })
   name: object;
+
+  @ApiProperty({ type: String, example: 'https://www.example.com/icon.png' })
+  icon: string;
 
   @ApiProperty({
     type: Object,
     example: JSON.stringify({ lang: 'Caption' }),
-    required: true,
   })
   caption: object;
 
   @ApiProperty({
     type: Object,
     example: JSON.stringify({ lang: 'Program description' }),
-    required: true,
   })
   description: object;
 
   @ApiProperty({
-    type: String,
-    example: 'https://www.example.com/icon.png',
-    required: true,
-  })
-  icon: string;
-
-  @ApiProperty({
     type: Object,
-    example: JSON.stringify({ lang: 'Program highlights' }),
-    required: true,
+    example: JSON.stringify({ lang: 'Program criteria description' }),
   })
-  highlights: object;
+  cycle: ProgramCycleResponse;
 }

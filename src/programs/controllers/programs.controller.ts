@@ -10,8 +10,10 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DeleteProgram } from '../dto/programs/deleteProgram';
+import { DetailedProgramResponse } from '../dto/programs/detailedProgramResponse';
 import { GetProgram } from '../dto/programs/getProgram';
 import { ProgramResponse } from '../dto/programs/programResponse';
+import { RowProgramResponse } from '../dto/programs/rowProgramResponse';
 import { UpdateProgram } from '../dto/programs/updateProgram';
 import { ProgramServices } from '../services/programs.service';
 
@@ -35,12 +37,12 @@ export class ProgramController {
     return this.programsServices.createProgram(program);
   }
 
-  @Get(':id')
+  @Get('detailed/:id')
   @ApiOperation({ summary: 'Gets a program by Id' })
   @ApiResponse({
     status: 200,
     description: 'The program has been successfully returned.',
-    type: ProgramResponse,
+    type: DetailedProgramResponse,
   })
   @ApiResponse({
     status: 400,
@@ -50,8 +52,31 @@ export class ProgramController {
     status: 404,
     description: 'The program has not been found.',
   })
-  async getProgram(@Param() programId: GetProgram): Promise<ProgramResponse> {
-    return this.programsServices.getProgram(programId.id);
+  async getProgramDetails(
+    @Param() programId: GetProgram,
+  ): Promise<DetailedProgramResponse> {
+    return this.programsServices.getProgramDetails(programId.id);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Gets a program by Id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The program has been successfully returned.',
+    type: RowProgramResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The program has not been found.',
+  })
+  async getRowProgram(
+    @Param() programId: GetProgram,
+  ): Promise<RowProgramResponse> {
+    return this.programsServices.getRowProgram(programId.id);
   }
 
   @Put()
