@@ -6,7 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthServices } from './auth.services';
 import { Login } from './dto/login';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
@@ -24,6 +24,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('hello')
   async signedInOnlyHello() {
     return 'hello';

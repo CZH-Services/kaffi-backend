@@ -7,6 +7,7 @@ import { WebinarModule } from './webinars/webinars.module';
 import { RoleModule } from './roles/role.module';
 import { CommitteeModule } from './committee/committee.module';
 import { AuthModule } from './auth/auth.module';
+import { ProgramsModule } from './programs/programs.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
     RoleModule,
     CommitteeModule,
     DonationModule,
+    ProgramsModule,
   ],
 })
 export class AppModule {}

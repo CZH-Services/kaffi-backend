@@ -24,7 +24,7 @@ export class RolesController {
   @ApiResponse({
     status: 200,
     description: 'Role created',
-    type: RoleResponse,
+    type: Boolean,
   })
   @ApiResponse({
     status: 400,
@@ -34,7 +34,7 @@ export class RolesController {
     status: 401,
     description: 'Unauthorized',
   })
-  async createOne(@Body() role: CreateRole): Promise<RoleResponse> {
+  async createOne(@Body() role: CreateRole): Promise<boolean> {
     return this.rolesServices.createRole(role);
   }
 
@@ -68,7 +68,7 @@ export class RolesController {
     return this.rolesServices.updateRole(role);
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   @ApiOperation({ summary: 'Delete a role' })
   @ApiResponse({
     status: 200,

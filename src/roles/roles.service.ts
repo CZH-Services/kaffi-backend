@@ -9,13 +9,12 @@ import { RolesRepository } from './roles.repository';
 export class RolesServices {
   constructor(private readonly rolesRepository: RolesRepository) {}
 
-  async createRole(role: CreateRole): Promise<RoleResponse> {
+  async createRole(role: CreateRole): Promise<boolean> {
     const existingRole = await this.rolesRepository.getRoleByName(role.name);
     if (existingRole) {
       throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
     }
-    const newRole = await this.rolesRepository.createRole(<Role>role);
-    return <RoleResponse>newRole;
+    return await this.rolesRepository.createRole(<Role>role);
   }
 
   async getRoles(): Promise<RoleResponse[]> {

@@ -1,4 +1,4 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Role } from './entities/role';
 
@@ -6,15 +6,11 @@ import { Role } from './entities/role';
 export class RolesRepository {
   constructor(private readonly database: DatabaseService) {}
 
-  async createRole(role: Role): Promise<Role> {
+  async createRole(role: Role): Promise<boolean> {
     return this.database
       .query(`INSERT INTO KaffiRole(name) VALUES('${role.name}');`)
-      .then(() => {
-        return this.database
-          .query('SELECT * FROM KaffiRole where name = $1', [role.name])
-          .then((res) => {
-            return res.rows[0];
-          });
+      .then((res) => {
+        return res.rowCount > 0;
       });
   }
 
@@ -22,7 +18,7 @@ export class RolesRepository {
     return this.database
       .query('SELECT * FROM KaffiRole WHERE name = $1', [name])
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <Role>res.rows[0];
         }
         return undefined;

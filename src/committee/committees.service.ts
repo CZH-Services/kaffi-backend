@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommitteesRepository } from './committees.repository';
 import { CommitteeResponse } from './dto/committeeResponse';
 import { CreateCommittee } from './dto/createCommittee';
@@ -16,10 +20,7 @@ export class CommittesServices {
       committee.name,
     );
     if (existingCommittee) {
-      throw new HttpException(
-        'Committee already exists',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Committee already exists');
     }
     const newCommittee = await this.committesRepository.createCommittee(
       <Committee>committee,
@@ -37,7 +38,7 @@ export class CommittesServices {
       <Committee>committee,
     );
     if (!updated) {
-      throw new HttpException('Committee not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Committee not found');
     }
     return updated;
   }
@@ -45,7 +46,7 @@ export class CommittesServices {
   async deleteCommittee(id: number): Promise<boolean> {
     const deleted = await this.committesRepository.deleteCommittee(id);
     if (!deleted) {
-      throw new HttpException('Committee not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Committee not found');
     }
     return deleted;
   }
