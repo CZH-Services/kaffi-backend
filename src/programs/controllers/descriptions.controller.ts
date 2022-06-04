@@ -45,7 +45,7 @@ export class ProgramDescriptionsController {
     );
   }
 
-  @Get(':id')
+  @Get(':programId')
   @ApiOperation({ summary: 'Gets all program descriptions' })
   @ApiResponse({
     status: 200,
@@ -83,7 +83,7 @@ export class ProgramDescriptionsController {
     );
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: 'Updates a program description' })
   @ApiResponse({
     status: 200,
