@@ -9,17 +9,17 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AddProgramCycle } from '../dto/cycles/addProgramCycle';
-import { CycleResponse } from '../dto/cycles/cycleResponse';
+import { ProgramCycleResponse } from '../dto/cycles/programCycleResponse';
 import { DeleteProgramCycle } from '../dto/cycles/deleteProgramCycle';
 import { GetProgramCycle } from '../dto/cycles/getProgramCycle';
 import { GetProgramCycles } from '../dto/cycles/getProgramCycles';
 import { UpdateProgramCycle } from '../dto/cycles/updateProgramCycle';
-import { CyclesService } from '../services/cycles.service';
+import { ProgramCyclesService } from '../services/programCycles.service';
 
 @Controller('programCycles')
 @ApiTags('Program Cycles')
 export class CyclesController {
-  constructor(private readonly cyclesService: CyclesService) {}
+  constructor(private readonly cyclesService: ProgramCyclesService) {}
 
   @Post()
   @ApiOperation({ summary: 'Creates a cycle' })
@@ -43,7 +43,7 @@ export class CyclesController {
   @ApiResponse({ status: 404, description: 'Program has not been found.' })
   async getActiveCycle(
     @Param() programId: GetProgramCycle,
-  ): Promise<CycleResponse> {
+  ): Promise<ProgramCycleResponse> {
     return this.cyclesService.getActiveCycle(programId.programId);
   }
 

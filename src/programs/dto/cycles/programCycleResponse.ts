@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CycleResponse {
+export class ProgramCycleResponse {
   @ApiProperty({ type: Number, example: 1 })
   id: number;
 

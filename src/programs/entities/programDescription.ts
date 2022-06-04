@@ -1,4 +1,4 @@
-export class Description {
+export class ProgramDescription {
   id: number;
   programId: number;
   rank: number;

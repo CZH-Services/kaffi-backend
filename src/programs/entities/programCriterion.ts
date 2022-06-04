@@ -1,4 +1,4 @@
-export class Criterion {
+export class ProgramCriterion {
   id: number;
   programId: number;
   rank: number;

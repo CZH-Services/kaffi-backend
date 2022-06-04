@@ -13,12 +13,14 @@ import { DeleteProgramCriterion } from '../dto/criteria/deleteProgramCriterion';
 import { GetProgramCriteria } from '../dto/criteria/getProgramCriteria';
 import { ProgramCriterionResponse } from '../dto/criteria/programCriteriaResponse';
 import { UpdateProgramCriterion } from '../dto/criteria/updateProgramCriterion';
-import { CriteriaServices } from '../services/criteria.service';
+import { ProgramCriteriaServices } from '../services/programCriteria.service';
 
 @ApiTags('Program Criteria')
 @Controller('programCriteria')
 export class CriteriaController {
-  constructor(private readonly programCriterionServices: CriteriaServices) {}
+  constructor(
+    private readonly programCriterionServices: ProgramCriteriaServices,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Creates a program criterion' })

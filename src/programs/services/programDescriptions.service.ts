@@ -2,15 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AddProgramDescription } from '../dto/descriptions/addProgramDescription';
 import { ProgramDescriptionResponse } from '../dto/descriptions/programDescriptionResponse';
 import { UpdateProgramDescription } from '../dto/descriptions/updateProgramDescription';
-import { Description } from '../entities/description';
-import { DescriptionRepository } from '../repositories/descriptions.repository';
+import { ProgramDescription } from '../entities/programDescription';
+import { ProgramDescriptionRepository } from '../repositories/programDescriptions.repository';
 import { ProgramServices } from './programs.service';
 
 @Injectable()
-export class DescriptionsServices {
+export class ProgramDescriptionsServices {
   constructor(
     private readonly programServices: ProgramServices,
-    private readonly descriptionRepository: DescriptionRepository,
+    private readonly descriptionRepository: ProgramDescriptionRepository,
   ) {}
 
   async addProgramDescription(
@@ -18,7 +18,7 @@ export class DescriptionsServices {
   ): Promise<boolean> {
     await this.programServices.getProgram(description.programId);
     return await this.descriptionRepository.createDescription(
-      <Description>description,
+      <ProgramDescription>description,
     );
   }
 
@@ -50,7 +50,7 @@ export class DescriptionsServices {
       throw new NotFoundException('Description not found');
     }
     return await this.descriptionRepository.updateDescription(
-      <Description>newDescription,
+      <ProgramDescription>newDescription,
     );
   }
 }

@@ -13,13 +13,13 @@ import { DeleteProgramDescription } from '../dto/descriptions/deleteProgramDescr
 import { GetProgramDescriptions } from '../dto/descriptions/getProgramDescriptions';
 import { ProgramDescriptionResponse } from '../dto/descriptions/programDescriptionResponse';
 import { UpdateProgramDescription } from '../dto/descriptions/updateProgramDescription';
-import { DescriptionsServices } from '../services/descriptions.service';
+import { ProgramDescriptionsServices } from '../services/programDescriptions.service';
 
 @ApiTags('Program Descriptions')
 @Controller('programDescriptions')
 export class DescriptionsController {
   constructor(
-    private readonly programDescriptionServices: DescriptionsServices,
+    private readonly programDescriptionServices: ProgramDescriptionsServices,
   ) {}
 
   @Post()

@@ -4,13 +4,13 @@ import { CriteriaController } from './controllers/criteria.controller';
 import { CyclesController } from './controllers/cycles.controller';
 import { DescriptionsController } from './controllers/descriptions.controller';
 import { ProgramController } from './controllers/programs.controller';
-import { CriteriaRepository } from './repositories/criteria.repository';
-import { CyclesRepository } from './repositories/cycles.repository';
-import { DescriptionRepository } from './repositories/descriptions.repository';
+import { ProgramCriteriaRepository } from './repositories/programCriteria.repository';
+import { ProgramCyclesRepository } from './repositories/programCycles.repository';
+import { ProgramDescriptionRepository } from './repositories/programDescriptions.repository';
 import { ProgramRepository } from './repositories/programs.repository';
-import { CriteriaServices } from './services/criteria.service';
-import { CyclesService } from './services/cycles.service';
-import { DescriptionsServices } from './services/descriptions.service';
+import { ProgramCriteriaServices } from './services/programCriteria.service';
+import { ProgramCyclesService } from './services/programCycles.service';
+import { ProgramDescriptionsServices } from './services/programDescriptions.service';
 import { ProgramServices } from './services/programs.service';
 
 @Module({
@@ -24,12 +24,12 @@ import { ProgramServices } from './services/programs.service';
   providers: [
     ProgramServices,
     ProgramRepository,
-    CyclesService,
-    CyclesRepository,
-    DescriptionsServices,
-    DescriptionRepository,
-    CriteriaServices,
-    CriteriaRepository,
+    ProgramCyclesService,
+    ProgramCyclesRepository,
+    ProgramDescriptionsServices,
+    ProgramDescriptionRepository,
+    ProgramCriteriaServices,
+    ProgramCriteriaRepository,
   ],
 })
 export class ProgramsModule {}

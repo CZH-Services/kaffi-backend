@@ -5,17 +5,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AddProgramCycle } from '../dto/cycles/addProgramCycle';
-import { CycleResponse } from '../dto/cycles/cycleResponse';
+import { ProgramCycleResponse } from '../dto/cycles/programCycleResponse';
 import { UpdateProgramCycle } from '../dto/cycles/updateProgramCycle';
-import { Cycle } from '../entities/cycle';
-import { CyclesRepository } from '../repositories/cycles.repository';
+import { ProgramCycle } from '../entities/programCycle';
+import { ProgramCyclesRepository } from '../repositories/programCycles.repository';
 import { ProgramServices } from './programs.service';
 
 @Injectable()
-export class CyclesService {
+export class ProgramCyclesService {
   constructor(
     private readonly programServices: ProgramServices,
-    private readonly cyclesRepository: CyclesRepository,
+    private readonly cyclesRepository: ProgramCyclesRepository,
   ) {}
 
   async addCycle(newCycle: AddProgramCycle): Promise<boolean> {
@@ -28,19 +28,19 @@ export class CyclesService {
     if (newCycle.active) {
       await this.cyclesRepository.deactivateProgramCycles(newCycle.programId);
     }
-    return this.cyclesRepository.addCycle(<Cycle>newCycle);
+    return this.cyclesRepository.addCycle(<ProgramCycle>newCycle);
   }
 
-  async getActiveCycle(programId: number): Promise<CycleResponse> {
+  async getActiveCycle(programId: number): Promise<ProgramCycleResponse> {
     await this.programServices.getProgram(programId);
     const activeCycle = await this.cyclesRepository.getActiveCycle(programId);
-    return <CycleResponse>activeCycle;
+    return <ProgramCycleResponse>activeCycle;
   }
 
   async getProgramCycles(programId: number) {
     await this.programServices.getProgram(programId);
     const cycles = await this.cyclesRepository.getProgramCycles(programId);
-    return <CycleResponse[]>cycles;
+    return <ProgramCycleResponse[]>cycles;
   }
 
   async updateCycle(updatedCycle: UpdateProgramCycle): Promise<boolean> {
@@ -53,7 +53,7 @@ export class CyclesService {
         updatedCycle.programId,
       );
     }
-    return this.cyclesRepository.updateCycle(<Cycle>updatedCycle);
+    return this.cyclesRepository.updateCycle(<ProgramCycle>updatedCycle);
   }
 
   async deleteCycle(id: number): Promise<boolean> {
