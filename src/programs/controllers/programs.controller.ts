@@ -8,19 +8,18 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateProgram } from './dto/createProgram';
-import { DeleteProgram } from './dto/deleteProgram';
-import { GetProgram } from './dto/getProgram';
-import { ProgramResponse } from './dto/programResponse';
-import { UpdateProgram } from './dto/updateProgram';
-import { ProgramServices } from './programs.service';
+import { CreateProgram } from '../dto/programs/createProgram';
+import { DeleteProgram } from '../dto/programs/deleteProgram';
+import { GetProgram } from '../dto/programs/getProgram';
+import { ProgramResponse } from '../dto/programs/programResponse';
+import { UpdateProgram } from '../dto/programs/updateProgram';
+import { ProgramServices } from '../services/programs.service';
 
 @Controller('programs')
 @ApiTags('Programs')
 export class ProgramController {
   constructor(private readonly programsServices: ProgramServices) {}
 
-  //#region program
   @Post()
   @ApiOperation({ summary: 'Creates program' })
   @ApiResponse({
@@ -93,7 +92,7 @@ export class ProgramController {
     return this.programsServices.deleteProgram(programId.id);
   }
 
-  @Get('/all')
+  @Get()
   @ApiOperation({ summary: 'Gets all programs' })
   @ApiResponse({
     status: 200,
@@ -103,29 +102,4 @@ export class ProgramController {
   async getPrograms(): Promise<ProgramResponse[]> {
     return this.programsServices.getPrograms();
   }
-  //#endregion
-
-  //#region program criteria
-  async addProgramCriterion() {}
-  async getProgramCriterion() {}
-  async updateProgramCriterion() {}
-  async deleteProgramCriterion() {}
-  async getProgramCriterions() {}
-  //#endregion
-
-  //#region program cycle
-  async addProgramCycle() {}
-  async getProgramCycle() {}
-  async updateProgramCycle() {}
-  async deleteProgramCycle() {}
-  async getProgramCycles() {}
-  //#endregion
-
-  //#region program description
-  async addProgramDescription() {}
-  async getProgramDescription() {}
-  async updateProgramDescription() {}
-  async deleteProgramDescription() {}
-  async getProgramDescriptions() {}
-  //#endregion
 }

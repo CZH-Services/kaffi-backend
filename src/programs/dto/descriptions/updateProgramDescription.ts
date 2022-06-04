@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumberString } from 'class-validator';
 
-export class AddProgramDescription {
+export class UpdateProgramDescription {
   @ApiProperty({ example: 1 })
   @IsNumberString({ message: 'Program id must be a number' })
-  programId: number;
+  id: number;
 
   @ApiProperty({ example: 1 })
   @IsNumberString({ message: 'Rank must be a number' })

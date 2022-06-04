@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { Program } from './entities/program';
+import { Program } from '../entities/program';
 
 @Injectable()
 export class ProgramRepository {

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS ProgramCycle (
     submition timestamp,
     deadline timestamp,
     results timestamp,
-    CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id)
+    CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS ProgramDescription (
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS ProgramDescription (
     programId integer,
     rank integer,
     description JSON,
-    CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id)
+    CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS ProgramCriterion (
@@ -30,5 +30,5 @@ CREATE TABLE IF NOT EXISTS ProgramCriterion (
     programId integer,
     rank integer,
     description JSON,
-    CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id)
+    CONSTRAINT fk_program FOREIGN KEY(programId) REFERENCES Program(id) ON DELETE CASCADE
 );

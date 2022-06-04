@@ -1,19 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProgram } from './dto/createProgram';
-import { ProgramResponse } from './dto/programResponse';
-import { UpdateProgram } from './dto/updateProgram';
-import { Program } from './entities/program';
-import { ProgramRepository } from './programs.repository';
+import { CreateProgram } from '../dto/programs/createProgram';
+import { ProgramResponse } from '../dto/programs/programResponse';
+import { UpdateProgram } from '../dto/programs/updateProgram';
+import { Program } from '../entities/program';
+import { ProgramRepository } from '../repositories/programs.repository';
 
 @Injectable()
 export class ProgramServices {
   constructor(private readonly programRepository: ProgramRepository) {}
 
   async createProgram(program: CreateProgram): Promise<boolean> {
-    const newProgram = await this.programRepository.createProgram(
-      <Program>program,
-    );
-    return newProgram;
+    return await this.programRepository.createProgram(<Program>program);
   }
 
   async getProgram(id: number): Promise<ProgramResponse> {
