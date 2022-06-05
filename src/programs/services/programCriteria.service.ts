@@ -18,7 +18,7 @@ export class ProgramCriteriaServices {
   ) {}
 
   async addProgramCriterion(criterion: AddProgramCriteria): Promise<boolean> {
-    await this.programServices.getRowProgram(criterion.programId);
+    await this.programServices.getProgram(criterion.programId);
     const rank = await this.criteriaRepository.getHighestProgramCriterionRank(
       criterion.programId,
     );
@@ -32,7 +32,7 @@ export class ProgramCriteriaServices {
   async getProgramCriteria(
     programId: number,
   ): Promise<ProgramCriterionResponse[]> {
-    await this.programServices.getRowProgram(programId);
+    await this.programServices.getProgram(programId);
     const criteria = await this.criteriaRepository.getProgramCriteria(
       programId,
     );

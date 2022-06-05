@@ -19,7 +19,7 @@ export class ProgramCyclesService {
   ) {}
 
   async addCycle(newCycle: AddProgramCycle): Promise<boolean> {
-    await this.programServices.getRowProgram(newCycle.programId);
+    await this.programServices.getProgram(newCycle.programId);
     if (newCycle.submission > newCycle.deadline) {
       throw new BadRequestException('Submission date cannot be after deadline');
     } else if (newCycle.deadline > newCycle.results) {
@@ -32,13 +32,13 @@ export class ProgramCyclesService {
   }
 
   async getActiveCycle(programId: number): Promise<ProgramCycleResponse> {
-    await this.programServices.getRowProgram(programId);
+    await this.programServices.getProgram(programId);
     const activeCycle = await this.cyclesRepository.getActiveCycle(programId);
     return <ProgramCycleResponse>activeCycle;
   }
 
   async getProgramCycles(programId: number) {
-    await this.programServices.getRowProgram(programId);
+    await this.programServices.getProgram(programId);
     const cycles = await this.cyclesRepository.getProgramCycles(programId);
     return <ProgramCycleResponse[]>cycles;
   }

@@ -52,23 +52,34 @@ export class ProgramServices {
     return result;
   }
 
-  async getRowProgram(id: number): Promise<RowProgramResponse> {
+  async getProgram(id: number): Promise<ProgramResponse> {
     const program = await this.programRepository.getProgram(id);
     if (!program) {
       throw new NotFoundException('Program not found');
     }
-    const activeCycle = await this.programCyclesRepository.getActiveCycle(
-      program.id,
+    return <ProgramResponse>program;
+  }
+
+  async getRowPrograms(): Promise<RowProgramResponse[]> {
+    const programs = await this.programRepository.getPrograms();
+    return Promise.all(
+      programs.map(async (program) => {
+        const activeCycle = await this.programCyclesRepository.getActiveCycle(
+          program.id,
+        );
+        if (activeCycle) {
+          const result: RowProgramResponse = {
+            id: program.id,
+            name: program.name,
+            icon: program.icon,
+            caption: program.caption,
+            description: program.description,
+            cycle: activeCycle,
+          };
+          return result;
+        }
+      }),
     );
-    const result: RowProgramResponse = {
-      id: program.id,
-      name: program.name,
-      icon: program.icon,
-      caption: program.caption,
-      description: program.description,
-      cycle: activeCycle,
-    };
-    return result;
   }
 
   async updateProgram(program: UpdateProgram): Promise<boolean> {

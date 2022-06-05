@@ -20,7 +20,7 @@ export class ProgramDescriptionsServices {
   async addProgramDescription(
     description: AddProgramDescription,
   ): Promise<boolean> {
-    await this.programServices.getRowProgram(description.programId);
+    await this.programServices.getProgram(description.programId);
     const rank =
       await this.descriptionRepository.getHighestProgramDescriptionRank(
         description.programId,
@@ -35,7 +35,7 @@ export class ProgramDescriptionsServices {
   async getProgramDescriptions(
     programId: number,
   ): Promise<ProgramDescriptionResponse[]> {
-    await this.programServices.getRowProgram(programId);
+    await this.programServices.getProgram(programId);
     const descriptions =
       await this.descriptionRepository.getProgramDescriptions(programId);
     return <ProgramDescriptionResponse[]>descriptions;

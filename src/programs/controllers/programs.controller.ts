@@ -58,7 +58,7 @@ export class ProgramController {
     return this.programsServices.getProgramDetails(programId.id);
   }
 
-  @Get(':id')
+  @Get('rows')
   @ApiOperation({ summary: 'Gets a program by Id' })
   @ApiResponse({
     status: 200,
@@ -73,10 +73,8 @@ export class ProgramController {
     status: 404,
     description: 'The program has not been found.',
   })
-  async getRowProgram(
-    @Param() programId: GetProgram,
-  ): Promise<RowProgramResponse> {
-    return this.programsServices.getRowProgram(programId.id);
+  async getRowPrograms(): Promise<RowProgramResponse[]> {
+    return this.programsServices.getRowPrograms();
   }
 
   @Put()
