@@ -85,7 +85,7 @@ export class WebinarsController {
     return await this.webinarService.updateWebinar(<UpdateWebinarRequest>info);
   }
 
-  @Delete()
+  @Delete(':id')
   @ApiOperation({ summary: 'delete a new webinar' })
   @ApiOkResponse({
     status: 200,
@@ -96,7 +96,7 @@ export class WebinarsController {
     status: 401,
     description: 'Unauthorized',
   })
-  async deleteWebinar(@Body() info: DeleteWebinarRequest): Promise<boolean> {
+  async deleteWebinar(@Param() info: DeleteWebinarRequest): Promise<boolean> {
     return await this.webinarService.deleteWebinar(<number>info.id);
   }
 

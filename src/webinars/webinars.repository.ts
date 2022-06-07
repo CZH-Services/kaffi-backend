@@ -14,7 +14,7 @@ export class WebinarRepository {
     return this.database
       .query(
         'SELECT w.id AS id, w.rank AS rank, w."youtubeUrl" AS "youtubeUrl", w."countryIconUrl" AS "countryIconUrl", \
-         w."selectedCountryIconUrl" AS "selectedCountryIconUrl" ,c.name AS country, c.id AS countryId\
+         w."selectedCountryIconUrl" AS "selectedCountryIconUrl" ,c.name AS country, c.id AS "countryId"\
          FROM webinars AS w INNER JOIN countries AS c on w."countryId" = c.id',
       )
       .then((res) => {
@@ -92,14 +92,25 @@ export class WebinarRepository {
     maxRank: number,
     increment: boolean,
   ): Promise<void> {
-    if (increment) {
+    const operation = increment ? '+' : '-';
+
+    if (minRank === -1 || maxRank === -1) {
+      const [comparison, rank] =
+        minRank === -1 ? ['<=', maxRank] : ['>=', minRank];
+
       return this.database.query(
-        'UPDATE webinars SET rank = rank + 1 WHERE rank >= $1 AND rank <= $2',
-        [minRank, maxRank],
+        'UPDATE webinars SET rank = rank ' +
+          operation +
+          ' 1 WHERE rank ' +
+          comparison +
+          ' $1',
+        [rank],
       );
     }
     return this.database.query(
-      'UPDATE webinars SET rank = rank - 1 WHERE rank >= $1 AND rank <= $2',
+      'UPDATE webinars SET rank = rank ' +
+        operation +
+        ' 1 WHERE rank >= $1 AND rank <= $2',
       [minRank, maxRank],
     );
   }
@@ -188,14 +199,24 @@ export class WebinarRepository {
     maxRank: number,
     increment: boolean,
   ): Promise<void> {
-    if (increment) {
+    const operation = increment ? '+' : '-';
+    if (minRank === -1 || maxRank === -1) {
+      const [comparison, rank] =
+        minRank === -1 ? ['<=', maxRank] : ['>=', minRank];
+
       return this.database.query(
-        'UPDATE WebinarSteps SET rank = rank + 1 WHERE rank >= $1 AND rank <= $2',
-        [minRank, maxRank],
+        'UPDATE WebinarSteps SET rank = rank ' +
+          operation +
+          ' 1 WHERE rank ' +
+          comparison +
+          ' $1',
+        [rank],
       );
     }
     return this.database.query(
-      'UPDATE WebinarSteps SET rank = rank - 1 WHERE rank >= $1 AND rank <= $2',
+      'UPDATE WebinarSteps SET rank = rank ' +
+        operation +
+        ' 1 WHERE rank >= $1 AND rank <= $2',
       [minRank, maxRank],
     );
   }

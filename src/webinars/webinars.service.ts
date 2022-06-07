@@ -68,6 +68,11 @@ export class WebinarService {
   }
 
   async deleteWebinar(id: number): Promise<boolean> {
+    const webinar = await this.webinarRepository.findOne(id);
+    if (!webinar) {
+      throw new HttpException('Webinar not Found', HttpStatus.NOT_FOUND);
+    }
+    this.webinarRepository.updateWebinarsRank(webinar.rank + 1, -1, false);
     await this.webinarRepository.deleteWebinarSteps(id);
     const deleteResponse = await this.webinarRepository.deleteWebinar(id);
     return <boolean>deleteResponse;
@@ -143,6 +148,15 @@ export class WebinarService {
   }
 
   async deleteWebinarStep(id: number): Promise<boolean> {
+    const webinarStep = await this.webinarRepository.getWebinarStep(id);
+    if (!webinarStep) {
+      throw new HttpException('Webinar Step not Found', HttpStatus.NOT_FOUND);
+    }
+    this.webinarRepository.updateWebinarStepRank(
+      webinarStep.rank + 1,
+      -1,
+      false,
+    );
     const deleteResponse = await this.webinarRepository.deleteWebinarStep(id);
     return <boolean>deleteResponse;
   }
