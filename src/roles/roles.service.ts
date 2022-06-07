@@ -5,17 +5,16 @@ import { UpdateRole } from './dto/updateRole';
 import { Role } from './entities/role';
 import { RolesRepository } from './roles.repository';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class RolesServices {
   constructor(private readonly rolesRepository: RolesRepository) {}
 
-  async createRole(role: CreateRole): Promise<RoleResponse> {
+  async createRole(role: CreateRole): Promise<boolean> {
     const existingRole = await this.rolesRepository.getRoleByName(role.name);
     if (existingRole) {
       throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
     }
-    const newRole = await this.rolesRepository.createRole(<Role>role);
-    return <RoleResponse>newRole;
+    return await this.rolesRepository.createRole(<Role>role);
   }
 
   async getRoles(): Promise<RoleResponse[]> {
@@ -24,23 +23,18 @@ export class RolesServices {
   }
 
   async updateRole(role: UpdateRole): Promise<boolean> {
-    const existingRole = await this.rolesRepository.getRoleById(role.id);
-    if (!existingRole) {
+    const updated = await this.rolesRepository.updateRole(<Role>role);
+    if (!updated) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
-    const updatedRole = await this.rolesRepository.updateRole(
-      role.id,
-      <Role>role,
-    );
-    return updatedRole;
+    return updated;
   }
 
   async deleteRole(id: number): Promise<boolean> {
-    const existingRole = await this.rolesRepository.getRoleById(id);
-    if (!existingRole) {
+    const deleted = await this.rolesRepository.deleteRole(id);
+    if (!deleted) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
-    const deletedRole = await this.rolesRepository.deleteRole(id);
-    return deletedRole;
+    return deleted;
   }
 }

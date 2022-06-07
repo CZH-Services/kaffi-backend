@@ -12,7 +12,7 @@ export class DatabaseService {
       host: env.POSTGRES_HOST,
       database: env.POSTGRES_DATABASE,
       password: env.POSTGRES_PASSWORD,
-      port: env.POSTGRES_PORT,
+      port: parseInt(env.POSTGRES_PORT),
     });
   }
 
