@@ -15,7 +15,7 @@ export class WebinarRepository {
       .query(
         'SELECT w.id AS id, w.rank AS rank, w."youtubeUrl" AS "youtubeUrl", w."countryIconUrl" AS "countryIconUrl", \
          w."selectedCountryIconUrl" AS "selectedCountryIconUrl" ,c.name AS country, c.id AS "countryId"\
-         FROM webinars AS w INNER JOIN countries AS c on w."countryId" = c.id',
+         FROM webinars AS w INNER JOIN countries AS c on w."countryId" = c.id ORDER BY rank',
       )
       .then((res) => {
         return res.rows.map((webinar: any) => <GetWebinarResponse>webinar);
@@ -144,7 +144,10 @@ export class WebinarRepository {
 
   async getAllWebinarSteps(webinarId: number): Promise<WebinarStep[]> {
     return this.database
-      .query('SELECT * FROM WebinarSteps WHERE "webinarId" = $1', [webinarId])
+      .query(
+        'SELECT * FROM WebinarSteps WHERE "webinarId" = $1 ORDER BY rank',
+        [webinarId],
+      )
       .then((res) => {
         return res.rows.map((step: any) => <WebinarStep>step);
       });
