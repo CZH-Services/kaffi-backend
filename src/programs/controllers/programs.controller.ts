@@ -59,7 +59,7 @@ export class ProgramController {
   }
 
   @Get('rows')
-  @ApiOperation({ summary: 'Gets a program by Id' })
+  @ApiOperation({ summary: 'Gets row programs' })
   @ApiResponse({
     status: 200,
     description: 'The program has been successfully returned.',
