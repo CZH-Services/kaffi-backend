@@ -20,7 +20,7 @@ export class DetailedProgramResponse {
     type: Object,
     example: JSON.stringify({ lang: 'Caption' }),
   })
-  hightlights: object;
+  highlights: object;
 
   @ApiProperty({
     type: Object,

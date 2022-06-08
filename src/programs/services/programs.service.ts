@@ -44,7 +44,7 @@ export class ProgramServices {
       id: program.id,
       name: program.name,
       icon: program.icon,
-      hightlights: program.highlights,
+      highlights: program.highlights,
       programDescriptions,
       programCriteria,
       cycle: activeCycle,
