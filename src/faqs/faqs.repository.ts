@@ -12,6 +12,16 @@ export class FAQRepository {
     });
   }
 
+  async getFaqsOfCategory(id: number): Promise<FAQ[]> {
+    return this.database
+      .query(
+        'SELECT * FROM faq INNER JOIN faqcategory on faq.category_id = faqcategory.id',
+      )
+      .then((res) => {
+        return res.rows.map((faq: any) => <FAQ>faq);
+      });
+  }
+
   async createFaq(faq: FAQ): Promise<void> {
     return this.database
       .query(
@@ -20,5 +30,24 @@ export class FAQRepository {
         [faq.question, faq.answer, faq.rank, faq.category_id],
       )
       .then(() => {});
+  }
+
+  async updateFaq(faq: FAQ): Promise<boolean> {
+    return this.database
+      .query(
+        `UPDATE faq SET question = '${faq.question}', answer = '${faq.answer}'
+        ,rank = '${faq.rank}' ,category_id = '${faq.category_id}' WHERE id = ${faq.id}`,
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
+  async deleteFaq(id: number): Promise<boolean> {
+    return this.database
+      .query(`DELETE FROM faq WHERE id = ${id}`)
+      .then((res) => {
+        return res.rowCount > 0;
+      });
   }
 }
