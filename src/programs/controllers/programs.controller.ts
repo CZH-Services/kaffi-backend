@@ -6,8 +6,18 @@ import {
   Param,
   Post,
   Put,
+  Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ImageService } from 'src/services/ImageService';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DeleteProgram } from '../dto/programs/deleteProgram';
 import { DetailedProgramResponse } from '../dto/programs/detailedProgramResponse';
@@ -24,6 +34,13 @@ export class ProgramController {
 
   @Post()
   @ApiOperation({ summary: 'Creates program' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor(
+      'iconFile',
+      ImageService.getSaveImageToStorage('public/images/program/icons/'),
+    ),
+  )
   @ApiResponse({
     status: 200,
     description: 'The program has been successfully created.',
@@ -33,8 +50,25 @@ export class ProgramController {
     status: 400,
     description: 'Invalid input.',
   })
-  async createProgram(@Body() program: CreateProgram): Promise<boolean> {
-    return this.programsServices.createProgram(program);
+  async createProgram(
+    @Body() program: CreateProgram,
+    @UploadedFile() iconFile: Express.Multer.File,
+  ): Promise<boolean> {
+    return this.programsServices.createProgram(program, iconFile);
+  }
+
+  @Get('programIcon/:icon')
+  @ApiOperation({ summary: 'Returns program icon' })
+  @ApiResponse({
+    status: 200,
+    description: 'The program icon has been successfully returned.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Icon not found.',
+  })
+  async getProgramIcon(@Param('icon') icon, @Res() res): Promise<any> {
+    res.sendFile(icon, { root: 'public/images/program/icons/' });
   }
 
   @Get('detailed/:id')
