@@ -3,6 +3,6 @@ export class Program {
   name: object;
   caption: object;
   description: object;
-  icon: string;
+  icon?: string;
   highlights: object;
 }

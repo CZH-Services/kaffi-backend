@@ -3,7 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import path = require('path');
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
-export class ImageService {
+const fs = require('fs');
+
+export class FileStorageService {
   static getSaveImageToStorage = (destination: string): MulterOptions => {
     return {
       storage: diskStorage({
@@ -17,5 +19,7 @@ export class ImageService {
     };
   };
 
-  static verifyImageFileExtension = (filePath: string) => {};
+  static deleteFileFromStorage = (filePath: string) => {
+    fs.unlinkSync(filePath);
+  };
 }

@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { programMediaPath } from 'src/constants';
+import { FileStorageService } from 'src/services/FileStorageService';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DetailedProgramResponse } from '../dto/programs/detailedProgramResponse';
 import { ProgramResponse } from '../dto/programs/programResponse';
@@ -21,11 +23,11 @@ export class ProgramServices {
 
   async createProgram(
     program: CreateProgram,
-    iconPath: Express.Multer.File,
+    iconFile: Express.Multer.File,
   ): Promise<boolean> {
     const newProgram = {
       id: 0,
-      icon: iconPath.path,
+      icon: iconFile.filename,
       ...program,
     };
     return await this.programRepository.createProgram(<Program>newProgram);
@@ -86,21 +88,37 @@ export class ProgramServices {
     );
   }
 
-  async updateProgram(program: UpdateProgram): Promise<boolean> {
-    const updated = await this.programRepository.updateProgram(
-      <Program>program,
-    );
+  async updateProgram(
+    program: UpdateProgram,
+    iconFile?: Express.Multer.File,
+  ): Promise<boolean> {
+    const updatedProgram: Program = {
+      ...program,
+      ...(iconFile && { icon: iconFile.filename }),
+    };
+    const oldProgram = await this.programRepository.getProgram(program.id);
+    const updated = await this.programRepository.updateProgram(updatedProgram);
     if (!updated) {
+      FileStorageService.deleteFileFromStorage(
+        programMediaPath + iconFile.filename,
+      );
       throw new NotFoundException('Program not found');
+    }
+    if (iconFile) {
+      FileStorageService.deleteFileFromStorage(
+        programMediaPath + oldProgram.icon,
+      );
     }
     return updated;
   }
 
   async deleteProgram(id: number): Promise<boolean> {
+    const program = await this.programRepository.getProgram(id);
     const deleted = await this.programRepository.deleteProgram(id);
     if (!deleted) {
       throw new NotFoundException('Program not found');
     }
+    FileStorageService.deleteFileFromStorage(programMediaPath + program.icon);
     return deleted;
   }
 

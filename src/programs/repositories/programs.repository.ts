@@ -35,18 +35,20 @@ export class ProgramRepository {
   }
 
   async updateProgram(program: Program): Promise<boolean> {
+    const query =
+      'UPDATE Program SET name = $1, caption = $2, description = $3, highlights = $4';
+    const queryWithoutIcon = query + 'WHERE id = $5';
+    const queryWithIcon = query + ', icon = $6 where id = $5';
+
     return this.database
-      .query(
-        `UPDATE Program SET name = $1, caption = $2, description = $3, icon = $4, highlights = $5 WHERE id = $6;`,
-        [
-          program.name,
-          program.caption,
-          program.description,
-          program.icon,
-          program.highlights,
-          program.id,
-        ],
-      )
+      .query(program.icon ? queryWithIcon : queryWithoutIcon, [
+        program.name,
+        program.caption,
+        program.description,
+        program.highlights,
+        program.id,
+        program.icon,
+      ])
       .then((res) => {
         return res.rowCount > 0;
       });

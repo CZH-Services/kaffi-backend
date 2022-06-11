@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt } from 'class-validator';
+import { IsInt, IsNumberString } from 'class-validator';
 
 export class UpdateProgram {
   @ApiProperty({ type: Number, example: 20, required: true })
-  @IsInt({ message: 'Please enter a valid id' })
+  @IsNumberString({ message: 'Please enter a valid id' })
   id: number;
 
   @ApiProperty({
@@ -29,10 +29,12 @@ export class UpdateProgram {
 
   @ApiProperty({
     type: String,
+    format: 'binary',
     example: 'https://www.example.com/icon.png',
-    required: true,
+    required: false,
+    name: 'iconFile',
   })
-  icon: string;
+  iconFile?: object;
 
   @ApiProperty({
     type: Object,

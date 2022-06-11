@@ -17,7 +17,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ImageService } from 'src/services/ImageService';
+import { programMediaPath } from 'src/constants';
+import { FileStorageService } from 'src/services/FileStorageService';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DeleteProgram } from '../dto/programs/deleteProgram';
 import { DetailedProgramResponse } from '../dto/programs/detailedProgramResponse';
@@ -38,7 +39,7 @@ export class ProgramController {
   @UseInterceptors(
     FileInterceptor(
       'iconFile',
-      ImageService.getSaveImageToStorage('public/images/program/icons/'),
+      FileStorageService.getSaveImageToStorage(programMediaPath),
     ),
   )
   @ApiResponse({
@@ -57,6 +58,35 @@ export class ProgramController {
     return this.programsServices.createProgram(program, iconFile);
   }
 
+  @Put()
+  @ApiOperation({ summary: 'Updates a program' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor(
+      'iconFile',
+      FileStorageService.getSaveImageToStorage(programMediaPath),
+    ),
+  )
+  @ApiResponse({
+    status: 200,
+    description: 'The program has been successfully updated.',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The program has not been found.',
+  })
+  async updateProgram(
+    @Body() program: UpdateProgram,
+    @UploadedFile() iconFile: Express.Multer.File,
+  ): Promise<boolean> {
+    return this.programsServices.updateProgram(program, iconFile);
+  }
+
   @Get('programIcon/:icon')
   @ApiOperation({ summary: 'Returns program icon' })
   @ApiResponse({
@@ -67,8 +97,8 @@ export class ProgramController {
     status: 404,
     description: 'Icon not found.',
   })
-  async getProgramIcon(@Param('icon') icon, @Res() res): Promise<any> {
-    res.sendFile(icon, { root: 'public/images/program/icons/' });
+  async getProgramIcon(@Param('icon') icon: string, @Res() res): Promise<any> {
+    res.sendFile(icon, { root: programMediaPath });
   }
 
   @Get('detailed/:id')
@@ -109,25 +139,6 @@ export class ProgramController {
   })
   async getRowPrograms(): Promise<RowProgramResponse[]> {
     return this.programsServices.getRowPrograms();
-  }
-
-  @Put()
-  @ApiOperation({ summary: 'Updates a program' })
-  @ApiResponse({
-    status: 200,
-    description: 'The program has been successfully updated.',
-    type: Boolean,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid input.',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'The program has not been found.',
-  })
-  async updateProgram(@Body() program: UpdateProgram): Promise<boolean> {
-    return this.programsServices.updateProgram(program);
   }
 
   @Delete(':id')
