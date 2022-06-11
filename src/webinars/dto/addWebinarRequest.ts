@@ -5,13 +5,21 @@ export class AddWebinarRequest {
   @IsNotEmpty({ message: 'Webinar youtubeUrl is required' })
   youtubeUrl: string;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: 'Webinar countryIconUrl is required' })
-  countryIconUrl: string;
+  @ApiProperty({
+    type: String,
+    format: 'binary',
+    required: true,
+    name: 'countryIconUrl',
+  })
+  countryIconUrl: object;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: 'Webinar selectedCountryIconUrl is required' })
-  selectedCountryIconUrl: string;
+  @ApiProperty({
+    type: String,
+    format: 'binary',
+    required: true,
+    name: 'selectedCountryIconUrl',
+  })
+  selectedCountryIconUrl: object;
 
   @ApiProperty({ example: 1 })
   @IsNotEmpty({ message: 'Webinar countryId is required ' })

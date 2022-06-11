@@ -6,13 +6,20 @@ import {
   Post,
   Put,
   Delete,
+  UseInterceptors,
+  UploadedFiles,
+  Res,
 } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
+  ApiConsumes,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { WEBINAR_MEDIA_PATH } from 'src/constants';
+import { FileStorageService } from 'src/services/FileStorageService';
 import { AddWebinarRequest } from './dto/addWebinarRequest';
 import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
 import { DeleteWebinarRequest } from './dto/deleteWebinarRequest';
@@ -57,21 +64,48 @@ export class WebinarsController {
 
   @Post()
   @ApiOperation({ summary: 'create a new webinar' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'countryIconUrl', maxCount: 1 },
+        { name: 'selectedCountryIconUrl', maxCount: 1 },
+      ],
+      FileStorageService.getSaveImageToStorage(WEBINAR_MEDIA_PATH),
+    ),
+  )
   @ApiOkResponse({
     status: 200,
-    description: 'webinar added',
+    description: 'Webinar added',
     type: Boolean,
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
   })
-  async createWebinar(@Body() info: AddWebinarRequest): Promise<boolean> {
-    return await this.webinarService.insertWebinar(<AddWebinarRequest>info);
+  async createWebinar(
+    @Body() info: AddWebinarRequest,
+    @UploadedFiles()
+    icons: {
+      countryIconUrl: Express.Multer.File[];
+      selectedCountryIconUrl: Express.Multer.File[];
+    },
+  ): Promise<boolean> {
+    return await this.webinarService.insertWebinar(info, icons);
   }
 
   @Put()
   @ApiOperation({ summary: 'update a webinar' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'countryIconUrl', maxCount: 1 },
+        { name: 'selectedCountryIconUrl', maxCount: 1 },
+      ],
+      FileStorageService.getSaveImageToStorage(WEBINAR_MEDIA_PATH),
+    ),
+  )
   @ApiOkResponse({
     status: 200,
     description: 'webinar updated',
@@ -81,8 +115,29 @@ export class WebinarsController {
     status: 401,
     description: 'Unauthorized',
   })
-  async updateWebinar(@Body() info: UpdateWebinarRequest): Promise<boolean> {
-    return await this.webinarService.updateWebinar(<UpdateWebinarRequest>info);
+  async updateWebinar(
+    @Body() info: UpdateWebinarRequest,
+    @UploadedFiles()
+    icons: {
+      countryIconUrl?: Express.Multer.File[];
+      selectedCountryIconUrl?: Express.Multer.File[];
+    },
+  ): Promise<boolean> {
+    return await this.webinarService.updateWebinar(info, icons);
+  }
+
+  @Get('webinarIcon/:icon')
+  @ApiOperation({ summary: 'Returns program icon' })
+  @ApiResponse({
+    status: 200,
+    description: 'The program icon has been successfully returned.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Icon not found.',
+  })
+  async getWebinarIcon(@Param('icon') icon: string, @Res() res): Promise<any> {
+    res.sendFile(icon, { root: WEBINAR_MEDIA_PATH });
   }
 
   @Delete(':id')

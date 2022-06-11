@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { AddWebinarRequest } from './dto/addWebinarRequest';
 import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
 import { GetWebinarResponse } from './dto/getWebinarResponse';
-import { UpdateWebinarRequest } from './dto/updateWebinarRequest';
 import { UpdateWebinarStepRequest } from './dto/updateWebinarStepRequest';
+import { Webinar } from './entities/webinar';
 import { WebinarStep } from './entities/webinarStep';
+
 @Injectable()
 export class WebinarRepository {
   constructor(private readonly database: DatabaseService) {}
@@ -52,13 +52,13 @@ export class WebinarRepository {
       });
   }
 
-  async addWebinar(data: AddWebinarRequest, rank: number): Promise<boolean> {
+  async addWebinar(data: Webinar): Promise<boolean> {
     return this.database
       .query(
         'INSERT INTO webinars (rank, "youtubeUrl", "countryIconUrl", "selectedCountryIconUrl", "countryId")\
         VALUES ($1, $2, $3, $4, $5)',
         [
-          rank,
+          data.rank,
           data.youtubeUrl,
           data.countryIconUrl,
           data.selectedCountryIconUrl,
@@ -70,18 +70,24 @@ export class WebinarRepository {
       });
   }
 
-  async updateWebinar(data: UpdateWebinarRequest): Promise<boolean> {
+  async updateWebinar(data: Webinar): Promise<boolean> {
+    let hasCountryIconUrl = '';
+    if (data.countryIconUrl) {
+      hasCountryIconUrl = '"countryIconUrl" = $4';
+    }
+    let hasSelectedCountryIconUrl = '';
+    if (data.selectedCountryIconUrl) {
+      hasSelectedCountryIconUrl = ', "selectedCountryIconUrl" = $5';
+    }
+    const query = `UPDATE webinars SET "youtubeUrl" = $1, rank = $2, ${hasCountryIconUrl}${hasSelectedCountryIconUrl} WHERE id = $3`;
     return this.database
-      .query(
-        'UPDATE webinars SET "youtubeUrl" = $1, "countryIconUrl" = $2, "selectedCountryIconUrl" = $3, rank = $4 WHERE id = $5',
-        [
-          data.youtubeUrl,
-          data.countryIconUrl,
-          data.selectedCountryIconUrl,
-          data.rank,
-          data.id,
-        ],
-      )
+      .query(query, [
+        data.youtubeUrl,
+        data.rank,
+        data.id,
+        data.countryIconUrl,
+        data.selectedCountryIconUrl,
+      ])
       .then((res) => {
         return res.rowCount > 0;
       });

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { programMediaPath } from 'src/constants';
+import { PROGRAM_MEDIA_PATH } from 'src/constants';
 import { FileStorageService } from 'src/services/FileStorageService';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DetailedProgramResponse } from '../dto/programs/detailedProgramResponse';
@@ -100,13 +100,13 @@ export class ProgramServices {
     const updated = await this.programRepository.updateProgram(updatedProgram);
     if (!updated) {
       FileStorageService.deleteFileFromStorage(
-        programMediaPath + iconFile.filename,
+        PROGRAM_MEDIA_PATH + iconFile.filename,
       );
       throw new NotFoundException('Program not found');
     }
     if (iconFile) {
       FileStorageService.deleteFileFromStorage(
-        programMediaPath + oldProgram.icon,
+        PROGRAM_MEDIA_PATH + oldProgram.icon,
       );
     }
     return updated;
@@ -118,7 +118,7 @@ export class ProgramServices {
     if (!deleted) {
       throw new NotFoundException('Program not found');
     }
-    FileStorageService.deleteFileFromStorage(programMediaPath + program.icon);
+    FileStorageService.deleteFileFromStorage(PROGRAM_MEDIA_PATH + program.icon);
     return deleted;
   }
 

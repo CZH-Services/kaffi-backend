@@ -4,11 +4,14 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
+import { WEBINAR_MEDIA_PATH } from 'src/constants';
+import { FileStorageService } from 'src/services/FileStorageService';
 import { AddWebinarRequest } from './dto/addWebinarRequest';
 import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
 import { GetWebinarResponse } from './dto/getWebinarResponse';
 import { UpdateWebinarRequest } from './dto/updateWebinarRequest';
 import { UpdateWebinarStepRequest } from './dto/updateWebinarStepRequest';
+import { Webinar } from './entities/webinar';
 import { WebinarStep } from './entities/webinarStep';
 import { WebinarRepository } from './webinars.repository';
 
@@ -29,20 +32,32 @@ export class WebinarService {
     return <GetWebinarResponse>webinar;
   }
 
-  async insertWebinar(info: AddWebinarRequest): Promise<boolean> {
+  async insertWebinar(
+    info: AddWebinarRequest,
+    icons: object,
+  ): Promise<boolean> {
     const rank =
       <number>await this.webinarRepository.getHighestWebinarRanks() + 1;
-    const insertResponse = await this.webinarRepository.addWebinar(
-      <AddWebinarRequest>info,
-      <number>rank,
-    );
+    const newWebinar: Webinar = {
+      id: 0,
+      rank: rank,
+      youtubeUrl: info.youtubeUrl,
+      countryIconUrl: icons['countryIconUrl'][0].filename,
+      selectedCountryIconUrl: icons['selectedCountryIconUrl'][0].filename,
+      countryId: info.countryId,
+    };
+    const insertResponse = await this.webinarRepository.addWebinar(newWebinar);
     return insertResponse;
   }
 
-  async updateWebinar(info: UpdateWebinarRequest): Promise<boolean> {
+  async updateWebinar(
+    info: UpdateWebinarRequest,
+    icons: object,
+  ): Promise<boolean> {
     const highestRank = <number>(
       await this.webinarRepository.getHighestWebinarRanks()
     );
+
     if (info.rank > highestRank || info.rank <= 0) {
       throw new ForbiddenException('Invalid Rank');
     }
@@ -61,8 +76,33 @@ export class WebinarService {
         !increment,
       );
     }
+
+    const updatedWebinar: Webinar = {
+      id: info.id,
+      rank: info.rank,
+      youtubeUrl: info.youtubeUrl,
+      countryId: prevWebinar.countryId,
+      ...(icons['countryIconUrl'] && {
+        countryIconUrl: icons['countryIconUrl'][0].filename,
+      }),
+      ...(icons['selectedCountryIconUrl'] && {
+        selectedCountryIconUrl: icons['selectedCountryIconUrl'][0].filename,
+      }),
+    };
+
+    if (icons['countryIconUrl']) {
+      FileStorageService.deleteFileFromStorage(
+        WEBINAR_MEDIA_PATH + prevWebinar.countryIconUrl,
+      );
+    }
+    if (icons['selectedCountryIconUrl']) {
+      FileStorageService.deleteFileFromStorage(
+        WEBINAR_MEDIA_PATH + prevWebinar.selectedCountryIconUrl,
+      );
+    }
+
     const updateResponse = await this.webinarRepository.updateWebinar(
-      <UpdateWebinarRequest>info,
+      updatedWebinar,
     );
     return <boolean>updateResponse;
   }
@@ -74,6 +114,12 @@ export class WebinarService {
     }
     this.webinarRepository.updateWebinarsRank(webinar.rank + 1, -1, false);
     await this.webinarRepository.deleteWebinarSteps(id);
+    FileStorageService.deleteFileFromStorage(
+      WEBINAR_MEDIA_PATH + webinar.countryIconUrl,
+    );
+    FileStorageService.deleteFileFromStorage(
+      WEBINAR_MEDIA_PATH + webinar.selectedCountryIconUrl,
+    );
     const deleteResponse = await this.webinarRepository.deleteWebinar(id);
     return <boolean>deleteResponse;
   }

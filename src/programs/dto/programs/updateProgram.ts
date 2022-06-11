@@ -30,7 +30,6 @@ export class UpdateProgram {
   @ApiProperty({
     type: String,
     format: 'binary',
-    example: 'https://www.example.com/icon.png',
     required: false,
     name: 'iconFile',
   })

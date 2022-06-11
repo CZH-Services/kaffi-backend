@@ -9,13 +9,21 @@ export class UpdateWebinarRequest {
   @IsNotEmpty({ message: 'youtubeUrl is required' })
   youtubeUrl: string;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: 'countryIconUrl is required' })
-  countryIconUrl: string;
+  @ApiProperty({
+    type: String,
+    format: 'binary',
+    required: false,
+    name: 'countryIconUrl',
+  })
+  countryIconUrl?: object;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: 'selectedCountryIconUrl is required' })
-  selectedCountryIconUrl: string;
+  @ApiProperty({
+    type: String,
+    format: 'binary',
+    required: false,
+    name: 'selectedCountryIconUrl',
+  })
+  selectedCountryIconUrl?: object;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'rank is required' })

@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { programMediaPath } from 'src/constants';
+import { PROGRAM_MEDIA_PATH } from 'src/constants';
 import { FileStorageService } from 'src/services/FileStorageService';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DeleteProgram } from '../dto/programs/deleteProgram';
@@ -39,7 +39,7 @@ export class ProgramController {
   @UseInterceptors(
     FileInterceptor(
       'iconFile',
-      FileStorageService.getSaveImageToStorage(programMediaPath),
+      FileStorageService.getSaveImageToStorage(PROGRAM_MEDIA_PATH),
     ),
   )
   @ApiResponse({
@@ -64,7 +64,7 @@ export class ProgramController {
   @UseInterceptors(
     FileInterceptor(
       'iconFile',
-      FileStorageService.getSaveImageToStorage(programMediaPath),
+      FileStorageService.getSaveImageToStorage(PROGRAM_MEDIA_PATH),
     ),
   )
   @ApiResponse({
@@ -98,7 +98,7 @@ export class ProgramController {
     description: 'Icon not found.',
   })
   async getProgramIcon(@Param('icon') icon: string, @Res() res): Promise<any> {
-    res.sendFile(icon, { root: programMediaPath });
+    res.sendFile(icon, { root: PROGRAM_MEDIA_PATH });
   }
 
   @Get('detailed/:id')
