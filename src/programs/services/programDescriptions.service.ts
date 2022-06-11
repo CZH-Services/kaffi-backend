@@ -46,6 +46,10 @@ export class ProgramDescriptionsServices {
     if (!exists) {
       throw new NotFoundException('Description not found');
     }
+    await this.descriptionRepository.decreaseProgramDescriptionRanks(
+      exists.programId,
+      exists.rank,
+    );
     return await this.descriptionRepository.deleteDescription(id);
   }
 

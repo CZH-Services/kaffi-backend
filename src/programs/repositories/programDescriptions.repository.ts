@@ -49,6 +49,13 @@ export class ProgramDescriptionRepository {
       });
   }
 
+  async decreaseProgramDescriptionRanks(programId: number, rank: number) {
+    return this.databaseService.query(
+      `UPDATE ProgramDescription SET rank = rank - 1 WHERE "programId" = $1 AND rank >= $2;`,
+      [programId, rank],
+    );
+  }
+
   async updateDescription(newDescription: ProgramDescription) {
     return this.databaseService
       .query(

@@ -44,6 +44,10 @@ export class ProgramCriteriaServices {
     if (!exists) {
       throw new NotFoundException('Criterion not found');
     }
+    await this.criteriaRepository.decreaseProgramCriteriaRanks(
+      exists.programId,
+      exists.rank,
+    );
     return await this.criteriaRepository.deleteCriterion(id);
   }
 

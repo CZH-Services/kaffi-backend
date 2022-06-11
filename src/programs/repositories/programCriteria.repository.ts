@@ -47,6 +47,13 @@ export class ProgramCriteriaRepository {
       });
   }
 
+  async decreaseProgramCriteriaRanks(programId: number, rank: number) {
+    return this.databaseService.query(
+      `UPDATE ProgramCriterion SET rank = rank - 1 WHERE "programId" = $1 AND rank >= $2;`,
+      [programId, rank],
+    );
+  }
+
   async updateCriterion(newCriterion: ProgramCriterion): Promise<boolean> {
     return this.databaseService
       .query(
