@@ -19,9 +19,13 @@ export class ProgramServices {
     private readonly programCriteriaRepository: ProgramCriteriaRepository,
   ) {}
 
-  async createProgram(program: CreateProgram): Promise<boolean> {
+  async createProgram(
+    program: CreateProgram,
+    iconPath: Express.Multer.File,
+  ): Promise<boolean> {
     const newProgram = {
       id: 0,
+      icon: iconPath.path,
       ...program,
     };
     return await this.programRepository.createProgram(<Program>newProgram);
