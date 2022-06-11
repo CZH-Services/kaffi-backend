@@ -2,7 +2,10 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Query,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -11,6 +14,7 @@ import { AuthServices } from './auth.services';
 import { Login } from './dto/login';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { LocalAuthGuard } from './guards/localAuth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -28,5 +32,15 @@ export class AuthController {
   @Get('hello')
   async signedInOnlyHello() {
     return 'hello';
+  }
+
+  @Get()
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {}
+
+  @Get('redirect')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req) {
+    return this.authServices.googleLogin(req);
   }
 }
