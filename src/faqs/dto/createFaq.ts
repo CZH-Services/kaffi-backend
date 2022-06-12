@@ -1,14 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsInt,
-  isJSON,
-  IsJSON,
-  isNotEmpty,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateFaq {
   @ApiProperty({
@@ -33,7 +24,7 @@ export class CreateFaq {
   readonly rank: Number;
 
   @ApiProperty({
-    example: 'asddfs32',
+    example: 23432,
     required: true,
   })
   @IsNotEmpty({ message: "Category ID shouldn't be empty" })

@@ -1,14 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsInt,
-  isJSON,
-  IsJSON,
-  isNotEmpty,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class UpdateFaq {
   @ApiProperty({ example: 20, required: true })

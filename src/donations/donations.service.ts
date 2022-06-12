@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { DonationResponse } from './dto/donationResponse';
 import { DonationRepository } from './donations.repository';
 import { CreateDonation } from './dto/createDonation';

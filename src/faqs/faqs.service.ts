@@ -15,8 +15,18 @@ export class FAQService {
     return (await faqs).map((faq) => <FAQResponse>faq);
   }
 
-  async createFaq(faq: CreateFaq): Promise<void> {
-    await this.faqRepository.createFaq(<FAQ>faq);
+  async getFaqsofCategory(id: Number): Promise<FAQResponse[]> {
+    const faqs = this.faqRepository.getFaqsOfCategory(id);
+
+    return (await faqs).map((faq) => <FAQResponse>faq);
+  }
+
+  async createFaq(faq: CreateFaq): Promise<boolean> {
+    const created = await this.faqRepository.createFaq(<FAQ>faq);
+    if (!created) {
+      throw new NotFoundException('FAQ could not be created');
+    }
+    return created;
   }
 
   async updateFaq(faq: UpdateFaq): Promise<boolean> {

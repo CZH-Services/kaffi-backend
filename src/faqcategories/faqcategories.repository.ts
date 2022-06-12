@@ -7,19 +7,23 @@ export class FAQCategoryRepository {
   constructor(private readonly database: DatabaseService) {}
 
   async getFaqCategories(): Promise<FAQCategory[]> {
-    return this.database.query('SELECT * FROM faqcategory').then((res) => {
-      return res.rows.map((faqcategory: any) => <FAQCategory>faqcategory);
-    });
+    return this.database
+      .query('SELECT * FROM faqcategory ORDER BY rank')
+      .then((res) => {
+        return res.rows.map((faqcategory: any) => <FAQCategory>faqcategory);
+      });
   }
 
-  async createFaqCategory(FAQCategory: FAQCategory): Promise<void> {
+  async createFaqCategory(FAQCategory: FAQCategory): Promise<boolean> {
     return this.database
       .query(
         `INSERT INTO faqcategory (name ,rank) 
         VALUES($1, $2)`,
         [FAQCategory.name, FAQCategory.rank],
       )
-      .then(() => {});
+      .then((res) => {
+        return res.rowCount > 0;
+      });
   }
 
   async updateFaqCategory(FAQCategory: FAQCategory): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Donation } from './entities/donation';
 
@@ -24,7 +24,7 @@ export class DonationRepository {
     return await this.database
       .query('SELECT * FROM Donation WHERE id = $1', [id])
       .then((res) => {
-        if (res.rows.length === 1) {
+        if (res.rowCount > 0) {
           return <Donation>res.rows[0];
         }
         return undefined;

@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { createFaqCategory } from './dto/createFaqCategory';
 import { updateFaqCategory } from './dto/updateFaqCategory';
 import { FAQCategory } from './entities/faqcategory';
 import { FAQCategoryRepository } from './faqcategories.repository';
@@ -15,6 +16,16 @@ export class FAQCategoryService {
     );
   }
 
+  async createFaqCategory(category: createFaqCategory): Promise<boolean> {
+    const created = await this.faqcategoryrepository.createFaqCategory(
+      <FAQCategory>category,
+    );
+    if (!created) {
+      throw new NotFoundException('FAQ Category could not be created');
+    }
+    return created;
+  }
+
   async updateFaqCategory(faqcategory: updateFaqCategory): Promise<boolean> {
     const updated = await this.faqcategoryrepository.updateFaqCategory(
       <FAQCategory>faqcategory,
@@ -25,7 +36,7 @@ export class FAQCategoryService {
     return updated;
   }
 
-  async deleteFaq(id: number): Promise<boolean> {
+  async deleteFaqCategory(id: number): Promise<boolean> {
     const deleted = await this.faqcategoryrepository.deleteFaqCategory(id);
     if (!deleted) {
       throw new NotFoundException('FAQ Category not found');
