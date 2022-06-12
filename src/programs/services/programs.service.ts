@@ -73,17 +73,15 @@ export class ProgramServices {
         const activeCycle = await this.programCyclesRepository.getActiveCycle(
           program.id,
         );
-        if (activeCycle) {
-          const result: RowProgramResponse = {
-            id: program.id,
-            name: program.name,
-            icon: program.icon,
-            caption: program.caption,
-            description: program.description,
-            cycle: activeCycle,
-          };
-          return result;
-        }
+        const result: RowProgramResponse = {
+          id: program.id,
+          name: program.name,
+          icon: program.icon,
+          caption: program.caption,
+          description: program.description,
+          cycle: activeCycle,
+        };
+        return result;
       }),
     );
   }
