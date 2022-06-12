@@ -9,7 +9,8 @@ export class FAQRepository {
   async getFaqs(): Promise<FAQ[]> {
     return this.database
       .query(
-        'SELECT * FROM faq INNER JOIN faqcategory ON faqcategory.id = faq.category_id ORDER BY faq.rank',
+        'SELECT f.id AS id, f.question AS question, f.answer AS answer, f.rank AS rank, f.category_id category_id,\
+         fc.name AS name FROM faq AS f INNER JOIN faqcategory AS fc ON fc.id = f.category_id ORDER BY f.rank',
       )
       .then((res) => {
         return res.rows.map((faq: any) => <FAQ>faq);

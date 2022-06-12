@@ -39,7 +39,7 @@ export class FAQCategoryRepository {
 
   async deleteFaqCategory(id: number): Promise<boolean> {
     return this.database
-      .query(`DELETE FROM faqcategory WHERE id = ${id}`)
+      .query(`DELETE FROM faqcategory WHERE id = $1`, [id])
       .then((res) => {
         return res.rowCount > 0;
       });
