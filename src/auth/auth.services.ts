@@ -1,6 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersServices } from 'src/user/users.services';
+import axios from 'axios';
 
 @Injectable()
 export class AuthServices {
@@ -25,14 +26,27 @@ export class AuthServices {
     };
   }
 
-  googleLogin(req) {
-    if (!req.user) {
-      return 'No user from google';
+  async createUser(user: any) {
+    return { email: user.email, id: 123 };
+  }
+
+  async googleAuthentication(accessToken: string) {
+    const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json&access_token=${accessToken}`;
+    const { email, given_name, family_name, profile, name } = await axios
+      .get(url)
+      .then((res) => res.data);
+
+    let user = await this.usersServices.findOne(email);
+
+    if (!user) {
+      user = await this.createUser({
+        email,
+        givenName: given_name,
+        familyName: family_name,
+        name: name,
+      });
     }
 
-    return {
-      message: 'User information from google',
-      user: req.user,
-    };
+    return await this.login(user);
   }
 }

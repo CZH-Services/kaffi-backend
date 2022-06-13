@@ -15,6 +15,7 @@ import { Login } from './dto/login';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { LocalAuthGuard } from './guards/localAuth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { GoogleAuthentication } from './dto/googleAuth';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -34,13 +35,8 @@ export class AuthController {
     return 'hello';
   }
 
-  @Get()
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
-
-  @Get('redirect')
-  @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req) {
-    return this.authServices.googleLogin(req);
+  @Post('google-authentication')
+  googleAuthRedirect(@Body() body: GoogleAuthentication) {
+    return this.authServices.googleAuthentication(body.accessToken);
   }
 }
