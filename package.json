@@ -35,7 +35,6 @@
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.1",
     "passport": "^0.5.3",
-    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",
