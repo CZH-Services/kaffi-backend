@@ -1,10 +1,10 @@
-import { Injectable, Scope } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { Injectable } from '@nestjs/common';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { Donation } from './entities/donation';
 
 @Injectable()
 export class DonationRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: PostgresService) {}
 
   async insertDonation(donation: Donation): Promise<void> {
     this.database

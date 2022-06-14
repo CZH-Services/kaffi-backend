@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { ProgramDescription } from '../entities/programDescription';
 
 @Injectable()
 export class ProgramDescriptionRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: PostgresService) {}
 
   async createDescription(description: ProgramDescription): Promise<boolean> {
     return this.databaseService

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { FAQRepository } from './faqs.repository';
 import { FAQController } from './faqs.controller';
 import { FAQService } from './faqs.service';
-import { DatabaseModule } from 'src/database/database.module';
+import { PostgresModule } from 'src/postgres/postgres.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [PostgresModule],
   controllers: [FAQController],
   providers: [FAQService, FAQRepository],
 })

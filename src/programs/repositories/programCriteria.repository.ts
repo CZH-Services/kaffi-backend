@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { ProgramCriterion } from '../entities/programCriterion';
 
 @Injectable()
 export class ProgramCriteriaRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: PostgresService) {}
 
   async createCriterion(criterion: ProgramCriterion): Promise<boolean> {
     return this.databaseService

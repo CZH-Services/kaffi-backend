@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { ProgramCycle } from '../entities/programCycle';
 
 @Injectable()
 export class ProgramCyclesRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: PostgresService) {}
 
   async addCycle(cycle: ProgramCycle): Promise<boolean> {
     return this.databaseService

@@ -1,10 +1,10 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { Committee } from './entities/committee';
 
 @Injectable()
 export class CommitteesRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: PostgresService) {}
 
   async createCommittee(committee: Committee): Promise<Committee> {
     return this.database
