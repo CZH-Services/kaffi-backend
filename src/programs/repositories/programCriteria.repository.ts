@@ -48,10 +48,14 @@ export class ProgramCriteriaRepository {
   }
 
   async decreaseProgramCriteriaRanks(programId: number, rank: number) {
-    return this.databaseService.query(
-      `UPDATE ProgramCriterion SET rank = rank - 1 WHERE "programId" = $1 AND rank >= $2;`,
-      [programId, rank],
-    );
+    return this.databaseService
+      .query(
+        `UPDATE ProgramCriterion SET rank = rank - 1 WHERE "programId" = $1 AND rank >= $2;`,
+        [programId, rank],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
   }
 
   async updateCriterion(newCriterion: ProgramCriterion): Promise<boolean> {
@@ -71,12 +75,16 @@ export class ProgramCriteriaRepository {
     maxRank: number,
     increment: boolean,
   ) {
-    return this.databaseService.query(
-      `UPDATE ProgramCriterion SET rank = rank ${
-        increment ? '+' : '-'
-      } 1 WHERE "programId" = $1 AND rank >= $2 AND rank <= $3;`,
-      [programId, minRank, maxRank],
-    );
+    return this.databaseService
+      .query(
+        `UPDATE ProgramCriterion SET rank = rank ${
+          increment ? '+' : '-'
+        } 1 WHERE "programId" = $1 AND rank >= $2 AND rank <= $3;`,
+        [programId, minRank, maxRank],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
   }
 
   async getHighestProgramCriterionRank(programId: number): Promise<number> {

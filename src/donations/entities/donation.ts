@@ -1,5 +1,9 @@
 export class Donation {
   id: number;
-  name: string;
-  amount: number;
+  accountName: string;
+  iban: string;
+  swift: string;
+  bankName: string;
+  currency: string;
+  externalPayments: object;
 }
