@@ -1,19 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class DonationResponse {
-  @ApiProperty({ example: 1 })
-  id: number;
-
-  @ApiProperty({ example: 'Kaffi' })
+  @ApiProperty({ example: 'Kaffi e.V.' })
   accountName: string;
 
-  @ApiProperty({ example: 'An IBAN' })
+  @ApiProperty({ example: 'DE51430609671262435500' })
   iban: string;
 
-  @ApiProperty({ example: '123456789' })
+  @ApiProperty({ example: 'GENODEM1GLS' })
   swift: string;
 
-  @ApiProperty({ example: 'Bank Audi' })
+  @ApiProperty({ example: 'GLS Bank' })
   bankName: string;
 
   @ApiProperty({ example: 'EUR' })
@@ -22,8 +19,12 @@ export class DonationResponse {
   @ApiProperty({
     example: {
       paypal: 'url to kaffipaypal',
-      gofundme: 'url to gofundme',
-      benevity: 'string of the benevity modal',
+      gofundme: 'https://www.gofundme.com/f/kaffi',
+      benevity: `We are now on Benevity, a donation platform that several companies
+      are partnered with, like Google & Microsoft. These companies
+      typically match employee donations, thus doubling your contribution
+      to us. If your company is partnered with Benevity, consider us for
+      your donation.`,
     },
   })
   externalPayments: object;

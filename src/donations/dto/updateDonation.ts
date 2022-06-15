@@ -6,19 +6,19 @@ export class UpdateDonation {
   @IsInt({ message: 'Id must be a number' })
   id: number;
 
-  @ApiProperty({ example: 'Kaffi' })
+  @ApiProperty({ example: 'Kaffi e.V.' })
   @IsString({ message: 'Account name must be a string' })
   accountName: string;
 
-  @ApiProperty({ example: 'An IBAN' })
+  @ApiProperty({ example: 'DE51430609671262435500' })
   @IsString({ message: 'IBAN must be a string' })
   iban: string;
 
-  @ApiProperty({ example: '123456789' })
+  @ApiProperty({ example: 'GENODEM1GLS' })
   @IsString({ message: 'SWIFT must be a string' })
   swift: string;
 
-  @ApiProperty({ example: 'Bank Audi' })
+  @ApiProperty({ example: 'GLS Bank' })
   @IsString({ message: 'Bank name must be a string' })
   bankName: string;
 
@@ -29,8 +29,12 @@ export class UpdateDonation {
   @ApiProperty({
     example: {
       paypal: 'url to kaffipaypal',
-      gofundme: 'url to gofundme',
-      benevity: 'string of the benevity modal',
+      gofundme: 'https://www.gofundme.com/f/kaffi',
+      benevity: `We are now on Benevity, a donation platform that several companies
+      are partnered with, like Google & Microsoft. These companies
+      typically match employee donations, thus doubling your contribution
+      to us. If your company is partnered with Benevity, consider us for
+      your donation.`,
     },
   })
   externalPayments: object;
