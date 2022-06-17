@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 
 @Injectable()
-export class DatabaseService {
+export class PostgresService {
   private pool: Pool;
 
   constructor() {

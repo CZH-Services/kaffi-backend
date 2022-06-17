@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { AddWebinarStepRequest } from './dto/addWebinarStepRequest';
 import { GetWebinarResponse } from './dto/getWebinarResponse';
 import { UpdateWebinarStepRequest } from './dto/updateWebinarStepRequest';
@@ -8,7 +8,7 @@ import { WebinarStep } from './entities/webinarStep';
 
 @Injectable()
 export class WebinarRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: PostgresService) {}
 
   async findAllWebinars(): Promise<GetWebinarResponse[]> {
     return this.database

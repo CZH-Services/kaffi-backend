@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { Role } from './entities/role';
 
 @Injectable()
 export class RolesRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: PostgresService) {}
 
   async createRole(role: Role): Promise<boolean> {
     return this.database

@@ -1,7 +1,7 @@
-import { Injectable, Scope } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { Injectable } from '@nestjs/common';
+import { PostgresService } from 'src/postgres/postgres.service';
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: PostgresService) {}
 }

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { DonationRepository } from './donations.repository';
 import { DonationsController } from './donations.controller';
 import { DonationsService } from './donations.service';
-import { DatabaseModule } from 'src/database/database.module';
+import { PostgresModule } from 'src/postgres/postgres.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [PostgresModule],
   controllers: [DonationsController],
   providers: [DonationsService, DonationRepository],
 })

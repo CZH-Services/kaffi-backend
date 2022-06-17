@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { PostgresService } from 'src/postgres/postgres.service';
 import { FAQCategory } from './entities/faqcategory';
 
 @Injectable()
 export class FAQCategoryRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: PostgresService) {}
 
   async getFaqCategories(): Promise<FAQCategory[]> {
     return this.database
