@@ -9,8 +9,8 @@ import {
 import { LANGUAGES_CODE } from 'src/constants';
 
 @ValidatorConstraint({ name: 'isMultiLingual' })
-export class IsMultiLingualRule implements ValidatorConstraintInterface {
-  async validate(object: Object) {
+class IsMultiLingualRule implements ValidatorConstraintInterface {
+  validate(object: Object) {
     for (const languageKey of LANGUAGES_CODE) {
       if (typeof object[languageKey] !== 'string') return false;
     }
