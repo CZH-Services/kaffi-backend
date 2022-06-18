@@ -18,8 +18,6 @@ async function bootstrap() {
   // Validations configuration
   app.useGlobalPipes(new ValidationPipe());
 
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
-
   // Swagger configuration
   const baseRoute = 'api';
   authSwaggerConfiguration(`${baseRoute}/auth`, app);
