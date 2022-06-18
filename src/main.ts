@@ -1,5 +1,4 @@
 import { ValidationPipe } from '@nestjs/common';
-import { useContainer } from 'class-validator';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { authSwaggerConfiguration } from './auth/auth.swagger';
