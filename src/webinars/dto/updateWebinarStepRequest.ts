@@ -13,11 +13,11 @@ export class UpdateWebinarStepRequest {
 
   @ApiProperty({ example: { en: 'Prepare documents' } })
   @IsNotEmpty({ message: 'title is required ' })
-  @IsMultiLingual()
+  @IsMultiLingual({ message: 'title has missing language(s) translation' })
   title: Object;
 
   @ApiProperty({ example: { en: 'This is how you prepare for documents' } })
   @IsNotEmpty({ message: 'paragraph is required ' })
-  @IsMultiLingual()
+  @IsMultiLingual({ message: 'paragraph has missing language(s) translation' })
   paragraph: Object;
 }
