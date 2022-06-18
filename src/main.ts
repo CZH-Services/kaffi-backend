@@ -1,4 +1,5 @@
 import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { authSwaggerConfiguration } from './auth/auth.swagger';
@@ -16,6 +17,8 @@ async function bootstrap() {
 
   // Validations configuration
   app.useGlobalPipes(new ValidationPipe());
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   // Swagger configuration
   const baseRoute = 'api';

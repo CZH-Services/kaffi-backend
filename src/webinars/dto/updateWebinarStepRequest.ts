@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
 export class UpdateWebinarStepRequest {
   @ApiProperty({ example: 1 })
@@ -12,9 +13,11 @@ export class UpdateWebinarStepRequest {
 
   @ApiProperty({ example: { en: 'Prepare documents' } })
   @IsNotEmpty({ message: 'title is required ' })
+  @IsMultiLingual()
   title: Object;
 
   @ApiProperty({ example: { en: 'This is how you prepare for documents' } })
   @IsNotEmpty({ message: 'paragraph is required ' })
+  @IsMultiLingual()
   paragraph: Object;
 }
