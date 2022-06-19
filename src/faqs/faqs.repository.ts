@@ -1,10 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
 import { FAQ } from './entities/faq';
+import { faqsSwaggerConfiguration } from './faqs.swagger';
 
 @Injectable()
 export class FAQRepository {
   constructor(private readonly database: PostgresService) {}
+
+  async getFaq(id: number): Promise<FAQ> {
+    return this.database
+      .query('SELECT * FROM faq where id = ' + id)
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return <FAQ>res.rows[0];
+        }
+        return undefined;
+      });
+  }
 
   async getFaqs(): Promise<FAQ[]> {
     return this.database
@@ -42,13 +54,21 @@ export class FAQRepository {
 
   async updateFaq(faq: FAQ): Promise<boolean> {
     return this.database
+
       .query(
-        `UPDATE faq SET question = '${faq.question}', answer = '${faq.answer}'
-        ,rank = '${faq.rank}' ,category_id = '${faq.category_id}' WHERE id = ${faq.id}`,
+        `UPDATE faq SET question = $1, answer = $2 , rank = $3 , category_id = $4 WHERE id = $5;`,
+        [faq.question, faq.answer, faq.rank, faq.category_id, faq.id],
       )
       .then((res) => {
         return res.rowCount > 0;
       });
+  }
+
+  async decreaseFaqRanks(categoryId: number, rank: number) {
+    return this.database.query(
+      `UPDATE faq SET rank = rank - 1 WHERE "category_id" = $1 AND rank >= $2;`,
+      [categoryId, rank],
+    );
   }
 
   async deleteFaq(id: number): Promise<boolean> {
@@ -57,5 +77,32 @@ export class FAQRepository {
       .then((res) => {
         return res.rowCount > 0;
       });
+  }
+
+  async getHighestFAQRank(categoryid: Number): Promise<number> {
+    return this.database
+      .query(`SELECT MAX(rank) FROM faq WHERE "category_id" = $1;`, [
+        categoryid,
+      ])
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return res.rows[0].max;
+        }
+        return undefined;
+      });
+  }
+
+  async updateFAQRanks(
+    categoryId: Number,
+    minRank: Number,
+    maxRank: Number,
+    increment: boolean,
+  ) {
+    return this.database.query(
+      `UPDATE faq SET rank = rank ${
+        increment ? '+' : '-'
+      } 1 WHERE "category_id" = $1 AND rank >= $2 AND rank <= $3;`,
+      [categoryId, minRank, maxRank],
+    );
   }
 }

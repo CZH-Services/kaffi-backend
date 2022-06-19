@@ -16,14 +16,6 @@ export class CreateFaq {
   readonly answer: JSON;
 
   @ApiProperty({
-    example: 3,
-    required: true,
-  })
-  @IsInt({ message: 'Rank should be a number' })
-  @IsNotEmpty({ message: "Rank shouldn't be empty" })
-  readonly rank: Number;
-
-  @ApiProperty({
     example: 23432,
     required: true,
   })
