@@ -56,7 +56,7 @@ export class ProgramCyclesRepository {
         if (res.rowCount > 0) {
           return <ProgramCycle[]>res.rows;
         }
-        return undefined;
+        return [];
       });
   }
 

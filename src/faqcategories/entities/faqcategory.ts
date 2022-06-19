@@ -1,5 +1,5 @@
 export class FAQCategory {
   id: number;
-  name: JSON;
+  name: object;
   rank: number;
 }
