@@ -10,9 +10,11 @@ export function IsMultiLingual(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(object: Object) {
+        validate(object: object) {
+          const newObject =
+            typeof object === 'string' ? JSON.parse(object) : object;
           for (const languageKey of LANGUAGES_CODE) {
-            if (typeof object[languageKey] !== 'string') return false;
+            if (typeof newObject[languageKey] !== 'string') return false;
           }
           return true;
         },
