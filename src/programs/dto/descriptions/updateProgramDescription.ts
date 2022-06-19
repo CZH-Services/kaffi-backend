@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
+import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
 export class UpdateProgramDescription {
   @ApiProperty({ type: Number, example: 1, required: true })
@@ -15,5 +16,6 @@ export class UpdateProgramDescription {
     example: JSON.stringify({ lang: 'A program description' }),
     required: true,
   })
+  @IsMultiLingual({ message: 'Program description should be multi-lingual' })
   description: Object;
 }

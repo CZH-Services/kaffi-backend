@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsDateString,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsDateString, IsInt } from 'class-validator';
+import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
 export class AddProgramCycle {
   @ApiProperty({ type: Number, example: 1, required: true })
@@ -17,6 +12,7 @@ export class AddProgramCycle {
     example: JSON.stringify({ lang: 'Fall' }),
     required: true,
   })
+  @IsMultiLingual({ message: 'Cycle name should be multi-lingual' })
   name: object;
 
   @ApiProperty({ type: Boolean, example: true, required: true })
