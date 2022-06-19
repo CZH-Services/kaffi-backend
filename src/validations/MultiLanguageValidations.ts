@@ -15,6 +15,7 @@ export function IsMultiLingual(validationOptions?: ValidationOptions) {
             typeof object === 'string' ? JSON.parse(object) : object;
           for (const languageKey of LANGUAGES_CODE) {
             if (typeof newObject[languageKey] !== 'string') return false;
+            if (newObject[languageKey] === '') return false;
           }
           return true;
         },
