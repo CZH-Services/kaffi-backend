@@ -14,7 +14,6 @@ export function IsMultiLingual(validationOptions?: ValidationOptions) {
           try {
             const newObject =
               typeof object === 'string' ? JSON.parse(object) : object;
-            console.log('newObject', newObject);
             for (const languageKey of LANGUAGES_CODE) {
               if (
                 typeof newObject[languageKey] !== 'string' ||
