@@ -33,7 +33,7 @@ export class FAQCategoryController {
     return await this.faqcategoryservice.createFaqCategory(category);
   }
 
-  @Put()
+  @Put('/:id')
   @ApiOperation({ summary: 'Update an FAQ Category' })
   @ApiResponse({
     status: 200,

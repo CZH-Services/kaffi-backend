@@ -52,6 +52,23 @@ export class FAQController {
     return this.faqService.getFaqsofCategory(id.id);
   }
 
+  @Get('/category-faqs/max-rank/:id')
+  @ApiOperation({
+    summary: 'Gets the max rank for FAQs of a certain FAQ Category',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Max rank for FAQs',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  async getMaxFaqRank(id: Number): Promise<Number> {
+    return this.faqService.getMaxRankOfFaqs(id);
+  }
+
   @Delete('/:id')
   @ApiOperation({ summary: 'Delete an FAQ' })
   @ApiResponse({
