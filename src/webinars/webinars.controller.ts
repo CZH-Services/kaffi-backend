@@ -217,7 +217,7 @@ export class WebinarsController {
     type: Boolean,
   })
   async deleteWebinarStep(
-    @Body() info: DeleteWebinarRequest,
+    @Param() info: DeleteWebinarRequest,
   ): Promise<boolean> {
     return await this.webinarService.deleteWebinarStep(<number>info.id);
   }
