@@ -11,16 +11,21 @@ export function IsMultiLingual(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(object: object) {
-          const newObject =
-            typeof object === 'string' ? JSON.parse(object) : object;
-          for (const languageKey of LANGUAGES_CODE) {
-            if (
-              typeof newObject[languageKey] !== 'string' ||
-              newObject[languageKey] === ''
-            )
-              return false;
+          try {
+            const newObject =
+              typeof object === 'string' ? JSON.parse(object) : object;
+            console.log('newObject', newObject);
+            for (const languageKey of LANGUAGES_CODE) {
+              if (
+                typeof newObject[languageKey] !== 'string' ||
+                newObject[languageKey] === ''
+              )
+                return false;
+            }
+            return true;
+          } catch (error) {
+            return false;
           }
-          return true;
         },
       },
     });
