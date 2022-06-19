@@ -6,6 +6,9 @@ export class UpdateDonation {
   @IsInt({ message: 'Id must be a number' })
   id: number;
 
+  @ApiProperty({ example: '27,000€ +' })
+  amount: string;
+
   @ApiProperty({ example: 'Kaffi e.V.' })
   @IsString({ message: 'Account name must be a string' })
   accountName: string;

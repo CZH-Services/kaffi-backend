@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class DonationResponse {
+  @ApiProperty({ example: '27,000€ +' })
+  amount: string;
+
   @ApiProperty({ example: 'Kaffi e.V.' })
   accountName: string;
 

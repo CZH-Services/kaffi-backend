@@ -9,7 +9,7 @@ export class DonationRepository {
   async updateDonationInformation(donation: Donation): Promise<boolean> {
     return await this.database
       .query(
-        'UPDATE Donation SET "accountName" = $1, iban = $2, swift = $3, "bankName" = $4, currency = $5, "externalPayments" = $6 WHERE id = $7',
+        'UPDATE Donation SET "accountName" = $1, iban = $2, swift = $3, "bankName" = $4, currency = $5, "externalPayments" = $6, amount = $7',
         [
           donation.accountName,
           donation.iban,
@@ -17,7 +17,7 @@ export class DonationRepository {
           donation.bankName,
           donation.currency,
           donation.externalPayments,
-          donation.id,
+          donation.amount,
         ],
       )
       .then((res) => {

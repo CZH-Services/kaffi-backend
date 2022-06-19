@@ -1,6 +1,5 @@
 ALTER TABLE Donation 
-    ADD name varchar(255),
-    ADD amount varchar(255);
+    ADD name varchar(255);
 
 ALTER TABLE Donation DROP COLUMN "accountName";
 ALTER TABLE Donation DROP COLUMN iban;
