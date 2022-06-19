@@ -38,6 +38,7 @@ export class CyclesController {
   @ApiResponse({
     status: 200,
     description: 'The program active cycle has been successfully returned.',
+    type: ProgramCycleResponse,
   })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
   @ApiResponse({ status: 404, description: 'Program has not been found.' })
@@ -52,8 +53,11 @@ export class CyclesController {
   @ApiResponse({
     status: 200,
     description: 'The cycles has been successfully returned.',
+    type: [ProgramCycleResponse],
   })
-  async getProgramCycles(@Param() programId: GetProgramCycles) {
+  async getProgramCycles(
+    @Param() programId: GetProgramCycles,
+  ): Promise<ProgramCycleResponse[]> {
     return this.cyclesService.getProgramCycles(programId.programId);
   }
 
