@@ -70,6 +70,13 @@ export class FAQCategoryRepository {
     );
   }
 
+  async decreaseFaqCategoryRanks(rank: number) {
+    return this.database.query(
+      `UPDATE faqcategory SET rank = rank - 1 WHERE rank >= $1;`,
+      [rank],
+    );
+  }
+
   async deleteFaqCategory(id: number): Promise<boolean> {
     return this.database
       .query(`DELETE FROM faqcategory WHERE id = $1`, [id])

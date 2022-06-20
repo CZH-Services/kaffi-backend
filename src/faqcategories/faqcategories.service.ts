@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { max } from 'class-validator';
 import { createFaqCategory } from './dto/createFaqCategory';
 import { updateFaqCategory } from './dto/updateFaqCategory';
 import { FAQCategory } from './entities/faqcategory';
@@ -70,7 +69,7 @@ export class FAQCategoryService {
 
   async deleteFaqCategory(id: number): Promise<boolean> {
     const tag = await this.faqcategoryrepository.getFaqCategory(id);
-    await this.faqcategoryrepository.decreaseFaqRanks(tag.rank);
+    await this.faqcategoryrepository.decreaseFaqCategoryRanks(tag.rank);
 
     const deleted = await this.faqcategoryrepository.deleteFaqCategory(id);
     if (!deleted) {

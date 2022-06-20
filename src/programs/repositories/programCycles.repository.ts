@@ -54,6 +54,7 @@ export class ProgramCyclesRepository {
       .query(`SELECT * FROM ProgramCycle WHERE "programId" = $1;`, [programId])
       .then((res) => {
         if (res.rowCount > 0) {
+          console.log(res.rows[0], <ProgramCycle>res.rows[0]);
           return <ProgramCycle[]>res.rows;
         }
         return [];

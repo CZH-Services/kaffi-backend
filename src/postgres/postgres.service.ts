@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
-
 @Injectable()
 export class PostgresService {
   private pool: Pool;
@@ -14,6 +13,7 @@ export class PostgresService {
       password: env.POSTGRES_PASSWORD,
       port: parseInt(env.POSTGRES_PORT),
     });
+    require('pg').types.setTypeParser(1082, (value) => value);
   }
 
   async query(query: string, params: any[] = []): Promise<any> {
