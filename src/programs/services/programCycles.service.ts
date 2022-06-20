@@ -48,6 +48,11 @@ export class ProgramCyclesService {
     if (!exists) {
       throw new NotFoundException('Cycle does not exist');
     }
+    if (updatedCycle.submission > updatedCycle.deadline) {
+      throw new BadRequestException('Submission date cannot be after deadline');
+    } else if (updatedCycle.deadline > updatedCycle.results) {
+      throw new BadRequestException('Deadline cannot be after results date');
+    }
     if (updatedCycle.active) {
       await this.cyclesRepository.deactivateProgramCycles(
         updatedCycle.programId,
