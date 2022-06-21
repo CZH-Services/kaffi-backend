@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class UpdateFaq {
@@ -11,12 +12,14 @@ export class UpdateFaq {
     required: true,
   })
   @IsNotEmpty({ message: "Question shouldn't be empty" })
+  @IsMultiLingual({ message: 'Question should be multi-lingual' })
   readonly question: JSON;
 
   @ApiProperty({
     example: { en: 'You start by applying, then we get back to you' },
   })
   @IsNotEmpty({ message: "Answer shouldn't be empty" })
+  @IsMultiLingual({ message: 'Answer should be multi-lingual' })
   readonly answer: JSON;
 
   @ApiProperty({
