@@ -1,0 +1,4 @@
+ALTER TABLE KaffiUser
+    ADD COLUMN profileUrl VARCHAR(300),
+    ADD COLUMN Location VARCHAR(300),
+    ADD COLUMN authWithGoogle BOOLEAN;
