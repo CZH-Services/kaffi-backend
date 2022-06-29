@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CommittesServices } from './committees.service';
+import { CommitteesServices } from './committees.service';
 import { CommitteeResponse } from './dto/committeeResponse';
 import { CreateCommittee } from './dto/createCommittee';
 import { DeleteCommittee } from './dto/deleteCommittee';
@@ -17,7 +17,7 @@ import { UpdateCommittee } from './dto/updateCommittee';
 @ApiTags('Committees')
 @Controller('committees')
 export class CommitteesController {
-  constructor(private readonly committeesServices: CommittesServices) {}
+  constructor(private readonly committeesServices: CommitteesServices) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new commitee' })
