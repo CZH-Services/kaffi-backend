@@ -8,5 +8,6 @@ import { RolesServices } from './roles.service';
   imports: [PostgresModule],
   controllers: [RolesController],
   providers: [RolesRepository, RolesServices],
+  exports: [RolesServices],
 })
 export class RoleModule {}
