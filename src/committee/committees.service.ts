@@ -10,6 +10,8 @@ export class CommitteesServices {
   }
 
   getCommitteeByName(committee: string): boolean {
-    return Object.values(Committee).includes(<Committee>committee);
+    return Object.values(Committee)
+      .map((committee) => committee.toString())
+      .includes(committee);
   }
 }

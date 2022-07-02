@@ -18,8 +18,13 @@ export class PermissionServices {
 
   async assignPermissionToUser(permission: AssignPermission): Promise<boolean> {
     await this.userServices.findOneById(permission.userId);
-    await this.rolesServices.getRoleByName(permission.role);
-    await this.committeeServices.getCommitteeByName(permission.committee);
+    if (!this.rolesServices.getRoleByName(permission.role)) {
+      throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
+    }
+    if (!this.committeeServices.getCommitteeByName(permission.committee)) {
+      throw new HttpException('Committee not found', HttpStatus.NOT_FOUND);
+    }
+
     const existingPermission = await this.permissionRepository.getPermission(
       permission.userId,
       permission.role,

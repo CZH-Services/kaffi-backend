@@ -10,6 +10,8 @@ export class RolesServices {
   }
 
   getRoleByName(role: string): boolean {
-    return Object.values(Role).includes(<Role>role);
+    return Object.values(Role)
+      .map((role) => role.toString())
+      .includes(role);
   }
 }
