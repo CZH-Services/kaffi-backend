@@ -10,7 +10,7 @@ import { UpdateCommittee } from './dto/updateCommittee';
 import { Committee } from './entities/committee';
 
 @Injectable()
-export class CommittesServices {
+export class CommitteesServices {
   constructor(private readonly committesRepository: CommitteesRepository) {}
 
   async createCommittee(
