@@ -6,11 +6,11 @@ export class AssignPermission {
   @IsInt({ message: 'User ID must be an integer' })
   readonly userId: number;
 
-  @ApiProperty({ example: 1, required: true })
+  @ApiProperty({ example: "Admin", required: true })
   @IsString({ message: 'Role must be a string' })
   readonly role: string;
 
-  @ApiProperty({ example: 1, required: true })
+  @ApiProperty({ example: "Finance", required: true })
   @IsString({ message: 'Committee must be a string' })
   readonly committee: string;
 }

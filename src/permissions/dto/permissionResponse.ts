@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class PermissionResponse {
   @ApiProperty({ example: 1 })
@@ -7,9 +8,11 @@ export class PermissionResponse {
   @ApiProperty({ example: 1, required: true })
   readonly userId: number;
 
-  @ApiProperty({ example: 1, required: true })
-  readonly roleId: number;
+  @ApiProperty({ example: 'Admin', required: true })
+  @IsString({ message: 'Role must be a string' })
+  readonly role: string;
 
-  @ApiProperty({ example: 1, required: true })
-  readonly committeeId: number;
+  @ApiProperty({ example: 'Finance', required: true })
+  @IsString({ message: 'Committee must be a string' })
+  readonly committee: string;
 }

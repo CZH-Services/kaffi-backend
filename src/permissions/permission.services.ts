@@ -18,12 +18,12 @@ export class PermissionServices {
 
   async assignPermissionToUser(permission: AssignPermission): Promise<boolean> {
     await this.userServices.findOneById(permission.userId);
-    await this.rolesServices.getRoleByName(permission.roleId);
-    await this.committeeServices.getCommitteeByName(permission.committeeId);
+    await this.rolesServices.getRoleByName(permission.role);
+    await this.committeeServices.getCommitteeByName(permission.committee);
     const existingPermission = await this.permissionRepository.getPermission(
       permission.userId,
-      permission.roleId,
-      permission.committeeId,
+      permission.role,
+      permission.committee,
     );
     if (existingPermission) {
       throw new HttpException(
@@ -52,11 +52,11 @@ export class PermissionServices {
 
   async getPermission(
     userId: number,
-    roleId: number,
-    committeeId: number,
+    role: string,
+    committee: string,
   ): Promise<PermissionResponse> {
     return <PermissionResponse>(
-      await this.permissionRepository.getPermission(userId, roleId, committeeId)
+      await this.permissionRepository.getPermission(userId, role, committee)
     );
   }
 

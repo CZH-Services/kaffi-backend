@@ -35,8 +35,8 @@ export class PermissionRepository {
 
   async getPermission(
     userId: number,
-    role: number,
-    committee: number,
+    role: string,
+    committee: string,
   ): Promise<Permission> {
     return this.database
       .query(
