@@ -3,8 +3,8 @@ import { PostgresService } from 'src/postgres/postgres.service';
 import { CreateUser } from './dto/createUser';
 import { ProfileInfoResponse } from './dto/profileInfoResponse';
 import { UpdateUserInfoRequest } from './dto/updateUserInfoRequest';
-import { UpdateUserProfileImage } from './dto/updateUserProfileImage';
 import { UserResponse } from './dto/userResponse';
+import { User } from './entities/user';
 
 @Injectable()
 export class UserRepository {
@@ -87,6 +87,20 @@ export class UserRepository {
         profile,
         email,
       ])
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
+  async getUsers(): Promise<User[]> {
+    return this.database.query(`SELECT * FROM kaffiuser`).then((res) => {
+      return res.rows;
+    });
+  }
+
+  async deleteUser(userId: number): Promise<boolean> {
+    return this.database
+      .query(`DELETE FROM kaffiuser WHERE id = $1`, [userId])
       .then((res) => {
         return res.rowCount > 0;
       });

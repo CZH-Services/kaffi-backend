@@ -15,6 +15,7 @@ export const authSwaggerConfiguration = (
     .setDescription('The authentication API description')
     .setVersion('1.0')
     .addTag('Authentication')
+    .addBearerAuth()
     .build();
 
   const programDocument = SwaggerModule.createDocument(app, options, {

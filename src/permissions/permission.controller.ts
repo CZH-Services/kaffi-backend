@@ -4,8 +4,8 @@ import { AssignPermission } from './dto/assignPermission';
 import { PermissionResponse } from './dto/permissionResponse';
 import { PermissionServices } from './permission.services';
 
-@ApiTags('User Roles')
-@Controller('userRoles')
+@ApiTags('Permissions')
+@Controller('permission')
 export class PermissionController {
   constructor(private readonly permissionServices: PermissionServices) {}
 
