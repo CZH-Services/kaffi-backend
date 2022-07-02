@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AssignUserRole } from './dto/assignUserRole';
-import { UserRoleResponse } from './dto/userRoleResponse';
-import { UserRoleServices } from './userRole.service';
+import { AssignPermission } from './dto/assignPermission';
+import { PermissionResponse } from './dto/permissionResponse';
+import { PermissionServices } from './permission.services';
 
 @ApiTags('User Roles')
 @Controller('userRoles')
-export class UserRoleController {
-  constructor(private readonly userRoleServices: UserRoleServices) {}
+export class PermissionController {
+  constructor(private readonly permissionServices: PermissionServices) {}
 
   @Post()
   @ApiOperation({ summary: 'Assign a role to a user' })
@@ -24,10 +24,10 @@ export class UserRoleController {
     status: 401,
     description: 'Unauthorized',
   })
-  async assignRolePermissionToUser(
-    @Body() userRole: AssignUserRole,
+  async assignPermissionToUser(
+    @Body() permission: AssignPermission,
   ): Promise<boolean> {
-    return this.userRoleServices.assignRolePermissionToUser(userRole);
+    return this.permissionServices.assignPermissionToUser(permission);
   }
 
   @Delete(':id')
@@ -45,26 +45,24 @@ export class UserRoleController {
     status: 401,
     description: 'Unauthorized',
   })
-  async revokeRolePermissionFromUser(
-    @Param('id') id: number,
-  ): Promise<boolean> {
-    return this.userRoleServices.revokeRolePermissionFromUser(id);
+  async revokePermissionFromUser(@Param('id') id: number): Promise<boolean> {
+    return this.permissionServices.revokePermissionFromUser(id);
   }
 
   @Get('/:userId')
-  @ApiOperation({ summary: 'Get all user roles by user' })
+  @ApiOperation({ summary: 'Get all user permissions' })
   @ApiResponse({
     status: 200,
-    description: 'User roles records',
-    type: [UserRoleResponse],
+    description: 'User permissions records',
+    type: [PermissionResponse],
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
   })
-  async getUserRoles(
+  async getPermissions(
     @Param('userId') userId: number,
-  ): Promise<UserRoleResponse[]> {
-    return this.userRoleServices.getUserRoles(userId);
+  ): Promise<PermissionResponse[]> {
+    return this.permissionServices.getPermissions(userId);
   }
 }

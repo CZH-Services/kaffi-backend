@@ -1,4 +1,4 @@
-DROP TABLE UserRole;
+DROP TABLE Permission;
 CREATE TABLE UserRole (
     id serial PRIMARY KEY,
     userId integer,

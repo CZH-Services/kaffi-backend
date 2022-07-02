@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { CommitteeModule } from 'src/committee/committee.module';
 import { RoleModule } from 'src/roles/role.module';
 import { UserModule } from 'src/user/users.module';
-import { UserRoleModule } from 'src/userRoles/userRole.module';
+import { PermissionModule } from 'src/permissions/permission.module';
 import { AuthModule } from './auth.module';
 
 export const authSwaggerConfiguration = (
@@ -23,7 +23,7 @@ export const authSwaggerConfiguration = (
       CommitteeModule,
       RoleModule,
       UserModule,
-      UserRoleModule,
+      PermissionModule,
     ],
   });
   SwaggerModule.setup(route, app, programDocument);

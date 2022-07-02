@@ -10,7 +10,7 @@ import { RoleModule } from './roles/role.module';
 import { CommitteeModule } from './committee/committee.module';
 import { AuthModule } from './auth/auth.module';
 import { ProgramsModule } from './programs/programs.module';
-import { UserRoleModule } from './userRoles/userRole.module';
+import { PermissionModule } from './permissions/permission.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { UserRoleModule } from './userRoles/userRole.module';
     RoleModule,
     CommitteeModule,
     UserModule,
-    UserRoleModule,
+    PermissionModule,
     DonationModule,
     ProgramsModule,
   ],

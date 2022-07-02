@@ -1,5 +1,5 @@
 DROP TABLE UserRole;
-CREATE TABLE UserRole (
+CREATE TABLE Permission (
     id serial PRIMARY KEY,
     "userId" integer,
     "roleId" integer,

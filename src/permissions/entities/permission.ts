@@ -1,4 +1,4 @@
-export class UserRole {
+export class Permission {
   id: number;
   userId: number;
   roleId: number;
