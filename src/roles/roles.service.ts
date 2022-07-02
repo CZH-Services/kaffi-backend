@@ -1,48 +1,15 @@
-import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
-import { CreateRole } from './dto/createRole';
-import { RoleResponse } from './dto/roleResponse';
-import { UpdateRole } from './dto/updateRole';
+import { Injectable } from '@nestjs/common';
 import { Role } from './entities/role';
-import { RolesRepository } from './roles.repository';
 
 @Injectable()
 export class RolesServices {
-  constructor(private readonly rolesRepository: RolesRepository) {}
+  constructor() {}
 
-  async createRole(role: CreateRole): Promise<boolean> {
-    const existingRole = await this.rolesRepository.getRoleByName(role.name);
-    if (existingRole) {
-      throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
-    }
-    return await this.rolesRepository.createRole(<Role>role);
+  getRoles(): string[] {
+    return Object.values(Role);
   }
 
-  async getRoles(): Promise<RoleResponse[]> {
-    const roles = await this.rolesRepository.getRoles();
-    return roles.map((role) => <RoleResponse>role);
-  }
-
-  async getRoleById(roleId: number): Promise<RoleResponse> {
-    const role = <RoleResponse>await this.rolesRepository.getRoleById(roleId);
-    if (!role) {
-      throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
-    }
-    return role;
-  }
-
-  async updateRole(role: UpdateRole): Promise<boolean> {
-    const updated = await this.rolesRepository.updateRole(<Role>role);
-    if (!updated) {
-      throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
-    }
-    return updated;
-  }
-
-  async deleteRole(id: number): Promise<boolean> {
-    const deleted = await this.rolesRepository.deleteRole(id);
-    if (!deleted) {
-      throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
-    }
-    return deleted;
+  getRoleByName(role: string): boolean {
+    return Object.values(Role).includes(<Role>role);
   }
 }

@@ -18,8 +18,8 @@ export class PermissionServices {
 
   async assignPermissionToUser(permission: AssignPermission): Promise<boolean> {
     await this.userServices.findOneById(permission.userId);
-    await this.rolesServices.getRoleById(permission.roleId);
-    await this.committeeServices.getCommitteeById(permission.committeeId);
+    await this.rolesServices.getRoleByName(permission.roleId);
+    await this.committeeServices.getCommitteeByName(permission.committeeId);
     const existingPermission = await this.permissionRepository.getPermission(
       permission.userId,
       permission.roleId,

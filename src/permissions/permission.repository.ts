@@ -9,8 +9,8 @@ export class PermissionRepository {
   async assignPermissionToUser(permission: Permission): Promise<boolean> {
     return this.database
       .query(
-        `INSERT INTO Permission ("userId", "roleId", "committeeId") VALUES ($1, $2, $3)`,
-        [permission.userId, permission.roleId, permission.committeeId],
+        `INSERT INTO Permission ("userId", role, committee) VALUES ($1, $2, $3)`,
+        [permission.userId, permission.role, permission.committee],
       )
       .then((res) => {
         return res.rowCount > 0;
@@ -35,13 +35,13 @@ export class PermissionRepository {
 
   async getPermission(
     userId: number,
-    roleId: number,
-    committeeId: number,
+    role: number,
+    committee: number,
   ): Promise<Permission> {
     return this.database
       .query(
-        `SELECT * FROM Permission WHERE "userId" = $1 AND "roleId" = $2 AND "committeeId" = $3`,
-        [userId, roleId, committeeId],
+        `SELECT * FROM Permission WHERE "userId" = $1 AND role = $2 AND committee = $3`,
+        [userId, role, committee],
       )
       .then((res) => {
         if (res.rowCount > 0) {

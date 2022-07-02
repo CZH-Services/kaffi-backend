@@ -1,4 +1,4 @@
-export class Committee {
-  id: number;
-  name: string;
+export enum Committee {
+  FINANCE = 'Finance',
+  SOCIAL_MEDIA = 'Social Media',
 }

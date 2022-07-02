@@ -1,6 +1,6 @@
 export class Permission {
   id: number;
   userId: number;
-  roleId: number;
-  committeeId: number;
+  role: string;
+  committee: string;
 }
