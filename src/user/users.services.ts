@@ -47,4 +47,12 @@ export class UsersServices {
       profile['profile'][0].filename,
     );
   }
+
+  async getUsers(): Promise<UserResponse[]> {
+    return <UserResponse[]>await this.userRepository.getUsers();
+  }
+
+  async deleteUser(userId: number): Promise<boolean> {
+    return await this.userRepository.deleteUser(userId);
+  }
 }

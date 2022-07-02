@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Put,
@@ -23,12 +24,10 @@ import { FileStorageService } from 'src/services/FileStorageService';
 import { ProfileInfoResponse } from './dto/profileInfoResponse';
 import { UpdateUserInfoRequest } from './dto/updateUserInfoRequest';
 import { UsersServices } from './users.services';
-
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UpdateUserProfileImage } from './dto/updateUserProfileImage';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
-import { profile } from 'console';
+import { UserResponse } from './dto/userResponse';
 
 @ApiTags('Users')
 @Controller('users')
@@ -98,9 +97,37 @@ export class UsersController {
     description: 'profile image not found.',
   })
   async getWebinarIcon(
+    // please keep this method name as is
     @Param('profile') profile: string,
     @Res() res,
   ): Promise<any> {
     res.sendFile(profile, { root: PROFILES_MEDIA_PATH });
+  }
+
+  @Get('admin')
+  @ApiOperation({ summary: 'Returns users list' })
+  @ApiResponse({
+    status: 200,
+    description: 'Users has been successfully returned.',
+    type: [UserResponse],
+  })
+  async getUsers() {
+    return await this.userServices.getUsers();
+  }
+
+  @Delete('admin/:id')
+  @ApiOperation({ summary: 'Delete user by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'Succesfully deleted a user',
+    type: Boolean,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+  })
+  async deleteUser(@Param('id') userId: number) {
+    return await this.userServices.deleteUser(userId);
   }
 }

@@ -26,7 +26,7 @@ export class CreateUser {
   password: string;
 
   @ApiProperty({ example: false, required: true })
-  @IsBoolean({ message: 'authWithGoogle shoulb a boolean' })
+  @IsBoolean({ message: 'authWithGoogle should be a boolean' })
   authWithGoogle: boolean;
 
   @ApiProperty({ example: 'USA', required: true })
