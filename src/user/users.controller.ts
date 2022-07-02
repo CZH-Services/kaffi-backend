@@ -96,8 +96,7 @@ export class UsersController {
     status: 404,
     description: 'profile image not found.',
   })
-  async getWebinarIcon(
-    // please keep this method name as is
+  async getProfileImage(
     @Param('profile') profile: string,
     @Res() res,
   ): Promise<any> {
