@@ -42,6 +42,17 @@ export class UserRepository {
       });
   }
 
+  async findOneById(id: number): Promise<UserResponse> {
+    return this.database
+      .query(`SELECT * FROM kaffiuser WHERE id = $1`, [id])
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return res.rows[0];
+        }
+        return undefined;
+      });
+  }
+
   async getUserProfileInfo(email: string): Promise<ProfileInfoResponse> {
     return this.database
       .query(

@@ -35,6 +35,17 @@ export class CommitteesRepository {
     });
   }
 
+  async getCommitteeById(id: number): Promise<Committee> {
+    return this.database
+      .query(`SELECT * FROM Committee WHERE id = ${id}`)
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return <Committee>res.rows[0];
+        }
+        return undefined;
+      });
+  }
+
   async updateCommittee(committee: Committee): Promise<boolean> {
     return this.database
       .query(

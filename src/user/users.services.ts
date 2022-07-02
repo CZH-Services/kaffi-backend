@@ -1,4 +1,4 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { CreateUser } from './dto/createUser';
 import { ProfileInfoResponse } from './dto/profileInfoResponse';
 import { UpdateUserInfoRequest } from './dto/updateUserInfoRequest';
@@ -15,6 +15,14 @@ export class UsersServices {
 
   async findOne(email: string): Promise<UserResponse> {
     return this.userRepository.findOne(email);
+  }
+
+  async findOneById(id: number): Promise<UserResponse> {
+    const user = await this.userRepository.findOneById(id);
+    if (!user) {
+      throw new HttpException('Invalid user', HttpStatus.NOT_FOUND);
+    }
+    return <UserResponse>user;
   }
 
   async getUserProfileInfo(email: string): Promise<ProfileInfoResponse> {

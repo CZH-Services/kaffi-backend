@@ -31,6 +31,17 @@ export class RolesRepository {
     });
   }
 
+  async getRoleById(roleId: number): Promise<Role> {
+    return this.database
+      .query(`SELECT * FROM KaffiRole WHERE id = ${roleId}`)
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return <Role>res.rows[0];
+        }
+        return undefined;
+      });
+  }
+
   async updateRole(role: Role): Promise<boolean> {
     return this.database
       .query(`UPDATE KaffiRole SET name = '${role.name}' WHERE id = ${role.id}`)

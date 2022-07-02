@@ -22,6 +22,14 @@ export class RolesServices {
     return roles.map((role) => <RoleResponse>role);
   }
 
+  async getRoleById(roleId: number): Promise<RoleResponse> {
+    const role = <RoleResponse>await this.rolesRepository.getRoleById(roleId);
+    if (!role) {
+      throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
+    }
+    return role;
+  }
+
   async updateRole(role: UpdateRole): Promise<boolean> {
     const updated = await this.rolesRepository.updateRole(<Role>role);
     if (!updated) {

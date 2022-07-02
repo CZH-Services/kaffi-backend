@@ -18,12 +18,9 @@ export class PermissionRepository {
       });
   }
 
-  async revokePermissionFromUser(permission: Permission): Promise<boolean> {
+  async revokePermissionFromUser(permissionId: number): Promise<boolean> {
     return this.database
-      .query(
-        `DELETE FROM Permission WHERE "userId" = $1 AND "roleId" = $2 AND "committeeId" = $3`,
-        [permission.userId, permission.roleId, permission.committeeId],
-      )
+      .query(`DELETE FROM Permission WHERE id = $1`, [permissionId])
       .then((res) => {
         return res.rowCount > 0;
       });
@@ -34,6 +31,35 @@ export class PermissionRepository {
       .query(`SELECT * FROM Permission WHERE "userId" = $1`, [userId])
       .then((res) => {
         return res.rows.map((permission: any) => <Permission>permission);
+      });
+  }
+
+  async getPermission(
+    userId: number,
+    roleId: number,
+    committeeId: number,
+  ): Promise<Permission> {
+    return this.database
+      .query(
+        `SELECT * FROM Permission WHERE "userId" = $1 AND "roleId" = $2 AND "committeeId" = $3`,
+        [userId, roleId, committeeId],
+      )
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return <Permission>res.rows[0];
+        }
+        return undefined;
+      });
+  }
+
+  async getPermissionById(id: number): Promise<Permission> {
+    return this.database
+      .query(`SELECT * FROM Permission WHERE id = $1`, [id])
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return <Permission>res.rows[0];
+        }
+        return undefined;
       });
   }
 }
