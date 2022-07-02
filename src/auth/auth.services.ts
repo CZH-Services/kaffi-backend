@@ -4,7 +4,6 @@ import { UsersServices } from 'src/user/users.services';
 import axios from 'axios';
 import * as bcrypt from 'bcrypt';
 import { UserResponse } from 'src/user/dto/userResponse';
-import { CreateUser } from 'src/user/dto/createUser';
 import { SignUp } from './dto/signup';
 import { Login } from './dto/login';
 import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
@@ -28,6 +27,7 @@ export class AuthServices {
     delete user.password;
     return user;
   }
+
   async getJWTToken(email: string, id: number) {
     const payload = { email: email, sub: id };
     return {
