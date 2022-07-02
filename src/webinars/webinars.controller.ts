@@ -30,7 +30,6 @@ import { GetWebinarStepsRequest } from './dto/getWebinarStepsRequest';
 import { UpdateWebinarRequest } from './dto/updateWebinarRequest';
 import { UpdateWebinarStepRequest } from './dto/updateWebinarStepRequest';
 import { WebinarStep } from './entities/webinarStep';
-import { WebinarRepository } from './webinars.repository';
 import { WebinarService } from './webinars.service';
 
 @ApiTags('Webinars')

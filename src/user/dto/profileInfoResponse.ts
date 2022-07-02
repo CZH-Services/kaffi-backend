@@ -1,14 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsEmail,
-  IsString,
-  ValidateIf,
-  IsOptional,
-  IsNumber,
-} from 'class-validator';
+import { IsEmail, IsString, IsOptional, IsNumber } from 'class-validator';
 
-export class UserResponse {
+export class ProfileInfoResponse {
   @ApiProperty({ example: 1, required: true })
   @IsNumber()
   id: number;
@@ -24,15 +17,6 @@ export class UserResponse {
   @ApiProperty({ example: 'zeitoun', required: true })
   @IsString({ message: 'last name should be a string' })
   lastName: string;
-
-  @ApiProperty({ required: true })
-  @ValidateIf((o) => !o.authWithGoogle || o.password)
-  @IsString({ message: 'passowrd should be a string' })
-  password: string;
-
-  @ApiProperty({ example: false, required: true })
-  @IsBoolean({ message: 'authWithGoogle shoulb a boolean' })
-  authWithGoogle: boolean;
 
   @ApiProperty({ example: 'USA', required: true })
   @IsOptional()

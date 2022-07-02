@@ -7,6 +7,7 @@ import { UserResponse } from 'src/user/dto/userResponse';
 import { CreateUser } from 'src/user/dto/createUser';
 import { SignUp } from './dto/signup';
 import { Login } from './dto/login';
+import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
 
 @Injectable()
 export class AuthServices {
@@ -24,9 +25,9 @@ export class AuthServices {
     if (!isValid) {
       return null;
     }
+    delete user.password;
     return user;
   }
-
   async getJWTToken(email: string, id: number) {
     const payload = { email: email, sub: id };
     return {
@@ -64,11 +65,9 @@ export class AuthServices {
   }
 
   async googleAuthentication(accessToken: string) {
-    const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json&access_token=${accessToken}`;
     const { email, given_name, family_name, picture } = await axios
-      .get(url)
+      .get(GET_GOOGLE_USER_INFO_URL(accessToken))
       .then((res) => res.data);
-
 
     let user = <UserResponse>await this.usersServices.findOne(email);
 

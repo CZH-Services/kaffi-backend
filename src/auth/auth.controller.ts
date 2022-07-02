@@ -42,7 +42,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('hello')
-  async signedInOnlyHello() {
-    return 'hello';
+  async signedInOnlyHello(@Request() req: any) {
+    return req.user;
   }
 }
