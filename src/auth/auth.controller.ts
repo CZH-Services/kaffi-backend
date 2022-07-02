@@ -13,6 +13,7 @@ import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { LocalAuthGuard } from './guards/localAuth.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { GoogleAuthentication } from './dto/googleAuth';
+import { SignUp } from './dto/signup';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -22,18 +23,23 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() credentials: Login, @Request() request) {
-    return this.authServices.login(request.user);
+    return this.authServices.getTokenForValidatedUser(credentials);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @Get('hello')
-  async signedInOnlyHello() {
-    return 'hello';
+  @Post('signup')
+  async signup(@Body() data: SignUp) {
+    return this.authServices.signup(data);
   }
 
   @Post('google-authentication')
   googleAuthRedirect(@Body() body: GoogleAuthentication) {
     return this.authServices.googleAuthentication(body.accessToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('hello')
+  async signedInOnlyHello(@Request() req: any) {
+    return req.user;
   }
 }
