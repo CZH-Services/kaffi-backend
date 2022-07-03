@@ -15,6 +15,7 @@ import {
 } from '@nestjs/swagger';
 import { Committee } from 'src/committee/entities/committee';
 import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 import { Role } from 'src/roles/entities/role';
 import { AssignPermission } from './dto/assignPermission';
 import { PermissionResponse } from './dto/permissionResponse';
@@ -22,13 +23,12 @@ import { PermissionServices } from './permission.services';
 
 @ApiTags('Permissions')
 @Controller('permission')
+@UseGuards(IsAdminGuard)
+@ApiBearerAuth()
 export class PermissionController {
   constructor(private readonly permissionServices: PermissionServices) {}
 
   @Post()
-  @ApiBearerAuth()
-  @UseGuards(HasAccessGuard)
-  @SetPermission(Role.ADMIN, Committee.FINANCE)
   @ApiOperation({ summary: 'Assign a role to a user' })
   @ApiResponse({
     status: 200,

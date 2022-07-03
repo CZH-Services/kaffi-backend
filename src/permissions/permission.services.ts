@@ -72,4 +72,8 @@ export class PermissionServices {
     }
     return <PermissionResponse>permission;
   }
+
+  async isAdmin(userId: number): Promise<boolean> {
+    return await this.permissionRepository.isAdmin(userId);
+  }
 }

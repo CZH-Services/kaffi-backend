@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
+import { Role } from 'src/roles/entities/role';
 import { Permission } from './entities/permission';
 
 @Injectable()
@@ -59,6 +60,17 @@ export class PermissionRepository {
           return <Permission>res.rows[0];
         }
         return undefined;
+      });
+  }
+
+  async isAdmin(userId: number): Promise<boolean> {
+    return this.database
+      .query(
+        `SELECT * FROM Permission WHERE "userId" = $1 AND role = '${Role.ADMIN}'`,
+        [userId],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
       });
   }
 }
