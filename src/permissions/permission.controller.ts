@@ -13,10 +13,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Committee } from 'src/committee/entities/committee';
-import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
 import { IsAdminGuard } from 'src/guards/isAdmin.guard';
-import { Role } from 'src/roles/entities/role';
 import { AssignPermission } from './dto/assignPermission';
 import { PermissionResponse } from './dto/permissionResponse';
 import { PermissionServices } from './permission.services';
