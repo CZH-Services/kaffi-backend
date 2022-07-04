@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CommitteesServices } from 'src/committee/committees.service';
 import { RolesServices } from 'src/roles/roles.service';
-import { UsersServices } from 'src/user/users.services';
+import { UsersServices } from 'src/user/services/users.services';
 import { AssignPermission } from './dto/assignPermission';
 import { PermissionResponse } from './dto/permissionResponse';
 import { Permission } from './entities/permission';

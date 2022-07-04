@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from './entities/role';
+import { NonStaffRoles, Role, StaffRoles } from './entities/role';
 
 @Injectable()
 export class RolesServices {
@@ -7,6 +7,14 @@ export class RolesServices {
 
   getRoles(): string[] {
     return Object.values(Role);
+  }
+
+  getStaffRoles(): string[] {
+    return Object.values(StaffRoles);
+  }
+
+  getNonStaffRoles(): string[] {
+    return Object.values(NonStaffRoles);
   }
 
   getRoleByName(role: string): boolean {

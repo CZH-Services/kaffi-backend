@@ -1,12 +1,13 @@
 import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersServices } from 'src/user/users.services';
+import { UsersServices } from 'src/user/services/users.services';
 import axios from 'axios';
 import * as bcrypt from 'bcrypt';
 import { UserResponse } from 'src/user/dto/userResponse';
 import { SignUp } from './dto/signup';
 import { Login } from './dto/login';
 import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
+import { hashString } from 'src/services/HashString';
 
 @Injectable()
 export class AuthServices {
@@ -35,10 +36,6 @@ export class AuthServices {
     };
   }
 
-  async hashPassword(password: string) {
-    return await bcrypt.hash(password, 10);
-  }
-
   async equalsHash(password: string, hash: string) {
     return await bcrypt.compare(password, hash);
   }
@@ -52,7 +49,7 @@ export class AuthServices {
     if (await this.usersServices.findOne(user.email)) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
-    const hashedPassword = await this.hashPassword(user.password);
+    const hashedPassword = await hashString(user.password);
     user.password = hashedPassword;
     let createdUser = <UserResponse>await this.usersServices.createAndGetUser({
       ...user,

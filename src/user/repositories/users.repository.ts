@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
-import { CreateUser } from './dto/createUser';
-import { ProfileInfoResponse } from './dto/profileInfoResponse';
-import { UpdateUserInfoRequest } from './dto/updateUserInfoRequest';
-import { UserResponse } from './dto/userResponse';
-import { User } from './entities/user';
+import { CreateUser } from '../dto/createUser';
+import { ProfileInfoResponse } from '../dto/profileInfoResponse';
+import { UpdateUserInfoRequest } from '../dto/updateUserInfoRequest';
+import { UserResponse } from '../dto/userResponse';
+import { User } from '../entities/user';
 
 @Injectable()
 export class UserRepository {
@@ -13,7 +13,7 @@ export class UserRepository {
   async createUser(user: CreateUser): Promise<Boolean> {
     return await this.database
       .query(
-        `INSERT INTO kaffiuser (firstname, lastname, email, password, authWithGoogle, profileUrl) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+        `INSERT INTO kaffiuser (firstname, lastname, email, password, authWithGoogle, profileUrl, location) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
         [
           user.firstName,
           user.lastName,
@@ -21,6 +21,7 @@ export class UserRepository {
           user.password,
           user.authWithGoogle,
           user.profile,
+          user.location,
         ],
       )
       .then((res) => {
@@ -92,10 +93,20 @@ export class UserRepository {
       });
   }
 
-  async getUsers(): Promise<User[]> {
-    return this.database.query(`SELECT * FROM kaffiuser`).then((res) => {
-      return res.rows;
-    });
+  async getNonStaffUsers(): Promise<User[]> {
+    return this.database
+      .query(
+        `SELECT u.id AS id, u.firstName AS "firstName", \
+         u.lastName AS "lastName", u.location AS location,\
+         u.profileurl AS "profileUrl",  u.email AS email,\
+         u.authWithGoogle AS "authWithGoogle"\
+         FROM kaffiuser AS u \
+         LEFT JOIN staff AS s on u.id = s.user_id\
+         WHERE s.id IS NULL `,
+      )
+      .then((res) => {
+        return res.rows;
+      });
   }
 
   async deleteUser(userId: number): Promise<boolean> {

@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { PermissionServices } from 'src/permissions/permission.services';
-import { UsersServices } from 'src/user/users.services';
+import { UsersServices } from 'src/user/services/users.services';
 
 export const SetPermission = (roleName: string, committeeName: string) =>
   SetMetadata('permission', [roleName, committeeName]);

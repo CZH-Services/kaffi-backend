@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PermissionServices } from 'src/permissions/permission.services';
-import { UsersServices } from 'src/user/users.services';
+import { UsersServices } from 'src/user/services/users.services';
 
 @Injectable()
 export class IsAdminGuard implements CanActivate {
