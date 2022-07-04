@@ -89,7 +89,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Put('/profile-image')
+  @Put('/admin/profile-image')
   @ApiOperation({ summary: 'update profile image' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(

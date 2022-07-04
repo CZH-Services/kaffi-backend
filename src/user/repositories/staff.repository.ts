@@ -25,8 +25,8 @@ export class StaffRepository {
   async getStaff(): Promise<GetStaffResponse[]> {
     return this.database
       .query(
-        `SELECT u.id AS id, u.email AS email, u.firstName AS firstName, 
-         u.lastName AS lastName, u.authWithGoogle AS authWithGoogle ,
+        `SELECT u.id AS id, u.email AS email, u.firstName AS "firstName", 
+         u.lastName AS "lastName", u.authWithGoogle AS "authWithGoogle" ,
          u.profileUrl AS profile, u.location AS location, 
          s.title AS title, s.tag AS tag, s.rank AS rank, 
          s.id AS "staffId"
