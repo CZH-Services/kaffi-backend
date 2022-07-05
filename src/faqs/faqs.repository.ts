@@ -32,8 +32,9 @@ export class FAQRepository {
   async getFaqsOfCategory(id: Number): Promise<FAQ[]> {
     return this.database
       .query(
-        'SELECT * FROM faq INNER JOIN faqcategory ON faqcategory.id = faq.category_id where category_id = ' +
-          id,
+        'SELECT faqcategory.id as category_id , faqcategory.rank as category_rank, faqcategory.name as category_name ,faq.id as id , faq.question as question , faq.answer as answer, faq.rank as rank FROM faq INNER JOIN faqcategory ON faqcategory.id = faq.category_id where category_id = ' +
+          id +
+          'Order by rank',
       )
       .then((res) => {
         return res.rows.map((faq: any) => <FAQ>faq);
