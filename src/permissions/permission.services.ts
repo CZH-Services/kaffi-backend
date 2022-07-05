@@ -21,7 +21,10 @@ export class PermissionServices {
     if (!this.rolesServices.getRoleByName(permission.role)) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
-    if (!this.committeeServices.getCommitteeByName(permission.committee)) {
+    if (
+      permission.committee &&
+      !this.committeeServices.getCommitteeByName(permission.committee)
+    ) {
       throw new HttpException('Committee not found', HttpStatus.NOT_FOUND);
     }
 

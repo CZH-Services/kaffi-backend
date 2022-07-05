@@ -24,6 +24,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { CreateStaff } from '../dto/createStaff';
 import { StaffServices } from '../services/staff.services';
 import { GetStaffResponse } from '../dto/getStaffResponse';
+import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
 
 @ApiTags('Staff')
 @Controller('staff')
@@ -57,6 +58,30 @@ export class StaffControllers {
   @ApiOperation({ summary: 'get staff tags' })
   @ApiResponse({ status: 200, description: 'Success' })
   async getStaffTags(@Req() req: any): Promise<string[]> {
-    return await this.staffServices.getStaffTags();
+    return this.staffServices.getStaffTags();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Put()
+  @ApiOperation({ summary: 'Update staff info' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  async updateSTaffInfo(
+    @Req() req: any,
+    @Body() body: UpdateStaffInfoByAdminRequest,
+  ): Promise<Boolean> {
+    return this.staffServices.updateStaff(body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Delete(':userId')
+  @ApiOperation({ summary: 'staff deleted successfully' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  async deleteStaff(
+    @Req() req: any,
+    @Param('userId') userId: number,
+  ): Promise<Boolean> {
+    return this.staffServices.deleteStaff(userId);
   }
 }

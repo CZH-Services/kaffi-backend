@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString, ValidateIf } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
-export class CreateStaff {
-  @ApiProperty({ example: 'admin@hotmail.com', required: true })
-  @IsEmail({ message: 'Email should be a valid email' })
-  email: string;
+export class UpdateStaffInfoByAdminRequest {
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  id: number;
+
+  @ApiProperty({ example: 1 })
+  rank: number;
 
   @ApiProperty({ example: 'zeinab', required: true })
   @IsString({ message: 'first name should be a string' })
@@ -14,11 +17,6 @@ export class CreateStaff {
   @ApiProperty({ example: 'zeitoun', required: true })
   @IsString({ message: 'last name should be a string' })
   lastName: string;
-
-  @ApiProperty({ example: '123456', required: true })
-  @ValidateIf((o) => !o.authWithGoogle || o.password)
-  @IsString({ message: 'Password should be a string' })
-  password: string;
 
   @ApiProperty({ example: 'USA', required: true })
   @IsOptional()

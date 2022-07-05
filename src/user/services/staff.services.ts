@@ -6,6 +6,7 @@ import { StaffTag } from '../entities/staffTag';
 import { StaffRepository } from '../repositories/staff.repository';
 import { UsersServices } from './users.services';
 import { hashString } from 'src/services/HashString';
+import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
 
 @Injectable()
 export class StaffServices {
@@ -22,6 +23,15 @@ export class StaffServices {
     return await this.staffRepository.createStaff(staff);
   }
 
+  async deleteStaff(userId: number): Promise<Boolean> {
+    const staff = await this.staffRepository.findOne(userId);
+    if (!staff) {
+      throw new HttpException('staff not Found', HttpStatus.NOT_FOUND);
+    }
+    this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
+    return await this.userServices.deleteUser(userId);
+  }
+
   async createStaffUser(staffUser: CreateStaff): Promise<Boolean> {
     staffUser.password = await hashString(staffUser.password);
     const user = await this.userServices.createAndGetUser({
@@ -36,7 +46,7 @@ export class StaffServices {
 
     const rank = (await this.staffRepository.getHighestStaffRank()) + 1;
 
-    const staff = await this.staffRepository.createStaff({
+    this.staffRepository.createStaff({
       title: staffUser.title,
       tag: staffUser.tag,
       rank: rank,
@@ -48,5 +58,29 @@ export class StaffServices {
 
   async getStaffUsers(): Promise<GetStaffResponse[]> {
     return this.staffRepository.getStaff();
+  }
+
+  async updateStaff(staff: UpdateStaffInfoByAdminRequest): Promise<Boolean> {
+    const highestRank = await this.staffRepository.getHighestStaffRank();
+    if (staff.rank > highestRank || staff.rank <= 0) {
+      throw new HttpException(
+        'Rank must be less than or equal to highest rank',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const prevStaff = await this.staffRepository.findOne(<number>staff.id);
+    if (!prevStaff) {
+      throw new HttpException('Webinar not Found', HttpStatus.NOT_FOUND);
+    }
+
+    if (staff.rank !== prevStaff.rank) {
+      const increment = staff.rank > prevStaff.rank;
+      const minRank = increment ? prevStaff.rank + 1 : staff.rank;
+      const maxRank = increment ? staff.rank : prevStaff.rank - 1;
+      await this.staffRepository.updateStaffRank(minRank, maxRank, !increment);
+    }
+
+    return await this.staffRepository.updateStaff(staff);
   }
 }

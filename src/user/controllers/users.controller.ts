@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Post,
   Put,
   Req,
   Res,
@@ -29,6 +30,8 @@ import { UpdateUserProfileImage } from '../dto/updateUserProfileImage';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { UserResponse } from '../dto/userResponse';
 import { UpdateProfileImageByAdmin } from '../dto/updateProfileImageByAdmin';
+import { CreateNonStaff } from '../dto/createNonStaff';
+import { UpdateUserInfoRequestByAdmin } from '../dto/updateUserInfoByAdminRequest';
 
 @ApiTags('Users')
 @Controller('users')
@@ -87,37 +90,6 @@ export class UsersController {
     return await this.userServices.updateProfileImage(req.user.email, profile);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @Put('/admin/profile-image')
-  @ApiOperation({ summary: 'update profile image' })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [{ name: 'profile', maxCount: 1 }],
-      FileStorageService.getSaveImageToStorage(PROFILES_MEDIA_PATH),
-    ),
-  )
-  @ApiOkResponse({
-    status: 200,
-    description: 'profile image updated',
-    type: Boolean,
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  async updateProfileImageByAdmin(
-    @Req() req: any,
-    @Body() info: UpdateProfileImageByAdmin,
-    @UploadedFiles()
-    profile: {
-      profile?: Express.Multer.File[];
-    },
-  ): Promise<Boolean> {
-    return await this.userServices.updateProfileImage(info.email, profile);
-  }
-
   @Get('profileImage/:profile')
   @ApiOperation({ summary: 'Returns profile image' })
   @ApiResponse({
@@ -146,6 +118,30 @@ export class UsersController {
     return await this.userServices.getNonStaffUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post('admin/non-staff')
+  @ApiOperation({ summary: 'create user by admin' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  async createNonStaffByAdmin(
+    @Req() req: any,
+    @Body() info: CreateNonStaff,
+  ): Promise<Boolean> {
+    return await this.userServices.hashPassThenCreateUser(info);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Put('admin/non-staff')
+  @ApiOperation({ summary: 'Update non staff user by admin' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  async updateNonStaffByAdmin(
+    @Req() req: any,
+    @Body() info: UpdateUserInfoRequestByAdmin,
+  ): Promise<Boolean> {
+    return await this.userServices.updateUser(info.email, info);
+  }
+
   @Delete('admin/:id')
   @ApiOperation({ summary: 'Delete user by id' })
   @ApiResponse({
@@ -160,5 +156,36 @@ export class UsersController {
   })
   async deleteUser(@Param('id') userId: number) {
     return await this.userServices.deleteUser(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Put('/admin/profile-image')
+  @ApiOperation({ summary: 'update profile image' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [{ name: 'profile', maxCount: 1 }],
+      FileStorageService.getSaveImageToStorage(PROFILES_MEDIA_PATH),
+    ),
+  )
+  @ApiOkResponse({
+    status: 200,
+    description: 'profile image updated by admin',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  async updateProfileImageByAdmin(
+    @Req() req: any,
+    @Body() info: UpdateProfileImageByAdmin,
+    @UploadedFiles()
+    profile: {
+      profile?: Express.Multer.File[];
+    },
+  ): Promise<Boolean> {
+    return await this.userServices.updateProfileImage(info.email, profile);
   }
 }
