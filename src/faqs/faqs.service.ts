@@ -44,7 +44,7 @@ export class FAQService {
 
   async updateFaq(updatedfaq: UpdateFaq): Promise<boolean> {
     const faq = await this.faqRepository.getFaq(updatedfaq.id);
-
+    console.log('in back ' + updatedfaq);
     const maxRank = await this.faqRepository.getHighestFAQRank(faq.category_id);
 
     if (updatedfaq.rank > maxRank || updatedfaq.rank <= 0) {
