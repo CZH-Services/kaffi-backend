@@ -6,7 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthServices } from './auth.services';
 import { Login } from './dto/login';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
@@ -14,6 +14,8 @@ import { LocalAuthGuard } from './guards/localAuth.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { GoogleAuthentication } from './dto/googleAuth';
 import { SignUp } from './dto/signup';
+import { RequestResetPassword } from './dto/requestResetPassword';
+import { VerifyResetPasswordToken } from './dto/verifyResetPasswordToken';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -41,5 +43,23 @@ export class AuthController {
   @Get('hello')
   async signedInOnlyHello(@Request() req: any) {
     return req.user;
+  }
+
+  @Post('request-reset-password')
+  @ApiResponse({
+    status: 200,
+    description: 'Reset password link sent to email',
+  })
+  async requestResetPassword(@Body() body: RequestResetPassword) {
+    return await this.authServices.requestResetPassword(body.email);
+  }
+
+  @Post('verify-reset-password-token')
+  @ApiResponse({
+    status: 200,
+    description: 'Reset password token is valid',
+  })
+  async verifyResetPasswordToken(@Body() body: VerifyResetPasswordToken) {
+    return this.authServices.verifyResetPasswordToken(body.token);
   }
 }
