@@ -26,7 +26,8 @@ export class AuthServices {
       );
       // TODO: create an email service and send the email
       // At the moment we will only print it on the console
-      console.log(`Token: localhost:3000/reset-password/${token}/`);
+      // Also, make sure that the following goes well with our kaffi routes
+      console.log(`Token: localhost:3001/reset-password/${token}/`);
     }
     return true;
   }
