@@ -8,7 +8,6 @@ import { SignUp } from './dto/signup';
 import { Login } from './dto/login';
 import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
 import { hashString } from 'src/services/HashString';
-import { RequestResetPassword } from './dto/requestResetPassword';
 
 @Injectable()
 export class AuthServices {
