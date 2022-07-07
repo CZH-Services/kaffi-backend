@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class AssignPermission {
   @ApiProperty({ example: 1, required: true })
@@ -14,4 +14,9 @@ export class AssignPermission {
   @IsOptional()
   @IsString({ message: 'Committee must be a string' })
   readonly committee: string;
+
+  @ApiProperty({ example: 'true', required: true })
+  @IsOptional()
+  @IsBoolean({ message: 'isCommitteeHead must be a boolean' })
+  isCommitteeHead: boolean;
 }

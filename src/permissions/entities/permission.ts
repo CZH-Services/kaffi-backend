@@ -3,4 +3,5 @@ export class Permission {
   userId: number;
   role: string;
   committee: string;
+  isCommitteeHead: boolean;
 }

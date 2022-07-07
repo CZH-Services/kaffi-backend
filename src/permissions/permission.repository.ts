@@ -10,8 +10,13 @@ export class PermissionRepository {
   async assignPermissionToUser(permission: Permission): Promise<boolean> {
     return this.database
       .query(
-        `INSERT INTO Permission ("userId", role, committee) VALUES ($1, $2, $3)`,
-        [permission.userId, permission.role, permission.committee],
+        `INSERT INTO Permission ("userId", role, committee, "isCommitteeHead") VALUES ($1, $2, $3, $4)`,
+        [
+          permission.userId,
+          permission.role,
+          permission.committee,
+          permission.isCommitteeHead,
+        ],
       )
       .then((res) => {
         return res.rowCount > 0;
