@@ -7,6 +7,7 @@ import { StaffRepository } from '../repositories/staff.repository';
 import { UsersServices } from './users.services';
 import { hashString } from 'src/services/HashString';
 import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
+import { AddStaffInfo } from '../dto/addStaffInfo';
 
 @Injectable()
 export class StaffServices {
@@ -19,8 +20,13 @@ export class StaffServices {
     return Object.values(StaffTag);
   }
 
-  async createStaff(staff: Staff): Promise<Boolean> {
-    return await this.staffRepository.createStaff(staff);
+  async addStaffInfo(staff: AddStaffInfo): Promise<Boolean> {
+    const rank = (await this.staffRepository.getHighestStaffRank()) + 1;
+    return await this.staffRepository.createStaff({
+      ...staff,
+      rank: rank,
+      userId: staff.id,
+    });
   }
 
   async deleteStaff(userId: number): Promise<Boolean> {
