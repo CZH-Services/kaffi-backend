@@ -16,6 +16,32 @@ export class AuthServices {
     private readonly jwtService: JwtService,
   ) {}
 
+  async requestResetPassword(email: string) {
+    const user = await this.usersServices.findOne(email);
+    if (user) {
+      const token = await this.jwtService.signAsync(
+        { email },
+        { expiresIn: '48h', secret: 'reset-password' },
+      );
+      // TODO: create an email service and send the email
+      // At the moment we will only print it on the console
+      // Also, make sure that the following goes well with our kaffi routes
+      console.log(`Token: localhost:3001/reset-password/${token}/`);
+    }
+    return true;
+  }
+
+  async verifyResetPasswordToken(token: string) {
+    try {
+      const isValid = await this.jwtService.verify(token, {
+        secret: 'reset-password',
+      });
+      return isValid !== undefined;
+    } catch (error) {
+      return false;
+    }
+  }
+
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersServices.findOne(email);
     if (!user) {
