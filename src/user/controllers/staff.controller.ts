@@ -25,6 +25,7 @@ import { CreateStaff } from '../dto/createStaff';
 import { StaffServices } from '../services/staff.services';
 import { GetStaffResponse } from '../dto/getStaffResponse';
 import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
+import { AddStaffInfo } from '../dto/addStaffInfo';
 
 @ApiTags('Staff')
 @Controller('staff')
@@ -41,6 +42,18 @@ export class StaffControllers {
     @Body() info: CreateStaff,
   ): Promise<Boolean> {
     return await this.staffServices.createStaffUser(info);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post('add-staff-info')
+  @ApiOperation({ summary: 'Add a staff info' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  async addStaffInfo(
+    @Req() req: any,
+    @Body() info: AddStaffInfo,
+  ): Promise<Boolean> {
+    return await this.staffServices.addStaffInfo(info);
   }
 
   @UseGuards(JwtAuthGuard)

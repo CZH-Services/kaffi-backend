@@ -33,6 +33,7 @@ export class CreateStaff {
     example: { en: 'President', de: 'Präsidentin' },
     required: true,
   })
+  @IsOptional()
   @IsMultiLingual({ message: 'title must be multi-lingual' })
   title: object;
 }
