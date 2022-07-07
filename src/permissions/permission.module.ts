@@ -10,7 +10,13 @@ import { PermissionServices } from './permission.services';
 import { forwardRef } from '@nestjs/common';
 
 @Module({
-  imports: [JwtModule, PostgresModule, CommitteeModule, RoleModule, UserModule],
+  imports: [
+    JwtModule,
+    PostgresModule,
+    CommitteeModule,
+    RoleModule,
+    forwardRef(() => UserModule),
+  ],
   controllers: [PermissionController],
   providers: [PermissionRepository, PermissionServices],
   exports: [PermissionServices, PermissionRepository],

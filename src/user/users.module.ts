@@ -8,9 +8,10 @@ import { UserRepository } from './repositories/users.repository';
 import { StaffServices } from './services/staff.services';
 import { UsersServices } from './services/users.services';
 import { forwardRef } from '@nestjs/common';
+import { PermissionModule } from 'src/permissions/permission.module';
 
 @Module({
-  imports: [PostgresModule],
+  imports: [PostgresModule, forwardRef(() => PermissionModule)],
   controllers: [UsersController, StaffControllers],
   providers: [
     UsersServices,

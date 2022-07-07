@@ -79,4 +79,12 @@ export class PermissionServices {
   async isAdmin(userId: number): Promise<boolean> {
     return await this.permissionRepository.isAdmin(userId);
   }
+
+  async deleteUserStaffRoles(userId: number): Promise<boolean> {
+    const staffRoles = this.rolesServices.getStaffRoles();
+    return await this.permissionRepository.deleteUserStaffRoles(
+      userId,
+      staffRoles,
+    );
+  }
 }

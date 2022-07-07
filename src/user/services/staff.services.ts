@@ -8,12 +8,14 @@ import { UsersServices } from './users.services';
 import { hashString } from 'src/services/HashString';
 import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
 import { AddStaffInfo } from '../dto/addStaffInfo';
+import { PermissionServices } from 'src/permissions/permission.services';
 
 @Injectable()
 export class StaffServices {
   constructor(
     private readonly staffRepository: StaffRepository,
     private readonly userServices: UsersServices,
+    private readonly permissionServices: PermissionServices,
   ) {}
 
   getStaffTags(): string[] {
@@ -27,6 +29,11 @@ export class StaffServices {
       rank: rank,
       userId: staff.id,
     });
+  }
+
+  async removeFromStaff(userId: number): Promise<Boolean> {
+    await this.permissionServices.deleteUserStaffRoles(userId);
+    return await this.staffRepository.deleteStaffRow(userId);
   }
 
   async deleteStaff(userId: number): Promise<Boolean> {

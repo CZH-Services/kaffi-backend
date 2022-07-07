@@ -88,6 +88,18 @@ export class StaffControllers {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @Delete('remove-from-staff/:userId')
+  @ApiOperation({ summary: 'removed from staff successfully' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  async removeFromStaff(
+    @Req() req: any,
+    @Param('userId') userId: number,
+  ): Promise<Boolean> {
+    return this.staffServices.removeFromStaff(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete(':userId')
   @ApiOperation({ summary: 'staff deleted successfully' })
   @ApiResponse({ status: 200, description: 'Success' })

@@ -65,6 +65,14 @@ export class StaffRepository {
       });
   }
 
+  async deleteStaffRow(userId: number): Promise<Boolean> {
+    return await this.database
+      .query(`DELETE FROM staff WHERE user_id=$1`, [userId])
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
   async updateStaff(staff: UpdateStaffInfoByAdminRequest): Promise<Boolean> {
     await this.database.query(
       'UPDATE staff SET title = $1, tag = $2, rank = $3 WHERE user_id = $4',
@@ -102,7 +110,6 @@ export class StaffRepository {
         [rank],
       );
     }
-    console.log('here', operation, minRank, maxRank);
     return await this.database.query(
       'UPDATE staff SET rank = rank ' +
         operation +

@@ -78,4 +78,18 @@ export class PermissionRepository {
         return res.rowCount > 0;
       });
   }
+
+  async deleteUserStaffRoles(
+    userId: number,
+    roles: string[],
+  ): Promise<boolean> {
+    return this.database
+      .query(
+        `DELETE FROM Permission WHERE "userId" = $1 AND role = ANY($2::text[])`,
+        [userId, roles],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
 }
