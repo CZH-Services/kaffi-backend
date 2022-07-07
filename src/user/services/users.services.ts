@@ -80,4 +80,9 @@ export class UsersServices {
   async deleteUser(userId: number): Promise<boolean> {
     return await this.userRepository.deleteUser(userId);
   }
+
+  async changePassword(email: string, newPassword): Promise<boolean> {
+    const hashedPassword = await hashString(newPassword);
+    return await this.userRepository.changePassword(email, hashedPassword);
+  }
 }

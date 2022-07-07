@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersServices } from 'src/user/services/users.services';
 import axios from 'axios';
@@ -26,7 +26,7 @@ export class AuthServices {
       // TODO: create an email service and send the email
       // At the moment we will only print it on the console
       // Also, make sure that the following goes well with our kaffi routes
-      console.log(`Token: localhost:3001/reset-password/${token}/`);
+      console.log(`Token: localhost:3001/reset-password?token=${token}`);
     }
     return true;
   }
@@ -40,6 +40,14 @@ export class AuthServices {
     } catch (error) {
       return false;
     }
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<boolean> {
+    if (!this.verifyResetPasswordToken(token)) {
+      throw new HttpException('Invalid token', HttpStatus.BAD_REQUEST);
+    }
+    const user = this.jwtService.decode(token);
+    return this.usersServices.changePassword(user['email'], newPassword);
   }
 
   async validateUser(email: string, password: string): Promise<any> {
