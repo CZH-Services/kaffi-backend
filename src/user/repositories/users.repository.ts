@@ -116,4 +116,15 @@ export class UserRepository {
         return res.rowCount > 0;
       });
   }
+
+  async changePassword(email: string, password: string): Promise<boolean> {
+    return this.database
+      .query(`UPDATE kaffiuser SET password = $1 WHERE email = $2`, [
+        password,
+        email,
+      ])
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
 }

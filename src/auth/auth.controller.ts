@@ -11,11 +11,11 @@ import { AuthServices } from './auth.services';
 import { Login } from './dto/login';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { LocalAuthGuard } from './guards/localAuth.guard';
-import { AuthGuard } from '@nestjs/passport';
 import { GoogleAuthentication } from './dto/googleAuth';
 import { SignUp } from './dto/signup';
 import { RequestResetPassword } from './dto/requestResetPassword';
 import { VerifyResetPasswordToken } from './dto/verifyResetPasswordToken';
+import { ResetPassword } from './dto/resetPassword';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -59,7 +59,20 @@ export class AuthController {
     status: 200,
     description: 'Reset password token is valid',
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid token',
+  })
   async verifyResetPasswordToken(@Body() body: VerifyResetPasswordToken) {
     return this.authServices.verifyResetPasswordToken(body.token);
+  }
+
+  @Post('reset-password')
+  @ApiResponse({
+    status: 200,
+    description: 'Password reset successfully',
+  })
+  async resetPassword(@Body() body: ResetPassword): Promise<boolean> {
+    return this.authServices.resetPassword(body.token, body.password);
   }
 }
