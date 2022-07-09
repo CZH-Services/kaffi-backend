@@ -26,6 +26,7 @@ import { StaffServices } from '../services/staff.services';
 import { GetStaffResponse } from '../dto/getStaffResponse';
 import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
 import { AddStaffInfo } from '../dto/addStaffInfo';
+import { GetStaffByTagWithCommitteesHead } from '../dto/getStaffByTagWithCommitteesHead';
 
 @ApiTags('Staff')
 @Controller('staff')
@@ -60,9 +61,24 @@ export class StaffControllers {
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'get all staff users' })
-  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: [GetStaffResponse],
+  })
   async getStaff(@Req() req: any): Promise<GetStaffResponse[]> {
     return await this.staffServices.getStaffUsers();
+  }
+
+  @Get('public/grouped-by-tag')
+  @ApiOperation({ summary: 'get all staff users grouped by tag' })
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: GetStaffByTagWithCommitteesHead,
+  })
+  async getstaffGroupedByTagWithCommitteeHeads(): Promise<GetStaffByTagWithCommitteesHead> {
+    return await this.staffServices.getstaffGroupedByTagWithCommitteeHeads();
   }
 
   @UseGuards(JwtAuthGuard)

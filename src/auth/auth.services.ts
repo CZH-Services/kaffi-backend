@@ -81,10 +81,7 @@ export class AuthServices {
 
   async signup(user: SignUp) {
     if (await this.usersServices.findOne(user.email)) {
-      throw new HttpException(
-        'User with this email already exists',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException({ emailTaken: true }, HttpStatus.BAD_REQUEST);
     }
     const hashedPassword = await hashString(user.password);
     user.password = hashedPassword;

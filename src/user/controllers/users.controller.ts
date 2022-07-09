@@ -114,8 +114,22 @@ export class UsersController {
     description: 'non staff users has been successfully returned.',
     type: [UserResponse],
   })
-  async getUsers() {
+  async getUsers(): Promise<UserResponse[]> {
     return await this.userServices.getNonStaffUsers();
+  }
+
+  @Get('admin/non-staff/:role')
+  @ApiOperation({ summary: 'Returns nonstaff users list' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'non staff users with specific role has been successfully returned.',
+    type: [UserResponse],
+  })
+  async getUsersWithSpecificRole(
+    @Param('role') role: string,
+  ): Promise<UserResponse[]> {
+    return await this.userServices.getNonStaffWithSpecificRole(role);
   }
 
   @UseGuards(JwtAuthGuard)

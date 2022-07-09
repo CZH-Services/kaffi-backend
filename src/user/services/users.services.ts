@@ -77,6 +77,10 @@ export class UsersServices {
     return <UserResponse[]>await this.userRepository.getNonStaffUsers();
   }
 
+  async getNonStaffWithSpecificRole(role: string): Promise<UserResponse[]> {
+    return <UserResponse[]>await this.userRepository.getNonStaffWithSpecificRole(role);
+  }
+
   async deleteUser(userId: number): Promise<boolean> {
     return await this.userRepository.deleteUser(userId);
   }

@@ -34,6 +34,28 @@ export class StaffRepository {
       });
   }
 
+  async getStaffByTag(tag: string): Promise<GetStaffResponse[]> {
+    return this.database
+      .query(
+        `SELECT  u.id AS id, u.email AS email, 
+         u.firstName AS "firstName", 
+         u.lastName AS "lastName", u.authWithGoogle AS "authWithGoogle" ,
+         u.profileUrl AS profile, u.location AS location, 
+         s.title AS title, s.tag AS tag, s.rank AS rank, 
+         s.id AS "staffId"
+         FROM staff AS s
+         INNER JOIN kaffiuser AS u on u.id = s.user_id
+         WHERE s.tag = '${tag}'
+         ORDER by s.rank`,
+      )
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return res.rows;
+        }
+        return undefined;
+      });
+  }
+
   async getStaff(): Promise<GetStaffResponse[]> {
     return this.database
       .query(
@@ -116,5 +138,22 @@ export class StaffRepository {
         ' 1 WHERE rank >= $1 AND rank <= $2',
       [minRank, maxRank],
     );
+  }
+
+  async getStaffCommitteesHead(
+    userId: number,
+  ): Promise<{ committee: string }[]> {
+    return await this.database
+      .query(
+        `SELECT committee from permission AS p
+      WHERE p."userId" = ${userId} AND p.committee IS NOT NULL 
+      and p."isCommitteeHead"`,
+      )
+      .then((res) => {
+        if (res.rows) {
+          return res.rows;
+        }
+        return undefined;
+      });
   }
 }
