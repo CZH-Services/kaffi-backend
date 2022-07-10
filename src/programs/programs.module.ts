@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { PermissionModule } from 'src/permissions/permission.module';
 import { PostgresModule } from 'src/postgres/postgres.module';
+import { UserModule } from 'src/user/users.module';
 import { CriteriaController } from './controllers/criteria.controller';
 import { CyclesController } from './controllers/cycles.controller';
 import { DescriptionsController } from './controllers/descriptions.controller';
@@ -14,7 +17,7 @@ import { ProgramDescriptionsServices } from './services/programDescriptions.serv
 import { ProgramServices } from './services/programs.service';
 
 @Module({
-  imports: [PostgresModule],
+  imports: [PostgresModule, UserModule, PermissionModule],
   controllers: [
     ProgramController,
     CyclesController,
@@ -22,6 +25,7 @@ import { ProgramServices } from './services/programs.service';
     DescriptionsController,
   ],
   providers: [
+    JwtService,
     ProgramServices,
     ProgramRepository,
     ProgramCyclesService,

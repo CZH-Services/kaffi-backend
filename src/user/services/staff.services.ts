@@ -32,6 +32,11 @@ export class StaffServices {
   }
 
   async removeFromStaff(userId: number): Promise<Boolean> {
+    const staff = await this.staffRepository.findOne(userId);
+    if (!staff) {
+      throw new HttpException('staff not Found', HttpStatus.NOT_FOUND);
+    }
+    await this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
     await this.permissionServices.deleteUserStaffRoles(userId);
     return await this.staffRepository.deleteStaffRow(userId);
   }
@@ -41,7 +46,7 @@ export class StaffServices {
     if (!staff) {
       throw new HttpException('staff not Found', HttpStatus.NOT_FOUND);
     }
-    this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
+    await this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
     return await this.userServices.deleteUser(userId);
   }
 

@@ -6,8 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 import { AddProgramCriteria } from '../dto/criteria/addProgramCriterion';
 import { DeleteProgramCriterion } from '../dto/criteria/deleteProgramCriterion';
 import { GetProgramCriteria } from '../dto/criteria/getProgramCriteria';
@@ -22,6 +29,8 @@ export class CriteriaController {
     private readonly programCriterionServices: ProgramCriteriaServices,
   ) {}
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Post()
   @ApiOperation({ summary: 'Creates a program criterion' })
   @ApiResponse({
@@ -58,6 +67,8 @@ export class CriteriaController {
     );
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Deletes a program criterion' })
   @ApiResponse({
@@ -81,6 +92,8 @@ export class CriteriaController {
     );
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Put()
   @ApiOperation({ summary: 'Updates a program criterion' })
   @ApiResponse({

@@ -20,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 import { PROFILES_MEDIA_PATH } from 'src/constants';
 import { FileStorageService } from 'src/services/FileStorageService';
 import { ProfileInfoResponse } from '../dto/profileInfoResponse';
@@ -107,6 +108,7 @@ export class UsersController {
     res.sendFile(profile, { root: PROFILES_MEDIA_PATH });
   }
 
+  @UseGuards(IsAdminGuard)
   @Get('admin/non-staff')
   @ApiOperation({ summary: 'Returns nonstaff users list' })
   @ApiResponse({
@@ -118,6 +120,7 @@ export class UsersController {
     return await this.userServices.getNonStaffUsers();
   }
 
+  @UseGuards(IsAdminGuard)
   @Get('admin/non-staff/:role')
   @ApiOperation({ summary: 'Returns nonstaff users list' })
   @ApiResponse({
@@ -132,7 +135,7 @@ export class UsersController {
     return await this.userServices.getNonStaffWithSpecificRole(role);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Post('admin/non-staff')
   @ApiOperation({ summary: 'create user by admin' })
@@ -144,7 +147,7 @@ export class UsersController {
     return await this.userServices.hashPassThenCreateUser(info);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Put('admin/non-staff')
   @ApiOperation({ summary: 'Update non staff user by admin' })
@@ -172,7 +175,7 @@ export class UsersController {
     return await this.userServices.deleteUser(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Put('/admin/profile-image')
   @ApiOperation({ summary: 'update profile image' })

@@ -8,6 +8,7 @@ import {
   Put,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -16,8 +17,10 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { PROGRAM_MEDIA_PATH } from 'src/constants';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 import { FileStorageService } from 'src/services/FileStorageService';
 import { CreateProgram } from '../dto/programs/createProgram';
 import { DeleteProgram } from '../dto/programs/deleteProgram';
@@ -33,6 +36,8 @@ import { ProgramServices } from '../services/programs.service';
 export class ProgramController {
   constructor(private readonly programsServices: ProgramServices) {}
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Post()
   @ApiOperation({ summary: 'Creates program' })
   @ApiConsumes('multipart/form-data')
@@ -58,6 +63,8 @@ export class ProgramController {
     return this.programsServices.createProgram(program, iconFile);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Put()
   @ApiOperation({ summary: 'Updates a program' })
   @ApiConsumes('multipart/form-data')
@@ -141,6 +148,8 @@ export class ProgramController {
     return this.programsServices.getRowPrograms();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Deletes a program' })
   @ApiResponse({

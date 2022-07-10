@@ -6,8 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AddProgramCycle } from '../dto/cycles/addProgramCycle';
 import { ProgramCycleResponse } from '../dto/cycles/programCycleResponse';
 import { DeleteProgramCycle } from '../dto/cycles/deleteProgramCycle';
@@ -15,12 +21,15 @@ import { GetProgramCycle } from '../dto/cycles/getProgramCycle';
 import { GetProgramCycles } from '../dto/cycles/getProgramCycles';
 import { UpdateProgramCycle } from '../dto/cycles/updateProgramCycle';
 import { ProgramCyclesService } from '../services/programCycles.service';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 
 @Controller('programCycles')
 @ApiTags('Program Cycles')
 export class CyclesController {
   constructor(private readonly cyclesService: ProgramCyclesService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Post()
   @ApiOperation({ summary: 'Creates a cycle' })
   @ApiResponse({
@@ -61,6 +70,8 @@ export class CyclesController {
     return this.cyclesService.getProgramCycles(programId.programId);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Put()
   @ApiOperation({ summary: 'Updates a cycle' })
   @ApiResponse({
@@ -73,6 +84,8 @@ export class CyclesController {
     return this.cyclesService.updateCycle(updatedCycle);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Deletes a cycle' })
   @ApiResponse({

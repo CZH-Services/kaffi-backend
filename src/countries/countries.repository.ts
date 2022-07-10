@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
 import { Country } from './entities/country';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Injectable()
 export class CountryRepository {
@@ -23,6 +25,8 @@ export class CountryRepository {
       });
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   async insertCountry(name: Object): Promise<boolean> {
     return this.database
       .query(`INSERT INTO countries (name) VALUES($1)`, [name])
@@ -31,6 +35,8 @@ export class CountryRepository {
       });
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   async updateCountry(country: Country): Promise<boolean> {
     return this.database
       .query(`UPDATE countries SET name = $1 WHERE id = $2`, [
@@ -42,6 +48,8 @@ export class CountryRepository {
       });
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   async deleteCountry(id: number): Promise<boolean> {
     return this.database
       .query(`DELETE FROM countries WHERE id = $1`, [id])

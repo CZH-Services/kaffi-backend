@@ -42,19 +42,17 @@ export class PermissionRepository {
   async getPermission(
     userId: number,
     role: string,
-    committee: string,
+    committee: string | null,
   ): Promise<Permission> {
-    return this.database
-      .query(
-        `SELECT * FROM Permission WHERE "userId" = $1 AND role = $2 AND committee = $3`,
-        [userId, role, committee],
-      )
-      .then((res) => {
-        if (res.rowCount > 0) {
-          return <Permission>res.rows[0];
-        }
-        return undefined;
-      });
+    const query = committee
+      ? `SELECT * FROM Permission WHERE "userId" = ${userId} AND role = '${role}' AND committee = '${committee}'`
+      : `SELECT * FROM Permission WHERE "userId" = ${userId} AND role = '${role}'`;
+    return this.database.query(query).then((res) => {
+      if (res.rowCount > 0) {
+        return <Permission>res.rows[0];
+      }
+      return undefined;
+    });
   }
 
   async getPermissionById(id: number): Promise<Permission> {

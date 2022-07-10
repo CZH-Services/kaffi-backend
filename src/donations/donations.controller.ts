@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
@@ -8,6 +9,7 @@ import {
 import { DonationsService } from './donations.service';
 import { DonationResponse } from './dto/donationResponse';
 import { UpdateDonation } from './dto/updateDonation';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 
 @ApiTags('Donations')
 @Controller('donations')
@@ -25,6 +27,8 @@ export class DonationsController {
     return this.donationsService.getDonationInformation();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Put()
   @ApiOperation({ summary: 'Update donation page information' })
   @ApiCreatedResponse({
