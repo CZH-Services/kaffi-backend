@@ -8,12 +8,14 @@ import { SignUp } from './dto/signup';
 import { Login } from './dto/login';
 import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
 import { hashString } from 'src/services/HashString';
+import { MailService } from 'src/services/MailService';
 
 @Injectable()
 export class AuthServices {
   constructor(
     private readonly usersServices: UsersServices,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async requestResetPassword(email: string) {
@@ -23,10 +25,8 @@ export class AuthServices {
         { email },
         { expiresIn: '48h', secret: 'reset-password' },
       );
-      // TODO: create an email service and send the email
-      // At the moment we will only print it on the console
-      // Also, make sure that the following goes well with our kaffi routes
-      console.log(`Token: localhost:3001/reset-password?token=${token}`);
+      const link = `Please visit <a href='http://localhost:3001/reset-password?token=${token}'> this link</a> to reset your password.`;
+      this.mailService.sendMail(user.email, 'Reset password', link);
     }
     return true;
   }
@@ -47,7 +47,16 @@ export class AuthServices {
       throw new HttpException('Invalid token', HttpStatus.BAD_REQUEST);
     }
     const user = this.jwtService.decode(token);
-    return this.usersServices.changePassword(user['email'], newPassword);
+    const done = await this.usersServices.changePassword(
+      user['email'],
+      newPassword,
+    );
+    if (done) {
+      const link = `Your password has been changed. If that wasn't you, please go to the following <a href='${'http://localhost:3001/request-reset-password'}'>link</a> and change it back!`;
+      this.mailService.sendMail(user['email'], 'Password reset', link);
+      return true;
+    }
+    return false;
   }
 
   async validateUser(email: string, password: string): Promise<any> {
