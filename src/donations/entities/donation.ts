@@ -1,3 +1,8 @@
+class ExternalPayments {
+  paypal: string;
+  gofundme: string;
+  benevity: Object;
+}
 export class Donation {
   id: number;
   amount: string;
@@ -6,5 +11,5 @@ export class Donation {
   swift: string;
   bankName: string;
   currency: string;
-  externalPayments: object;
+  externalPayments: ExternalPayments;
 }

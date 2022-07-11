@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { CreateStaff } from '../dto/createStaff';
 import { GetStaffResponse } from '../dto/getStaffResponse';
-import { Staff } from '../entities/staff';
 import { StaffTag } from '../entities/staffTag';
 import { StaffRepository } from '../repositories/staff.repository';
 import { UsersServices } from './users.services';
@@ -9,6 +8,7 @@ import { hashString } from 'src/services/HashString';
 import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
 import { AddStaffInfo } from '../dto/addStaffInfo';
 import { PermissionServices } from 'src/permissions/permission.services';
+import { GetStaffByTagWithCommitteesHead } from '../dto/getStaffByTagWithCommitteesHead';
 
 @Injectable()
 export class StaffServices {
@@ -32,6 +32,11 @@ export class StaffServices {
   }
 
   async removeFromStaff(userId: number): Promise<Boolean> {
+    const staff = await this.staffRepository.findOne(userId);
+    if (!staff) {
+      throw new HttpException('staff not Found', HttpStatus.NOT_FOUND);
+    }
+    await this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
     await this.permissionServices.deleteUserStaffRoles(userId);
     return await this.staffRepository.deleteStaffRow(userId);
   }
@@ -41,7 +46,7 @@ export class StaffServices {
     if (!staff) {
       throw new HttpException('staff not Found', HttpStatus.NOT_FOUND);
     }
-    this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
+    await this.staffRepository.updateStaffRank(staff.rank + 1, -1, false);
     return await this.userServices.deleteUser(userId);
   }
 
@@ -71,6 +76,41 @@ export class StaffServices {
 
   async getStaffUsers(): Promise<GetStaffResponse[]> {
     return this.staffRepository.getStaff();
+  }
+
+  async getStaffByTag(tag: string): Promise<GetStaffResponse[]> {
+    return this.staffRepository.getStaffByTag(tag);
+  }
+
+  async getstaffGroupedByTagWithCommitteeHeads(): Promise<GetStaffByTagWithCommitteesHead> {
+    const boardStaff = await this.getStaffByTag('Board');
+    const memberStaff = await this.getStaffByTag('Member');
+
+    let boardStaffWithCommitteeHeads = [];
+    for (let staff of boardStaff) {
+      const committeeHeads = await this.staffRepository.getStaffCommitteesHead(
+        staff.id,
+      );
+      boardStaffWithCommitteeHeads = [
+        ...boardStaffWithCommitteeHeads,
+        { ...staff, committeeHeads },
+      ];
+    }
+
+    let memberStaffWithCommitteeHeads = [];
+    for (let staff of memberStaff) {
+      const committeeHeads = await this.staffRepository.getStaffCommitteesHead(
+        staff.id,
+      );
+      memberStaffWithCommitteeHeads = [
+        ...memberStaffWithCommitteeHeads,
+        { ...staff, committeeHeads },
+      ];
+    }
+    return {
+      board: boardStaffWithCommitteeHeads,
+      member: memberStaffWithCommitteeHeads,
+    };
   }
 
   async updateStaff(staff: UpdateStaffInfoByAdminRequest): Promise<Boolean> {

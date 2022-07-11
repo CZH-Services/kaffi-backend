@@ -6,8 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 import { AddProgramDescription } from '../dto/descriptions/addProgramDescription';
 import { DeleteProgramDescription } from '../dto/descriptions/deleteProgramDescription';
 import { GetProgramDescriptions } from '../dto/descriptions/getProgramDescriptions';
@@ -22,6 +29,8 @@ export class DescriptionsController {
     private readonly programDescriptionServices: ProgramDescriptionsServices,
   ) {}
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Post()
   @ApiOperation({ summary: 'Creates a program description' })
   @ApiResponse({
@@ -60,6 +69,8 @@ export class DescriptionsController {
     );
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Deletes a program description' })
   @ApiResponse({
@@ -83,6 +94,8 @@ export class DescriptionsController {
     );
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Put()
   @ApiOperation({ summary: 'Updates a program description' })
   @ApiResponse({

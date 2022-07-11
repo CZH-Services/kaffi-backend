@@ -9,9 +9,11 @@ import {
   UseInterceptors,
   UploadedFiles,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
+  ApiBearerAuth,
   ApiConsumes,
   ApiOkResponse,
   ApiOperation,
@@ -31,6 +33,7 @@ import { UpdateWebinarRequest } from './dto/updateWebinarRequest';
 import { UpdateWebinarStepRequest } from './dto/updateWebinarStepRequest';
 import { WebinarStep } from './entities/webinarStep';
 import { WebinarService } from './webinars.service';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 
 @ApiTags('Webinars')
 @Controller('webinars')
@@ -61,6 +64,8 @@ export class WebinarsController {
     return await this.webinarService.getCountryWebinar(<number>data.countryId);
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'create a new webinar' })
   @ApiConsumes('multipart/form-data')
@@ -93,6 +98,8 @@ export class WebinarsController {
     return await this.webinarService.insertWebinar(info, icons);
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Put()
   @ApiOperation({ summary: 'update a webinar' })
   @ApiConsumes('multipart/form-data')
@@ -139,6 +146,8 @@ export class WebinarsController {
     res.sendFile(icon, { root: WEBINAR_MEDIA_PATH });
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'delete a new webinar' })
   @ApiOkResponse({
@@ -180,6 +189,8 @@ export class WebinarsController {
     return await this.webinarService.getWebinarStep(<number>info.id);
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Post('steps')
   @ApiOperation({ summary: 'create a new webinar step' })
   @ApiOkResponse({
@@ -193,6 +204,8 @@ export class WebinarsController {
     );
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Put('steps')
   @ApiOperation({ summary: 'update a webinar step' })
   @ApiOkResponse({
@@ -208,6 +221,8 @@ export class WebinarsController {
     );
   }
 
+  @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Delete('steps/:id')
   @ApiOperation({ summary: 'delete a webinar step' })
   @ApiOkResponse({

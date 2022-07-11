@@ -9,8 +9,9 @@ import { JwtService } from '@nestjs/jwt';
 import { PermissionServices } from 'src/permissions/permission.services';
 import { UsersServices } from 'src/user/services/users.services';
 
-export const SetPermission = (roleName: string, committeeName: string) =>
-  SetMetadata('permission', [roleName, committeeName]);
+export const SetPermission = (
+  permissions: { role: string; committee: string | null }[],
+) => SetMetadata('permissions', permissions);
 
 @Injectable()
 export class HasAccessGuard implements CanActivate {
@@ -22,12 +23,10 @@ export class HasAccessGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext) {
-    const permission = this.reflector.get<string>(
-      'permission',
+    const permissions = this.reflector.get<any>(
+      'permissions',
       context.getHandler(),
     );
-    const role = permission[0];
-    const committee = permission[1];
 
     const request = context.switchToHttp().getRequest();
     const bearer = request.headers.authorization.split(' ')[1];
@@ -42,16 +41,20 @@ export class HasAccessGuard implements CanActivate {
         return false;
       }
 
-      const hasPermission = await this.permissionServices.getPermission(
-        user.id,
-        role,
-        committee,
+      const checks = await Promise.all(
+        permissions.map(
+          async (permission: { role: string; committee: string | null }) => {
+            return this.permissionServices.getPermission(
+              user.id,
+              permission.role,
+              permission.committee,
+            );
+          },
+        ),
       );
 
-      if (!hasPermission) {
-        return false;
-      }
-      return true;
+      const hasPermission = checks.some((check) => check !== undefined);
+      return hasPermission;
     });
   }
 }

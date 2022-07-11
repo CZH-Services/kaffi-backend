@@ -109,6 +109,23 @@ export class UserRepository {
       });
   }
 
+  async getNonStaffWithSpecificRole(role: string): Promise<User[]> {
+    return this.database
+      .query(
+        `SELECT u.id AS id, u.firstName AS "firstName",
+         u.lastName AS "lastName", u.location AS location,
+         u.profileurl AS "profileUrl",  u.email AS email,
+         u.authWithGoogle AS "authWithGoogle"
+         FROM kaffiuser AS u 
+         LEFT JOIN staff AS s on u.id = s.user_id
+         INNER JOIN permission AS p on p."userId" = u.id
+         WHERE p.role = '${role}' AND s.id IS NULL `,
+      )
+      .then((res) => {
+        return res.rows;
+      });
+  }
+
   async deleteUser(userId: number): Promise<boolean> {
     return this.database
       .query(`DELETE FROM kaffiuser WHERE id = $1`, [userId])

@@ -7,32 +7,29 @@ import {
   Post,
   Put,
   Req,
-  Res,
-  UploadedFiles,
+  SetMetadata,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiConsumes,
-  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { CreateStaff } from '../dto/createStaff';
 import { StaffServices } from '../services/staff.services';
 import { GetStaffResponse } from '../dto/getStaffResponse';
 import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequest';
 import { AddStaffInfo } from '../dto/addStaffInfo';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
+import { GetStaffByTagWithCommitteesHead } from '../dto/getStaffByTagWithCommitteesHead';
 
 @ApiTags('Staff')
 @Controller('staff')
 export class StaffControllers {
   constructor(private readonly staffServices: StaffServices) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'create a staff user' })
@@ -44,7 +41,7 @@ export class StaffControllers {
     return await this.staffServices.createStaffUser(info);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Post('add-staff-info')
   @ApiOperation({ summary: 'Add a staff info' })
@@ -56,16 +53,31 @@ export class StaffControllers {
     return await this.staffServices.addStaffInfo(info);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'get all staff users' })
-  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: [GetStaffResponse],
+  })
   async getStaff(@Req() req: any): Promise<GetStaffResponse[]> {
     return await this.staffServices.getStaffUsers();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Get('public/grouped-by-tag')
+  @ApiOperation({ summary: 'get all staff users grouped by tag' })
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: GetStaffByTagWithCommitteesHead,
+  })
+  async getstaffGroupedByTagWithCommitteeHeads(): Promise<GetStaffByTagWithCommitteesHead> {
+    return await this.staffServices.getstaffGroupedByTagWithCommitteeHeads();
+  }
+
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Get('tags')
   @ApiOperation({ summary: 'get staff tags' })
@@ -74,7 +86,7 @@ export class StaffControllers {
     return this.staffServices.getStaffTags();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Put()
   @ApiOperation({ summary: 'Update staff info' })
@@ -86,7 +98,7 @@ export class StaffControllers {
     return this.staffServices.updateStaff(body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Delete('remove-from-staff/:userId')
   @ApiOperation({ summary: 'removed from staff successfully' })
@@ -98,7 +110,7 @@ export class StaffControllers {
     return this.staffServices.removeFromStaff(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Delete(':userId')
   @ApiOperation({ summary: 'staff deleted successfully' })

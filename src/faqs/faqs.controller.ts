@@ -6,9 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FAQCategory } from 'src/faqcategories/entities/faqcategory';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 import { CreateFaq } from './dto/createFaq';
 import { DeleteFaq } from './dto/deleteFaq';
 import { getFaqsOfCategory } from './dto/getsFaqsofCategory';
@@ -28,6 +34,8 @@ export class FAQController {
     return await this.faqService.getFaqs();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Post('/create')
   @ApiOperation({ summary: 'Create FAQ' })
   @ApiResponse({ status: 200, type: [FAQResponse] })
@@ -69,6 +77,8 @@ export class FAQController {
     return this.faqService.getMaxRankOfFaqs(id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Delete('/:id')
   @ApiOperation({ summary: 'Delete an FAQ' })
   @ApiResponse({
@@ -84,6 +94,8 @@ export class FAQController {
     return this.faqService.deleteFaq(id.id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(IsAdminGuard)
   @Put('/:id')
   @ApiOperation({ summary: 'Update an FAQ' })
   @ApiResponse({
