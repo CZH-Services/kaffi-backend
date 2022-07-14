@@ -33,6 +33,7 @@ import { UserResponse } from '../dto/userResponse';
 import { UpdateProfileImageByAdmin } from '../dto/updateProfileImageByAdmin';
 import { CreateNonStaff } from '../dto/createNonStaff';
 import { UpdateUserInfoRequestByAdmin } from '../dto/updateUserInfoByAdminRequest';
+import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -108,31 +109,64 @@ export class UsersController {
     res.sendFile(profile, { root: PROFILES_MEDIA_PATH });
   }
 
-  @UseGuards(IsAdminGuard)
-  @Get('admin/non-staff')
-  @ApiOperation({ summary: 'Returns nonstaff users list' })
-  @ApiResponse({
-    status: 200,
-    description: 'non staff users has been successfully returned.',
-    type: [UserResponse],
-  })
-  async getUsers(): Promise<UserResponse[]> {
-    return await this.userServices.getNonStaffUsers();
-  }
-
-  @UseGuards(IsAdminGuard)
-  @Get('admin/non-staff/:role')
-  @ApiOperation({ summary: 'Returns nonstaff users list' })
+  @SetPermission([
+    { role: 'Admin', committee: null },
+    { role: 'Member', committee: 'Advising' },
+  ])
+  @UseGuards(HasAccessGuard)
+  @Get('admin/non-staff/buddies')
+  @ApiOperation({ summary: 'Returns nonstaff buddies list' })
   @ApiResponse({
     status: 200,
     description:
       'non staff users with specific role has been successfully returned.',
     type: [UserResponse],
   })
-  async getUsersWithSpecificRole(
-    @Param('role') role: string,
-  ): Promise<UserResponse[]> {
-    return await this.userServices.getNonStaffWithSpecificRole(role);
+  async getBuddies(): Promise<UserResponse[]> {
+    return await this.userServices.getNonStaffWithSpecificRole('Buddy');
+  }
+
+  @UseGuards(IsAdminGuard)
+  @Get('admin/non-staff/volunteers')
+  @ApiOperation({ summary: 'Returns nonstaff volunteers list' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'non staff users with specific role has been successfully returned.',
+    type: [UserResponse],
+  })
+  async getVolunteers(): Promise<UserResponse[]> {
+    return await this.userServices.getNonStaffWithSpecificRole('Volunteer');
+  }
+
+  @SetPermission([
+    { role: 'Admin', committee: null },
+    { role: 'Member', committee: 'Advising' },
+  ])
+  @UseGuards(HasAccessGuard)
+  @Get('admin/non-staff/students')
+  @ApiOperation({ summary: 'Returns nonstaff students list' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'non staff users with specific role has been successfully returned.',
+    type: [UserResponse],
+  })
+  async getStudents(): Promise<UserResponse[]> {
+    return await this.userServices.getNonStaffWithSpecificRole('Student');
+  }
+
+  @UseGuards(IsAdminGuard)
+  @Get('admin/non-staff/no-role')
+  @ApiOperation({ summary: 'Returns nonstaff with no role' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'non staff users with specific role has been successfully returned.',
+    type: [UserResponse],
+  })
+  async getNonStaffWithNoRole(): Promise<UserResponse[]> {
+    return await this.userServices.getNonStaffWithNoRole();
   }
 
   @UseGuards(IsAdminGuard)

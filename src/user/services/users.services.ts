@@ -73,12 +73,14 @@ export class UsersServices {
     );
   }
 
-  async getNonStaffUsers(): Promise<UserResponse[]> {
-    return <UserResponse[]>await this.userRepository.getNonStaffUsers();
+  async getNonStaffWithSpecificRole(role: string): Promise<UserResponse[]> {
+    return <UserResponse[]>(
+      await this.userRepository.getNonStaffWithSpecificRole(role)
+    );
   }
 
-  async getNonStaffWithSpecificRole(role: string): Promise<UserResponse[]> {
-    return <UserResponse[]>await this.userRepository.getNonStaffWithSpecificRole(role);
+  async getNonStaffWithNoRole(): Promise<UserResponse[]> {
+    return <UserResponse[]>await this.userRepository.getNonStaffWithNoRole();
   }
 
   async deleteUser(userId: number): Promise<boolean> {

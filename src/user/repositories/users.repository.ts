@@ -93,22 +93,6 @@ export class UserRepository {
       });
   }
 
-  async getNonStaffUsers(): Promise<User[]> {
-    return this.database
-      .query(
-        `SELECT u.id AS id, u.firstName AS "firstName", \
-         u.lastName AS "lastName", u.location AS location,\
-         u.profileurl AS "profileUrl",  u.email AS email,\
-         u.authWithGoogle AS "authWithGoogle"\
-         FROM kaffiuser AS u \
-         LEFT JOIN staff AS s on u.id = s.user_id\
-         WHERE s.id IS NULL `,
-      )
-      .then((res) => {
-        return res.rows;
-      });
-  }
-
   async getNonStaffWithSpecificRole(role: string): Promise<User[]> {
     return this.database
       .query(
@@ -120,6 +104,23 @@ export class UserRepository {
          LEFT JOIN staff AS s on u.id = s.user_id
          INNER JOIN permission AS p on p."userId" = u.id
          WHERE p.role = '${role}' AND s.id IS NULL `,
+      )
+      .then((res) => {
+        return res.rows;
+      });
+  }
+
+  async getNonStaffWithNoRole(): Promise<User[]> {
+    return this.database
+      .query(
+        `SELECT u.id AS id, u.firstName AS "firstName",
+      u.lastName AS "lastName", u.location AS location,
+      u.profileurl AS "profileUrl",  u.email AS email,
+      u.authWithGoogle AS "authWithGoogle"
+      FROM kaffiuser AS u 
+      LEFT JOIN staff AS s on u.id = s.user_id
+      LEFT JOIN permission AS p on p."userId" = u.id
+      WHERE p.id IS NULL AND s.id IS NULL `,
       )
       .then((res) => {
         return res.rows;
