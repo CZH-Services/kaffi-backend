@@ -105,7 +105,7 @@ export class AuthServices {
   }
 
   async googleAuthentication(accessToken: string) {
-    const { email, given_name, family_name, picture } = await axios
+    const { email, given_name, family_name } = await axios
       .get(GET_GOOGLE_USER_INFO_URL(accessToken))
       .then((res) => res.data);
 
@@ -117,7 +117,7 @@ export class AuthServices {
         firstName: given_name,
         lastName: family_name,
         authWithGoogle: true,
-        profile: picture,
+        profile: null,
         password: null,
         location: null,
       });
