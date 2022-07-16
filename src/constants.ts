@@ -1,6 +1,7 @@
 export const PROGRAM_MEDIA_PATH = 'public/icons/program/';
 export const WEBINAR_MEDIA_PATH = 'public/icons/webinar/';
 export const PROFILES_MEDIA_PATH = 'public/images/profile/';
+export const BLOGS_MEDIA_PATH = 'public/images/blog/';
 
 export const LANGUAGES = ['English', 'German'];
 export const LANGUAGES_CODE = ['en', 'de'];

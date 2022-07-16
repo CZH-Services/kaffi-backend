@@ -11,6 +11,7 @@ import { CommitteeModule } from './committee/committee.module';
 import { AuthModule } from './auth/auth.module';
 import { ProgramsModule } from './programs/programs.module';
 import { PermissionModule } from './permissions/permission.module';
+import { BlogModule } from './blogs/blogs.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PermissionModule } from './permissions/permission.module';
     PermissionModule,
     DonationModule,
     ProgramsModule,
+    BlogModule,
   ],
 })
 export class AppModule {}
