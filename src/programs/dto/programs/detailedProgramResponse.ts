@@ -39,4 +39,11 @@ export class DetailedProgramResponse {
     example: JSON.stringify({ lang: 'Program criteria description' }),
   })
   cycle: ProgramCycleResponse;
+
+  @ApiProperty({
+    type: String,
+    example: 'https://www.example.com/icon.png',
+    required: true,
+  })
+  applicationLink: string;
 }

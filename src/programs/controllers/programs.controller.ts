@@ -30,6 +30,7 @@ import { ProgramResponse } from '../dto/programs/programResponse';
 import { RowProgramResponse } from '../dto/programs/rowProgramResponse';
 import { UpdateProgram } from '../dto/programs/updateProgram';
 import { ProgramServices } from '../services/programs.service';
+import { GetProgramNamesAndIds } from '../dto/programs/getProgramNamesAndIds';
 
 @Controller('programs')
 @ApiTags('Programs')
@@ -178,5 +179,16 @@ export class ProgramController {
   })
   async getPrograms(): Promise<ProgramResponse[]> {
     return this.programsServices.getPrograms();
+  }
+
+  @Get('names-and-ids')
+  @ApiOperation({ summary: 'Gets all programs names and id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The programs names and id has been successfully returned.',
+    type: [ProgramResponse],
+  })
+  async getProgramsNamesAndIds(): Promise<GetProgramNamesAndIds[]> {
+    return this.programsServices.getProgramsNamesAndIds();
   }
 }

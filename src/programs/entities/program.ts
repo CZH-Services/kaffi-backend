@@ -5,4 +5,5 @@ export class Program {
   description: object;
   icon?: string;
   highlights: object;
+  applicationLink: string;
 }

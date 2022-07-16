@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS staff (
     title JSON,
     tag VARCHAR(255),
     rank integer,
-    user_id integer REFERENCES kaffiuser(id) ON DELETE CASCADE,
+    user_id integer REFERENCES kaffiuser(id) ON DELETE CASCADE
 )

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNumberString } from 'class-validator';
+import { IsInt, IsNumberString, IsString, IsUrl } from 'class-validator';
 import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
 export class UpdateProgram {
@@ -46,4 +46,13 @@ export class UpdateProgram {
   })
   @IsMultiLingual({ message: 'Program highlights should be multi-lingual' })
   highlights: object;
+
+  @ApiProperty({
+    type: String,
+    example: 'https://www.example.com/icon.png',
+    required: true,
+  })
+  @IsString({ message: 'Program application link must be a string' })
+  @IsUrl(undefined, { message: 'Program application link must be a valid URL' })
+  applicationLink: string;
 }

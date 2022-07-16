@@ -9,18 +9,25 @@ export class ProgramRepository {
   async createProgram(program: Program): Promise<boolean> {
     return this.database
       .query(
-        `INSERT INTO Program(name, caption, description, icon, highlights) VALUES($1, $2, $3, $4, $5);`,
+        `INSERT INTO Program(name, caption, description, icon, highlights, "applicationLink") VALUES($1, $2, $3, $4, $5, $6);`,
         [
           program.name,
           program.caption,
           program.description,
           program.icon,
           program.highlights,
+          program.applicationLink,
         ],
       )
       .then((res) => {
         return res.rowCount > 0;
       });
+  }
+
+  async getProgramsNamesAndIds(): Promise<{ id: number; name: Object }[]> {
+    return this.database.query(`SELECT id, name FROM Program;`).then((res) => {
+      return res.rows;
+    });
   }
 
   async getProgram(id: number): Promise<Program> {
@@ -35,8 +42,7 @@ export class ProgramRepository {
   }
 
   async updateProgram(program: Program): Promise<boolean> {
-    const query =
-      'UPDATE Program SET name = $1, caption = $2, description = $3, highlights = $4';
+    const query = `UPDATE Program SET name = $1, caption = $2, description = $3, highlights = $4, "applicationLink" = $7 `;
     const queryWithoutIcon = query + 'WHERE id = $5';
     const queryWithIcon = query + ', icon = $6 where id = $5';
 
@@ -48,6 +54,7 @@ export class ProgramRepository {
         program.highlights,
         program.id,
         program.icon,
+        program.applicationLink,
       ])
       .then((res) => {
         return res.rowCount > 0;

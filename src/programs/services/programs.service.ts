@@ -54,6 +54,7 @@ export class ProgramServices {
       programDescriptions,
       programCriteria,
       cycle: activeCycle,
+      applicationLink: program.applicationLink,
     };
     return result;
   }
@@ -84,6 +85,11 @@ export class ProgramServices {
         return result;
       }),
     );
+  }
+
+  async getProgramsNamesAndIds(): Promise<{ id: number; name: Object }[]> {
+    const programs = await this.programRepository.getProgramsNamesAndIds();
+    return <{ id: number; name: string }[]>programs;
   }
 
   async updateProgram(

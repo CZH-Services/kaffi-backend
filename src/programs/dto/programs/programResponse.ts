@@ -30,4 +30,7 @@ export class ProgramResponse {
     example: JSON.stringify({ lang: 'Program highlights' }),
   })
   highlights: object;
+
+  @ApiProperty({ type: String, example: 'https://www.example.com/icon.png' })
+  applicationLink: string;
 }
