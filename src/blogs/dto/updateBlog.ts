@@ -30,7 +30,7 @@ export class UpdateBlogRequest {
   })
   image: string;
 
-  @ApiProperty({ example: '2020-01-01' })
+  @ApiProperty({ example: '2020-01-01', type: Date })
   @IsNotEmpty({ message: 'date is required' })
   @IsDateString({ message: 'date should be a valid date' })
   date: Date;

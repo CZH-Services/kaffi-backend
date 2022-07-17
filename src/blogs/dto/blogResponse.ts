@@ -20,7 +20,7 @@ export class GetBlogResponse {
   @IsNotEmpty({ message: 'image is required' })
   image: string;
 
-  @ApiProperty({ example: '2020-01-01' })
+  @ApiProperty({ example: '2020-01-01', type: Date })
   @IsNotEmpty({ message: 'date is required' })
   date: Date;
 
