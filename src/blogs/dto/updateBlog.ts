@@ -36,6 +36,7 @@ export class UpdateBlogRequest {
   date: Date;
 
   @ApiProperty({
+    required: false,
     example:
       'https://drive.google.com/file/d/1tDlbVR9JDEDhB_lL-aprjeK11iAalaIR/view',
   })
@@ -44,6 +45,7 @@ export class UpdateBlogRequest {
   externalLink: string;
 
   @ApiProperty({
+    required: false,
     example: {
       en: '<div>html string here</div>',
       de: '<div>html string here</div>',
