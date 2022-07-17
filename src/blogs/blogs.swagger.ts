@@ -11,6 +11,7 @@ export const blogsSwaggerConfiguration = (
     .setDescription('The Blogs API description')
     .setVersion('1.0')
     .addTag('Blogs')
+    .addBearerAuth()
     .build();
 
   const programDocument = SwaggerModule.createDocument(app, options, {
