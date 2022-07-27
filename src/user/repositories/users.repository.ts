@@ -34,7 +34,12 @@ export class UserRepository {
 
   async findOne(email: string): Promise<UserResponse> {
     return this.database
-      .query(`SELECT * FROM kaffiuser WHERE email = $1`, [email])
+      .query(
+        `SELECT id, email, firstName AS "firstName", lastName AS "lastName", 
+        location, profileUrl AS "profileUrl" , password, authWithGoogle AS "authWithGoogle"
+        FROM kaffiuser WHERE email = $1`,
+        [email],
+      )
       .then((res) => {
         if (res.rowCount > 0) {
           return res.rows[0];

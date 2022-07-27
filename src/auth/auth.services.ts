@@ -9,6 +9,7 @@ import { Login } from './dto/login';
 import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
 import { hashString } from 'src/services/HashString';
 import { MailService } from 'src/services/MailService';
+import { AuthResponse } from './dto/authResponse';
 
 @Injectable()
 export class AuthServices {
@@ -72,20 +73,22 @@ export class AuthServices {
     return user;
   }
 
-  async getJWTToken(email: string, id: number) {
+  getJWTToken(email: string, id: number) {
     const payload = { email: email, sub: id };
-    return {
-      accessToken: this.jwtService.sign(payload),
-    };
+    return this.jwtService.sign(payload);
   }
 
   async equalsHash(password: string, hash: string) {
     return await bcrypt.compare(password, hash);
   }
 
-  async getTokenForValidatedUser(info: Login) {
+  async getTokenAndNameForValidatedUser(info: Login) {
     const user = await this.usersServices.findOne(info.email);
-    return this.getJWTToken(user.email, user.id);
+    console.log(user);
+    return {
+      token: this.getJWTToken(user.email, user.id),
+      name: user.firstName,
+    };
   }
 
   async signup(user: SignUp) {
@@ -101,10 +104,13 @@ export class AuthServices {
       location: null,
     });
 
-    return this.getJWTToken(createdUser.email, createdUser.id);
+    return {
+      token: this.getJWTToken(createdUser.email, createdUser.id),
+      name: createdUser.firstName,
+    };
   }
 
-  async googleAuthentication(accessToken: string) {
+  async googleAuthentication(accessToken: string): Promise<AuthResponse> {
     const { email, given_name, family_name } = await axios
       .get(GET_GOOGLE_USER_INFO_URL(accessToken))
       .then((res) => res.data);
@@ -123,6 +129,9 @@ export class AuthServices {
       });
     }
 
-    return this.getJWTToken(email, user.id);
+    return {
+      token: this.getJWTToken(email, user.id),
+      name: given_name,
+    };
   }
 }

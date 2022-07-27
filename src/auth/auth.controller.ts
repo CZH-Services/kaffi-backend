@@ -25,7 +25,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() credentials: Login, @Request() request) {
-    return this.authServices.getTokenForValidatedUser(credentials);
+    return this.authServices.getTokenAndNameForValidatedUser(credentials);
   }
 
   @Post('signup')
