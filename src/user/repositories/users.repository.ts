@@ -96,7 +96,7 @@ export class UserRepository {
   async getNonStaffWithSpecificRole(role: string): Promise<User[]> {
     return this.database
       .query(
-        `SELECT u.id AS id, u.firstName AS "firstName",
+        `SELECT distinct u.id AS id, u.firstName AS "firstName",
          u.lastName AS "lastName", u.location AS location,
          u.profileurl AS "profileUrl",  u.email AS email,
          u.authWithGoogle AS "authWithGoogle"

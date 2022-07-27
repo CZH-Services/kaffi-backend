@@ -34,6 +34,8 @@ import { UpdateProfileImageByAdmin } from '../dto/updateProfileImageByAdmin';
 import { CreateNonStaff } from '../dto/createNonStaff';
 import { UpdateUserInfoRequestByAdmin } from '../dto/updateUserInfoByAdminRequest';
 import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
+import { Role } from 'src/roles/entities/role';
+import { Committee } from 'src/committee/entities/committee';
 
 @ApiTags('Users')
 @Controller('users')
@@ -110,8 +112,8 @@ export class UsersController {
   }
 
   @SetPermission([
-    { role: 'Admin', committee: null },
-    { role: 'Member', committee: 'Advising' },
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
   ])
   @UseGuards(HasAccessGuard)
   @Get('admin/non-staff/buddies')
@@ -140,8 +142,9 @@ export class UsersController {
   }
 
   @SetPermission([
-    { role: 'Admin', committee: null },
-    { role: 'Member', committee: 'Advising' },
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
   ])
   @UseGuards(HasAccessGuard)
   @Get('admin/non-staff/students')
@@ -156,7 +159,12 @@ export class UsersController {
     return await this.userServices.getNonStaffWithSpecificRole('Student');
   }
 
-  @UseGuards(IsAdminGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
   @Get('admin/non-staff/no-role')
   @ApiOperation({ summary: 'Returns nonstaff with no role' })
   @ApiResponse({

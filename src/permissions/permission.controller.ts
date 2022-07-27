@@ -16,9 +16,13 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { IsAdminGuard } from 'src/guards/isAdmin.guard';
+import { CanAssignOrRevokePermission } from 'src/guards/canAssignPermission.guard';
 import { AssignPermission } from './dto/assignPermission';
 import { PermissionResponse } from './dto/permissionResponse';
 import { PermissionServices } from './permission.services';
+import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
+import { Role } from 'src/roles/entities/role';
+import { Committee } from 'src/committee/entities/committee';
 
 @ApiTags('Permissions')
 @Controller('permission')
@@ -26,7 +30,7 @@ import { PermissionServices } from './permission.services';
 export class PermissionController {
   constructor(private readonly permissionServices: PermissionServices) {}
 
-  @UseGuards(IsAdminGuard)
+  @UseGuards(CanAssignOrRevokePermission)
   @Post()
   @ApiOperation({ summary: 'Assign a role to a user' })
   @ApiResponse({
@@ -48,7 +52,7 @@ export class PermissionController {
     return this.permissionServices.assignPermissionToUser(permission);
   }
 
-  @UseGuards(IsAdminGuard)
+  @UseGuards(CanAssignOrRevokePermission)
   @Delete(':id')
   @ApiOperation({ summary: 'Revoke a role from a user' })
   @ApiResponse({
@@ -84,7 +88,12 @@ export class PermissionController {
     return this.permissionServices.getPermissionsByEmail(req.user.email);
   }
 
-  @UseGuards(IsAdminGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
   @Get('/:userId')
   @ApiOperation({ summary: 'Get all user permissions' })
   @ApiResponse({
