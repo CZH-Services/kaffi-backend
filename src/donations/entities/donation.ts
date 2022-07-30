@@ -1,5 +1,4 @@
 class ExternalPayments {
-  paypal: string;
   gofundme: string;
   benevity: Object;
 }

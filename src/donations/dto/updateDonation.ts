@@ -4,10 +4,6 @@ import { IsInt, IsString, ValidateNested } from 'class-validator';
 import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
 class ExternalPayments {
-  @ApiProperty({ example: 'url to kaffipaypal' })
-  @IsString({ message: 'paypal must be a url string' })
-  paypal: string;
-
   @ApiProperty({ example: 'https://www.gofundme.com/f/kaffi' })
   @IsString({ message: 'gofundme must be a url string' })
   gofundme: string;

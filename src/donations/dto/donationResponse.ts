@@ -21,7 +21,6 @@ export class DonationResponse {
 
   @ApiProperty({
     example: {
-      paypal: 'url to kaffipaypal',
       gofundme: 'https://www.gofundme.com/f/kaffi',
       benevity: `We are now on Benevity, a donation platform that several companies
       are partnered with, like Google & Microsoft. These companies

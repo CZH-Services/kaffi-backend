@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateIf,
 } from 'class-validator';
 import { IsMultiLingual } from 'src/validations/MultiLanguageValidations';
 
@@ -40,6 +41,7 @@ export class UpdateBlogRequest {
     example:
       'https://drive.google.com/file/d/1tDlbVR9JDEDhB_lL-aprjeK11iAalaIR/view',
   })
+  @ValidateIf((o) => !o.HTMLString)
   @IsOptional()
   @IsString({ message: 'externalLink should be a string' })
   externalLink: string;
@@ -51,7 +53,8 @@ export class UpdateBlogRequest {
       de: '<div>html string here</div>',
     },
   })
-  @IsMultiLingual({ message: 'HTMLString must be multilingual' })
+  @ValidateIf((o) => !o.externalLink)
   @IsOptional()
+  @IsMultiLingual({ message: 'HTMLString must be multilingual' })
   HTMLString: object;
 }
