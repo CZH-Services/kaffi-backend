@@ -72,7 +72,11 @@ export class BuddyRespository {
       });
   }
 
-  async createBuddiesConnection(data: CreateBuddiesRequest): Promise<boolean> {
+  async createBuddiesConnection(data: {
+    buddyId: number;
+    studentId: number;
+    connectedBy: number;
+  }): Promise<boolean> {
     return await this.database
       .query(
         'INSERT INTO buddyMatch ("buddyId", "studentId", "connectedBy")\

@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Delete, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Delete,
+  Post,
+  Body,
+  Req,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BuddyService } from './buddies.service';
 import { CreateBuddiesRequest } from './dto/createBuddiesRequest';
@@ -38,8 +46,14 @@ export class BuddiesController {
     description: 'buddies connection created',
     type: Boolean,
   })
-  async createBuddies(@Body() data: CreateBuddiesRequest): Promise<boolean> {
-    return await this.blogService.createBuddiesConnection(data);
+  async createBuddies(
+    @Body() data: CreateBuddiesRequest,
+    @Req() req: any,
+  ): Promise<boolean> {
+    return await this.blogService.createBuddiesConnection({
+      ...data,
+      connectedByEmail: req.user.email,
+    });
   }
 
   @Delete(':id')

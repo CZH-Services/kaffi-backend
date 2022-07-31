@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateBuddiesRequest {
   @ApiProperty({ required: true, example: 1 })
@@ -8,12 +8,7 @@ export class CreateBuddiesRequest {
   buddyId: number;
 
   @ApiProperty({ required: true, example: 1 })
-  @IsNotEmpty({ message: 'buddyId is required' })
+  @IsNotEmpty({ message: 'studentId is required' })
   @IsNumber()
   studentId: number;
-
-  @ApiProperty({ required: true, example: 1 })
-  @IsNotEmpty({ message: 'buddyId is required' })
-  @IsNumber()
-  connectedBy: number;
 }

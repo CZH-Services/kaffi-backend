@@ -11,12 +11,14 @@ import { GetBuddiesResponse } from './dto/getBuddiesResponse';
 import { firstPermissionIsEquivalientToSecond } from 'src/services/PermissionsHelpers';
 import { Role } from '../roles/entities/role';
 import { Committee } from 'src/committee/entities/committee';
+import { UsersServices } from 'src/user/services/users.services';
 
 @Injectable()
 export class BuddyService {
   constructor(
     private readonly buddyRespository: BuddyRespository,
     private readonly permissionServices: PermissionServices,
+    private readonly userServices: UsersServices,
   ) {}
 
   async findAllBuddies(): Promise<GetBuddiesResponse[]> {
@@ -27,7 +29,11 @@ export class BuddyService {
     return await this.buddyRespository.findUserBuddies(userId);
   }
 
-  async createBuddiesConnection(data: CreateBuddiesRequest): Promise<boolean> {
+  async createBuddiesConnection(data: {
+    buddyId: number;
+    studentId: number;
+    connectedByEmail: string;
+  }): Promise<boolean> {
     const studentPermissions = await this.permissionServices.getPermissions(
       data.studentId,
     );
@@ -70,7 +76,21 @@ export class BuddyService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    return await this.buddyRespository.createBuddiesConnection(data);
+
+    const connectedBy = await this.userServices.findOne(data.connectedByEmail);
+
+    if (!connectedBy) {
+      throw new HttpException(
+        'User connecting students and buddy is not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return await this.buddyRespository.createBuddiesConnection({
+      buddyId: data.buddyId,
+      studentId: data.studentId,
+      connectedBy: connectedBy.id,
+    });
   }
 
   async deleteBuddiesConnection(id: number): Promise<boolean> {
