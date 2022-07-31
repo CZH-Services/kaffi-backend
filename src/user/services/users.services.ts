@@ -1,18 +1,18 @@
-import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUser } from '../dto/createUser';
 import { ProfileInfoResponse } from '../dto/profileInfoResponse';
 import { UpdateUserInfoRequest } from '../dto/updateUserInfoRequest';
 import { UserResponse } from '../dto/userResponse';
 import { UserRepository } from '../repositories/users.repository';
-import { JwtService } from '@nestjs/jwt';
 import { hashString } from 'src/services/HashString';
 import { CreateNonStaff } from '../dto/createNonStaff';
+import { MailService } from 'src/services/MailService';
 
 @Injectable()
 export class UsersServices {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async findOne(email: string): Promise<UserResponse> {
@@ -43,6 +43,7 @@ export class UsersServices {
 
   async hashPassThenCreateUser(info: CreateNonStaff): Promise<Boolean> {
     const hashedPassword = await hashString(info.password);
+
     return await this.createUser({
       email: info.email,
       password: hashedPassword,
@@ -51,6 +52,14 @@ export class UsersServices {
       profile: null,
       location: info.location,
       authWithGoogle: false,
+    }).then(() => {
+      this.mailService.sendWelcomeOnBoardMail(
+        info.firstName,
+        info.lastName,
+        info.email,
+        info.password,
+      );
+      return true;
     });
   }
 
