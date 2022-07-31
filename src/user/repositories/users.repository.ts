@@ -5,6 +5,7 @@ import { ProfileInfoResponse } from '../dto/profileInfoResponse';
 import { UpdateUserInfoRequest } from '../dto/updateUserInfoRequest';
 import { UserResponse } from '../dto/userResponse';
 import { User } from '../entities/user';
+import { Role } from '../../roles/entities/role';
 
 @Injectable()
 export class UserRepository {
@@ -148,6 +149,24 @@ export class UserRepository {
       ])
       .then((res) => {
         return res.rowCount > 0;
+      });
+  }
+
+  async getEmailsGivenSpecificRole(
+    role: string,
+    committee: string | null,
+  ): Promise<string[]> {
+    console.log(committee);
+    return this.database
+      .query(
+        `SELECT DISTINCT u.email AS email
+         FROM kaffiuser AS u 
+         INNER JOIN permission AS p on p."userId" = u.id
+         WHERE p.role =  '${role}' AND 
+         ('${committee}' IS NULL OR p.committee = '${committee}')`,
+      )
+      .then((res) => {
+        return res.rows.map((row) => row.email);
       });
   }
 }

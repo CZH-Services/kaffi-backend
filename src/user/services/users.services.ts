@@ -91,4 +91,14 @@ export class UsersServices {
     const hashedPassword = await hashString(newPassword);
     return await this.userRepository.changePassword(email, hashedPassword);
   }
+
+  async getEmailsGivenSpecificRole(
+    role: string,
+    committee: string | null,
+  ): Promise<string[]> {
+    return await this.userRepository.getEmailsGivenSpecificRole(
+      role,
+      committee,
+    );
+  }
 }
