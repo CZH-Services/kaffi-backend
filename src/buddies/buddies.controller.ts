@@ -6,8 +6,18 @@ import {
   Post,
   Body,
   Req,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
+import { Committee } from 'src/committee/entities/committee';
+import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
+import { Role } from 'src/roles/entities/role';
 import { BuddyService } from './buddies.service';
 import { CreateBuddiesRequest } from './dto/createBuddiesRequest';
 import { GetBuddiesResponse } from './dto/getBuddiesResponse';
@@ -17,6 +27,13 @@ import { GetBuddiesResponse } from './dto/getBuddiesResponse';
 export class BuddiesController {
   constructor(private readonly blogService: BuddyService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Get buddies connection' })
   @ApiResponse({
@@ -27,6 +44,13 @@ export class BuddiesController {
     return await this.blogService.findAllBuddies();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get(':userId')
   @ApiOperation({ summary: 'Get buddies connection' })
   @ApiResponse({
@@ -39,6 +63,13 @@ export class BuddiesController {
     return await this.blogService.findUserBuddies(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Create buddies connection' })
   @ApiResponse({
@@ -56,6 +87,13 @@ export class BuddiesController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Delete buddies connection' })
   @ApiResponse({
