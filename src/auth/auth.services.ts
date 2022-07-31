@@ -26,7 +26,15 @@ export class AuthServices {
         { email },
         { expiresIn: '48h', secret: 'reset-password' },
       );
-      const link = `Please visit <a href='http://localhost:3001/reset-password?token=${token}'> this link</a> to reset your password.`;
+      const link = `<p>Dear ${user.firstName},</p>
+      <p>
+       You have requested a password reset. Please click on 
+       <a href='http://localhost:3001/reset-password?token=${token}'>this link</a>
+       to reset your password.
+      </p>
+      <br>
+      <p>Regards,</p>
+      <p>Kaffi Support Team</p>`;
       this.mailService.sendMail(user.email, 'Reset password', link);
     }
     return true;
@@ -53,8 +61,16 @@ export class AuthServices {
       newPassword,
     );
     if (done) {
-      const link = `Your password has been changed. If that wasn't you, please go to the following <a href='${'http://localhost:3001/request-reset-password'}'>link</a> and change it back!`;
-      this.mailService.sendMail(user['email'], 'Password reset', link);
+      const html = `<p>Hello,</p>
+      <p>
+       Your password has been changed. If that wasn't you, please go to the following 
+       <a href='${'http://localhost:3001/request-reset-password'}'>link</a> 
+       and change it back!
+      </p>
+      <br>
+      <p>Regards,</p>
+      <p>Kaffi Support Team</p>`;
+      this.mailService.sendMail(user['email'], 'Password reset', html);
       return true;
     }
     return false;

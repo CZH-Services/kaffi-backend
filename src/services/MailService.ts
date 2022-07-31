@@ -23,7 +23,7 @@ export class MailService {
 
   public sendMail(to: string, subject: string, html: string) {
     const mailOptions = {
-      from: env.SENDGRID_FROM,
+      from: 'Kaffi-lb<' + env.SENDGRID_FROM + '>',
       to,
       subject,
       html: html,
