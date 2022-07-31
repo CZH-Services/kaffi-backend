@@ -47,6 +47,31 @@ export class BuddyRespository {
       });
   }
 
+  async findOneBuddyConnection(
+    studentId: number,
+    buddyId: number,
+  ): Promise<GetBuddiesResponse> {
+    return this.database
+      .query(
+        `SELECT b.id AS id, b."buddyId" AS "buddyId", b."studentId" AS "studentId",
+         b."connectedBy" AS "connectedBy", b."connectedOn" AS "connectedOn",
+         CONCAT(bu.firstName , ' ', bu.lastName) AS "buddyFullName", bu.email AS "buddyEmail",
+         CONCAT(su.firstName , ' ', su.lastName) "studentFullName", su.email AS "studentEmail",
+         CONCAT(cu.firstName , ' ', cu.lastName)  AS "connectedByFullName", cu.email AS "connectedByEmail"
+         FROM buddyMatch AS b
+         INNER JOIN kaffiuser AS bu ON b."buddyId" = bu.id
+         INNER JOIN kaffiuser AS su ON b."studentId" = su.id
+         INNER JOIN kaffiuser AS cu ON b."connectedBy" = cu.id
+         WHERE b."studentId" = $1 AND b."buddyId" = $2`,
+        [studentId, buddyId],
+      )
+      .then((res) => {
+        if (res.rows.length > 0) {
+          return res.rows[0];
+        } else return undefined;
+      });
+  }
+
   async createBuddiesConnection(data: CreateBuddiesRequest): Promise<boolean> {
     return await this.database
       .query(

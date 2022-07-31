@@ -84,7 +84,6 @@ export class AuthServices {
 
   async getTokenAndNameForValidatedUser(info: Login) {
     const user = await this.usersServices.findOne(info.email);
-    console.log(user);
     return {
       token: this.getJWTToken(user.email, user.id),
       name: user.firstName,

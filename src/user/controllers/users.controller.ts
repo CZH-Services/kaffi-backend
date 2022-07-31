@@ -116,6 +116,7 @@ export class UsersController {
     { role: Role.MEMBER, committee: Committee.ADVISING },
   ])
   @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/buddies')
   @ApiOperation({ summary: 'Returns nonstaff buddies list' })
   @ApiResponse({
@@ -129,6 +130,7 @@ export class UsersController {
   }
 
   @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/volunteers')
   @ApiOperation({ summary: 'Returns nonstaff volunteers list' })
   @ApiResponse({
@@ -147,6 +149,7 @@ export class UsersController {
     { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
   ])
   @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/students')
   @ApiOperation({ summary: 'Returns nonstaff students list' })
   @ApiResponse({
@@ -165,6 +168,7 @@ export class UsersController {
     { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
   ])
   @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/no-role')
   @ApiOperation({ summary: 'Returns nonstaff with no role' })
   @ApiResponse({

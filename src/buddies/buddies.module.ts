@@ -8,7 +8,7 @@ import { BuddyRespository } from './buddies.respository';
 import { BuddyService } from './buddies.service';
 
 @Module({
-  imports: [PostgresModule, UserModule, PermissionModule],
+  imports: [PostgresModule, PermissionModule],
   controllers: [BuddiesController],
   providers: [BuddyService, BuddyRespository, JwtService],
 })

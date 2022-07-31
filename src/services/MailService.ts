@@ -9,7 +9,6 @@ export class MailService {
 
   constructor() {
     const env = process.env;
-    console.log(env);
     const options = {
       host: env.SENDGRID_HOST,
       secure: true,

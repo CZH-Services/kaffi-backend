@@ -64,7 +64,6 @@ export class BlogsRespository {
   }
 
   async updateBlog(data: UpdateBlogRequest): Promise<boolean> {
-    console.log(data);
     return this.database
       .query(
         `UPDATE blogs SET "title" = $1, "summary" = $2,

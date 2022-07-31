@@ -9,6 +9,7 @@ import { PermissionServices } from 'src/permissions/permission.services';
 import { UsersServices } from 'src/user/services/users.services';
 import { Role } from '../roles/entities/role';
 import { Committee } from 'src/committee/entities/committee';
+import { firstPermissionIsEquivalientToSecond } from 'src/services/PermissionsHelpers';
 
 @Injectable()
 export class CanAssignOrRevokePermission implements CanActivate {
@@ -39,30 +40,24 @@ export class CanAssignOrRevokePermission implements CanActivate {
       unsignedToken['email'],
     );
 
-    const firstPermissionIsEquivalientToSecond = (p1, p2) => {
-      return (
-        p1.role === p2.role && (!p2.committee || p1.committee === p2.committee)
-      );
-    };
-
     return (
       userPermissions.some((permission) => permission.role === Role.ADMIN) ||
-      (userPermissions.some((permission) =>
-        firstPermissionIsEquivalientToSecond(permission, {
+      (userPermissions.some((permission) => {
+        return firstPermissionIsEquivalientToSecond(permission, {
           role: Role.MEMBER,
           committee: Committee.ADVISING,
-        }),
-      ) &&
+        });
+      }) &&
         firstPermissionIsEquivalientToSecond(permissionToAssignOrRevoke, {
           role: Role.STUDENT,
           committee: Committee.ADVISING,
         })) ||
-      (userPermissions.some((permission) =>
-        firstPermissionIsEquivalientToSecond(permission, {
+      (userPermissions.some((permission) => {
+        return firstPermissionIsEquivalientToSecond(permission, {
           role: Role.MEMBER,
           committee: Committee.SCHOLARSHIP,
-        }),
-      ) &&
+        });
+      }) &&
         firstPermissionIsEquivalientToSecond(permissionToAssignOrRevoke, {
           role: Role.STUDENT,
           committee: Committee.SCHOLARSHIP,
