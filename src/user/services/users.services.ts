@@ -92,11 +92,11 @@ export class UsersServices {
     return await this.userRepository.changePassword(email, hashedPassword);
   }
 
-  async getEmailsGivenSpecificRole(
+  async getEmailsGivenSpecificRoleAndIds(
     role: string,
     committee: string | null,
-  ): Promise<string[]> {
-    return await this.userRepository.getEmailsGivenSpecificRole(
+  ): Promise<{ id: number; email: string }[]> {
+    return await this.userRepository.getEmailsGivenSpecificRoleAndIds(
       role,
       committee,
     );

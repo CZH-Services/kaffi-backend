@@ -152,21 +152,20 @@ export class UserRepository {
       });
   }
 
-  async getEmailsGivenSpecificRole(
+  async getEmailsGivenSpecificRoleAndIds(
     role: string,
     committee: string | null,
-  ): Promise<string[]> {
-    console.log(committee);
+  ): Promise<{ id: number; email: string }[]> {
+    const committeeCheck = committee ? `p.committee  = '${committee}'` : `TRUE`;
     return this.database
       .query(
-        `SELECT DISTINCT u.email AS email
+        `SELECT DISTINCT u.email AS email, u.id AS id
          FROM kaffiuser AS u 
          INNER JOIN permission AS p on p."userId" = u.id
-         WHERE p.role =  '${role}' AND 
-         ('${committee}' IS NULL OR p.committee = '${committee}')`,
+         WHERE p.role =  '${role}' AND ${committeeCheck}`,
       )
       .then((res) => {
-        return res.rows.map((row) => row.email);
+        return res.rows;
       });
   }
 }

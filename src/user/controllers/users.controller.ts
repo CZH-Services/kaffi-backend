@@ -129,43 +129,6 @@ export class UsersController {
     return await this.userServices.getNonStaffWithSpecificRole('Buddy');
   }
 
-  @SetPermission([
-    { role: Role.ADMIN, committee: null },
-    { role: Role.MEMBER, committee: Committee.ADVISING },
-  ])
-  @UseGuards(HasAccessGuard)
-  @ApiBearerAuth()
-  @Get('admin/non-staff/buddies-emails')
-  @ApiOperation({ summary: 'Returns nonstaff buddies emails list' })
-  @ApiResponse({
-    status: 200,
-    description: 'buddies emails has been successfully returned.',
-    type: [String],
-  })
-  async getBuddiesEmails(): Promise<String[]> {
-    return await this.userServices.getEmailsGivenSpecificRole(Role.BUDDY, null);
-  }
-
-  @SetPermission([
-    { role: Role.ADMIN, committee: null },
-    { role: Role.MEMBER, committee: Committee.ADVISING },
-  ])
-  @UseGuards(HasAccessGuard)
-  @ApiBearerAuth()
-  @Get('admin/non-staff/advising-students-emails')
-  @ApiOperation({ summary: 'Returns advising students emails list' })
-  @ApiResponse({
-    status: 200,
-    description: 'advising students emails has been successfully returned.',
-    type: [String],
-  })
-  async getAdvisingStudentsEmails(): Promise<String[]> {
-    return await this.userServices.getEmailsGivenSpecificRole(
-      Role.STUDENT,
-      Committee.ADVISING,
-    );
-  }
-
   @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Get('admin/non-staff/volunteers')
@@ -287,5 +250,48 @@ export class UsersController {
     },
   ): Promise<Boolean> {
     return await this.userServices.updateProfileImage(info.email, profile);
+  }
+
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
+  @Get('admin/non-staff/buddies-email-and-id')
+  @ApiOperation({ summary: 'Returns nonstaff buddies email and id list' })
+  @ApiResponse({
+    status: 200,
+    description: 'buddies email and id has been successfully returned.',
+    type: [String],
+  })
+  async getBuddiesEmailsAndIds(): Promise<{ id: number; email: string }[]> {
+    return await this.userServices.getEmailsGivenSpecificRoleAndIds(
+      Role.BUDDY,
+      null,
+    );
+  }
+
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
+  @Get('admin/non-staff/advising-students-email-and-id')
+  @ApiOperation({ summary: 'Returns advising students email and id list' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'advising students emails and ids has been successfully returned.',
+    type: [String],
+  })
+  async getAdvisingStudentsEmailsAndIds(): Promise<
+    { id: number; email: string }[]
+  > {
+    return await this.userServices.getEmailsGivenSpecificRoleAndIds(
+      Role.STUDENT,
+      Committee.ADVISING,
+    );
   }
 }

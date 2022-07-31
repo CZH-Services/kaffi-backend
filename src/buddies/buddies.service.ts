@@ -41,7 +41,7 @@ export class BuddyService {
       })
     ) {
       throw new ForbiddenException(
-        'Student does not have permission to connect',
+        'Student should have a student role in the advsing committee',
       );
     }
 
@@ -56,7 +56,7 @@ export class BuddyService {
         });
       })
     ) {
-      throw new ForbiddenException('Buddy does not have permission to connect');
+      throw new ForbiddenException('Buddy should have a buddy role');
     }
 
     if (
