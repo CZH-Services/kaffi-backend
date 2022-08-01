@@ -1,21 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Delete,
-  UseInterceptors,
-  UploadedFiles,
-  Res,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiConsumes,
-  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -31,6 +16,7 @@ export class ApplicationsController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Creates a user application' })
   @ApiResponse({
     status: 200,
@@ -48,6 +34,7 @@ export class ApplicationsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Gets applications' })
   @ApiResponse({
     status: 200,
@@ -63,6 +50,7 @@ export class ApplicationsController {
   }
 
   @Put('applicationStatus')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Updates application status' })
   @ApiResponse({
     status: 200,
@@ -83,6 +71,7 @@ export class ApplicationsController {
   }
 
   @Put('scholarshipStatus')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Updates scholarship status' })
   @ApiResponse({
     status: 200,
