@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsEmail,
-  IsOptional,
-  IsString,
-  ValidateIf,
-} from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class CreateNonStaff {
   @ApiProperty({ example: 'admin@hotmail.com', required: true })
@@ -19,11 +13,6 @@ export class CreateNonStaff {
   @ApiProperty({ example: 'zeitoun', required: true })
   @IsString({ message: 'last name should be a string' })
   lastName: string;
-
-  @ApiProperty({ example: '123456', required: true })
-  @ValidateIf((o) => !o.authWithGoogle || o.password)
-  @IsString({ message: 'Password should be a string' })
-  password: string;
 
   @ApiProperty({ example: 'USA', required: true })
   @IsOptional()

@@ -53,7 +53,9 @@ export class StaffServices {
   }
 
   async createStaffUser(staffUser: CreateStaff): Promise<Boolean> {
-    const hashedPassword = await hashString(staffUser.password);
+    const generatedPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await hashString(generatedPassword);
+
     const user = await this.userServices.createAndGetUser({
       email: staffUser.email,
       password: hashedPassword,
@@ -76,7 +78,7 @@ export class StaffServices {
       staffUser.firstName,
       staffUser.lastName,
       staffUser.email,
-      staffUser.password,
+      generatedPassword,
     );
     return Boolean(user);
   }

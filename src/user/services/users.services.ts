@@ -42,7 +42,8 @@ export class UsersServices {
   }
 
   async hashPassThenCreateUser(info: CreateNonStaff): Promise<Boolean> {
-    const hashedPassword = await hashString(info.password);
+    const generatedPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await hashString(generatedPassword);
 
     return await this.createUser({
       email: info.email,
@@ -57,7 +58,7 @@ export class UsersServices {
         info.firstName,
         info.lastName,
         info.email,
-        info.password,
+        generatedPassword,
       );
       return true;
     });
