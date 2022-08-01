@@ -31,6 +31,16 @@ export class ApplicationsController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Creates a user application' })
+  @ApiResponse({
+    status: 200,
+    description: 'Application created',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async addApplication(
     @Body() newApplication: AddApplication,
   ): Promise<boolean> {
@@ -38,11 +48,31 @@ export class ApplicationsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Gets applications' })
+  @ApiResponse({
+    status: 200,
+    description: 'Applications returned',
+    type: [ApplicationResponse],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async getApplications(): Promise<ApplicationResponse[]> {
     return await this.applicationService.getApplications();
   }
 
   @Put()
+  @ApiOperation({ summary: 'Updates application status' })
+  @ApiResponse({
+    status: 200,
+    description: 'Application status updated',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async updateApplicationStatus(
     @Body()
     updateApplicationStatus: UpdateApplicationStatus,
