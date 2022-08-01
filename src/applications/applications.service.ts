@@ -34,4 +34,13 @@ export class ApplicationService {
       updateApplicationStatus.status,
     );
   }
+
+  async updateScholarshipStatus(
+    updateApplicationStatus: UpdateApplicationStatus,
+  ): Promise<boolean> {
+    return await this.applicationsRepository.updateScholarshipStatus(
+      updateApplicationStatus.id,
+      updateApplicationStatus.status,
+    );
+  }
 }

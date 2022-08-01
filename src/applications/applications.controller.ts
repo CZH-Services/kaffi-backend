@@ -62,7 +62,7 @@ export class ApplicationsController {
     return await this.applicationService.getApplications();
   }
 
-  @Put()
+  @Put('applicationStatus')
   @ApiOperation({ summary: 'Updates application status' })
   @ApiResponse({
     status: 200,
@@ -78,6 +78,26 @@ export class ApplicationsController {
     updateApplicationStatus: UpdateApplicationStatus,
   ): Promise<boolean> {
     return await this.applicationService.updateApplicationStatus(
+      updateApplicationStatus,
+    );
+  }
+
+  @Put('scholarshipStatus')
+  @ApiOperation({ summary: 'Updates scholarship status' })
+  @ApiResponse({
+    status: 200,
+    description: 'Scholarship status updated',
+    type: Boolean,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  async updateScholarshipStatus(
+    @Body()
+    updateApplicationStatus: UpdateApplicationStatus,
+  ): Promise<boolean> {
+    return await this.applicationService.updateScholarshipStatus(
       updateApplicationStatus,
     );
   }

@@ -9,9 +9,10 @@ export class ApplicationRepository {
   async addApplication(application: Application): Promise<boolean> {
     return this.database
       .query(
-        'INSERT INTO applications ("userId", "programId", "cycleId", "applicationStatus", "scholarshipStatus") VALUES ($1, $2, $3, $4)',
+        'INSERT INTO applications ("userId", "applicationId", "programId", "cycleId", "applicationStatus", "scholarshipStatus") VALUES ($1, $2, $3, $4, $5, $6)',
         [
           application.userId,
+          application.applicationId,
           application.programId,
           application.cycleId,
           application.applicationStatus,
@@ -32,6 +33,17 @@ export class ApplicationRepository {
   async updateApplicationStatus(id: number, status: string): Promise<boolean> {
     return this.database
       .query('UPDATE applications SET "applicationStatus" = $1 WHERE id = $2', [
+        status,
+        id,
+      ])
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
+  async updateScholarshipStatus(id: number, status: string): Promise<boolean> {
+    return this.database
+      .query('UPDATE applications SET "scholarshipStatus" = $1 WHERE id = $2', [
         status,
         id,
       ])
