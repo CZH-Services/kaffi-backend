@@ -13,6 +13,7 @@ import { ProgramsModule } from './programs/programs.module';
 import { PermissionModule } from './permissions/permission.module';
 import { BlogModule } from './blogs/blogs.module';
 import { BuddiesModule } from './buddies/buddies.module';
+import { ApplicationModule } from './applications/applications.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { BuddiesModule } from './buddies/buddies.module';
     ProgramsModule,
     BlogModule,
     BuddiesModule,
+    ApplicationModule,
   ],
 })
 export class AppModule {}
