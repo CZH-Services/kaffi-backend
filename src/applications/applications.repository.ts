@@ -29,14 +29,11 @@ export class ApplicationRepository {
     });
   }
 
-  async updateApplicationStatus(
-    applicationId: number,
-    status: string,
-  ): Promise<boolean> {
+  async updateApplicationStatus(id: number, status: string): Promise<boolean> {
     return this.database
       .query('UPDATE applications SET "applicationStatus" = $1 WHERE id = $2', [
         status,
-        applicationId,
+        id,
       ])
       .then((res) => {
         return res.rowCount > 0;

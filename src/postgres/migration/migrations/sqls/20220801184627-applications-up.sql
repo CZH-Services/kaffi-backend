@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS Applications (
     id serial PRIMARY KEY,
+    "applicationId" integer,
     "userId" integer REFERENCES kaffiuser(id) ON DELETE CASCADE,
     "programId" integer REFERENCES Program(id) ON DELETE CASCADE,
     "cycleId" integer REFERENCES ProgramCycle(id) ON DELETE CASCADE,

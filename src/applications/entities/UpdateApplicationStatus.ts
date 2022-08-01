@@ -1,4 +1,4 @@
 export class UpdateApplicationStatus {
-  applicationId: number;
+  id: number;
   status: string;
 }

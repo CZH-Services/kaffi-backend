@@ -12,6 +12,8 @@ export class ApplicationService {
   async addApplication(newApplication: AddApplication): Promise<boolean> {
     const application: Application = {
       id: 0,
+      applicationStatus: Status.Pending,
+      scholarshipStatus: Status.Pending,
       ...newApplication,
     };
     return this.applicationsRepository.addApplication(application);
@@ -27,7 +29,7 @@ export class ApplicationService {
     updateApplicationStatus: UpdateApplicationStatus,
   ): Promise<boolean> {
     return await this.applicationsRepository.updateApplicationStatus(
-      updateApplicationStatus.applicationId,
+      updateApplicationStatus.id,
       updateApplicationStatus.status,
     );
   }
