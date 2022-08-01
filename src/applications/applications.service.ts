@@ -3,6 +3,7 @@ import { ApplicationRepository } from './applications.repository';
 import { AddApplication } from './entities/AddApplication';
 import { Application } from './entities/Application';
 import { ApplicationResponse } from './entities/ApplicationResponse';
+import { Status } from './entities/Status';
 import { UpdateApplicationStatus } from './entities/UpdateApplicationStatus';
 
 @Injectable()
