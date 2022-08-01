@@ -119,6 +119,15 @@ export class AuthServices {
       location: null,
     });
 
+    const html = `<p>Hello ${user.firstName} ${user.lastName},</p>
+      <p>
+       Your account has been created successfully!
+      </p>
+      <br>
+      <p>Regards,</p>
+      <p>Kaffi Support Team</p>`;
+    this.mailService.sendMail(user.email, 'Account created', html);
+
     return {
       token: this.getJWTToken(createdUser.email, createdUser.id),
       name: createdUser.firstName,
