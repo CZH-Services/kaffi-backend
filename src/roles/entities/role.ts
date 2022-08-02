@@ -9,6 +9,8 @@ export enum Role {
 export enum StaffRoles {
   ADMIN = 'Admin',
   MEMBER = 'Member',
+  BUDDY = 'Buddy',
+  VOLUNTEER = 'Volunteer',
 }
 
 export enum NonStaffRoles {

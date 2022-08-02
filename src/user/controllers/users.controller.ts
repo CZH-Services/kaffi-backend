@@ -34,6 +34,8 @@ import { UpdateProfileImageByAdmin } from '../dto/updateProfileImageByAdmin';
 import { CreateNonStaff } from '../dto/createNonStaff';
 import { UpdateUserInfoRequestByAdmin } from '../dto/updateUserInfoByAdminRequest';
 import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
+import { Role } from 'src/roles/entities/role';
+import { Committee } from 'src/committee/entities/committee';
 
 @ApiTags('Users')
 @Controller('users')
@@ -110,10 +112,11 @@ export class UsersController {
   }
 
   @SetPermission([
-    { role: 'Admin', committee: null },
-    { role: 'Member', committee: 'Advising' },
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
   ])
   @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/buddies')
   @ApiOperation({ summary: 'Returns nonstaff buddies list' })
   @ApiResponse({
@@ -127,6 +130,7 @@ export class UsersController {
   }
 
   @UseGuards(IsAdminGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/volunteers')
   @ApiOperation({ summary: 'Returns nonstaff volunteers list' })
   @ApiResponse({
@@ -140,10 +144,12 @@ export class UsersController {
   }
 
   @SetPermission([
-    { role: 'Admin', committee: null },
-    { role: 'Member', committee: 'Advising' },
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
   ])
   @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/students')
   @ApiOperation({ summary: 'Returns nonstaff students list' })
   @ApiResponse({
@@ -156,7 +162,13 @@ export class UsersController {
     return await this.userServices.getNonStaffWithSpecificRole('Student');
   }
 
-  @UseGuards(IsAdminGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
   @Get('admin/non-staff/no-role')
   @ApiOperation({ summary: 'Returns nonstaff with no role' })
   @ApiResponse({
@@ -238,5 +250,48 @@ export class UsersController {
     },
   ): Promise<Boolean> {
     return await this.userServices.updateProfileImage(info.email, profile);
+  }
+
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
+  @Get('admin/non-staff/buddies-email-and-id')
+  @ApiOperation({ summary: 'Returns nonstaff buddies email and id list' })
+  @ApiResponse({
+    status: 200,
+    description: 'buddies email and id has been successfully returned.',
+    type: [String],
+  })
+  async getBuddiesEmailsAndIds(): Promise<{ id: number; email: string }[]> {
+    return await this.userServices.getEmailsGivenSpecificRoleAndIds(
+      Role.BUDDY,
+      null,
+    );
+  }
+
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.ADVISING },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
+  @Get('admin/non-staff/advising-students-email-and-id')
+  @ApiOperation({ summary: 'Returns advising students email and id list' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'advising students emails and ids has been successfully returned.',
+    type: [String],
+  })
+  async getAdvisingStudentsEmailsAndIds(): Promise<
+    { id: number; email: string }[]
+  > {
+    return await this.userServices.getEmailsGivenSpecificRoleAndIds(
+      Role.STUDENT,
+      Committee.ADVISING,
+    );
   }
 }

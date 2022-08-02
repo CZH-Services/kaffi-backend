@@ -9,6 +9,7 @@ import { Login } from './dto/login';
 import { GET_GOOGLE_USER_INFO_URL } from 'src/constants';
 import { hashString } from 'src/services/HashString';
 import { MailService } from 'src/services/MailService';
+import { AuthResponse } from './dto/authResponse';
 
 @Injectable()
 export class AuthServices {
@@ -25,7 +26,15 @@ export class AuthServices {
         { email },
         { expiresIn: '48h', secret: 'reset-password' },
       );
-      const link = `Please visit <a href='http://localhost:3001/reset-password?token=${token}'> this link</a> to reset your password.`;
+      const link = `<p>Dear ${user.firstName},</p>
+      <p>
+       You have requested a password reset. Please click on 
+       <a href='http://localhost:3001/reset-password?token=${token}'>this link</a>
+       to reset your password.
+      </p>
+      <br>
+      <p>Regards,</p>
+      <p>Kaffi Support Team</p>`;
       this.mailService.sendMail(user.email, 'Reset password', link);
     }
     return true;
@@ -52,8 +61,16 @@ export class AuthServices {
       newPassword,
     );
     if (done) {
-      const link = `Your password has been changed. If that wasn't you, please go to the following <a href='${'http://localhost:3001/request-reset-password'}'>link</a> and change it back!`;
-      this.mailService.sendMail(user['email'], 'Password reset', link);
+      const html = `<p>Hello,</p>
+      <p>
+       Your password has been changed. If that wasn't you, please go to the following 
+       <a href='${'http://localhost:3001/request-reset-password'}'>link</a> 
+       and change it back!
+      </p>
+      <br>
+      <p>Regards,</p>
+      <p>Kaffi Support Team</p>`;
+      this.mailService.sendMail(user['email'], 'Password reset', html);
       return true;
     }
     return false;
@@ -72,20 +89,21 @@ export class AuthServices {
     return user;
   }
 
-  async getJWTToken(email: string, id: number) {
+  getJWTToken(email: string, id: number) {
     const payload = { email: email, sub: id };
-    return {
-      accessToken: this.jwtService.sign(payload),
-    };
+    return this.jwtService.sign(payload);
   }
 
   async equalsHash(password: string, hash: string) {
     return await bcrypt.compare(password, hash);
   }
 
-  async getTokenForValidatedUser(info: Login) {
+  async getTokenAndNameForValidatedUser(info: Login) {
     const user = await this.usersServices.findOne(info.email);
-    return this.getJWTToken(user.email, user.id);
+    return {
+      token: this.getJWTToken(user.email, user.id),
+      name: user.firstName,
+    };
   }
 
   async signup(user: SignUp) {
@@ -101,10 +119,22 @@ export class AuthServices {
       location: null,
     });
 
-    return this.getJWTToken(createdUser.email, createdUser.id);
+    const html = `<p>Hello ${user.firstName} ${user.lastName},</p>
+      <p>
+       Your account has been created successfully!
+      </p>
+      <br>
+      <p>Regards,</p>
+      <p>Kaffi Support Team</p>`;
+    this.mailService.sendMail(user.email, 'Account created', html);
+
+    return {
+      token: this.getJWTToken(createdUser.email, createdUser.id),
+      name: createdUser.firstName,
+    };
   }
 
-  async googleAuthentication(accessToken: string) {
+  async googleAuthentication(accessToken: string): Promise<AuthResponse> {
     const { email, given_name, family_name } = await axios
       .get(GET_GOOGLE_USER_INFO_URL(accessToken))
       .then((res) => res.data);
@@ -123,6 +153,9 @@ export class AuthServices {
       });
     }
 
-    return this.getJWTToken(email, user.id);
+    return {
+      token: this.getJWTToken(email, user.id),
+      name: given_name,
+    };
   }
 }

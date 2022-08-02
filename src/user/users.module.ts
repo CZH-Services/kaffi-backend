@@ -9,6 +9,7 @@ import { StaffServices } from './services/staff.services';
 import { UsersServices } from './services/users.services';
 import { forwardRef } from '@nestjs/common';
 import { PermissionModule } from 'src/permissions/permission.module';
+import { MailService } from 'src/services/MailService';
 
 @Module({
   imports: [PostgresModule, forwardRef(() => PermissionModule)],
@@ -19,6 +20,7 @@ import { PermissionModule } from 'src/permissions/permission.module';
     StaffRepository,
     UserRepository,
     JwtService,
+    MailService,
   ],
   exports: [UsersServices],
 })

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateStaff } from '../dto/createStaff';
 import { GetStaffResponse } from '../dto/getStaffResponse';
 import { StaffTag } from '../entities/staffTag';
@@ -9,12 +9,14 @@ import { UpdateStaffInfoByAdminRequest } from '../dto/updateStaffInfoByAdminRequ
 import { AddStaffInfo } from '../dto/addStaffInfo';
 import { PermissionServices } from 'src/permissions/permission.services';
 import { GetStaffByTagWithCommitteesHead } from '../dto/getStaffByTagWithCommitteesHead';
+import { MailService } from 'src/services/MailService';
 
 @Injectable()
 export class StaffServices {
   constructor(
     private readonly staffRepository: StaffRepository,
     private readonly userServices: UsersServices,
+    private readonly mailService: MailService,
     private readonly permissionServices: PermissionServices,
   ) {}
 
@@ -51,10 +53,12 @@ export class StaffServices {
   }
 
   async createStaffUser(staffUser: CreateStaff): Promise<Boolean> {
-    staffUser.password = await hashString(staffUser.password);
+    const generatedPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await hashString(generatedPassword);
+
     const user = await this.userServices.createAndGetUser({
       email: staffUser.email,
-      password: staffUser.password,
+      password: hashedPassword,
       firstName: staffUser.firstName,
       lastName: staffUser.lastName,
       profile: null,
@@ -70,7 +74,12 @@ export class StaffServices {
       rank: rank,
       userId: user.id,
     });
-
+    this.mailService.sendWelcomeOnBoardMail(
+      staffUser.firstName,
+      staffUser.lastName,
+      staffUser.email,
+      generatedPassword,
+    );
     return Boolean(user);
   }
 

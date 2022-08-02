@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
 import { AddBlogRequest } from './dto/addBlogRequest';
 import { GetBlogResponse } from './dto/blogResponse';
+import { GetBlogResponseForAdmin } from './dto/blogResponseForAdmin';
 import { UpdateBlogRequest } from './dto/updateBlog';
 
 @Injectable()
@@ -14,6 +15,20 @@ export class BlogsRespository {
         `SELECT b.id AS id, b."title" AS "title", 
          b."summary" AS "summary", b."image" AS "image", 
          b."date" AS "date", b."externalLink" AS "externalLink"
+         FROM blogs AS b ORDER BY date DESC`,
+      )
+      .then((res) => {
+        return res.rows;
+      });
+  }
+
+  async findAllBlogsForAdmin(): Promise<GetBlogResponseForAdmin[]> {
+    return this.database
+      .query(
+        `SELECT b.id AS id, b."title" AS "title", 
+         b."summary" AS "summary", b."image" AS "image", 
+         b."date" AS "date", b."externalLink" AS "externalLink",
+         b."HTMLString" AS "HTMLString"
          FROM blogs AS b ORDER BY date DESC`,
       )
       .then((res) => {

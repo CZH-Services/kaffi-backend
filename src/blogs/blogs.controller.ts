@@ -27,6 +27,7 @@ import { FileStorageService } from 'src/services/FileStorageService';
 import { BlogService } from './blogs.service';
 import { AddBlogRequest } from './dto/addBlogRequest';
 import { GetBlogResponse } from './dto/blogResponse';
+import { GetBlogResponseForAdmin } from './dto/blogResponseForAdmin';
 import { UpdateBlogRequest } from './dto/updateBlog';
 
 @ApiTags('Blogs')
@@ -43,6 +44,17 @@ export class BlogsController {
   })
   async findAll(): Promise<GetBlogResponse[]> {
     return await this.blogService.findAllBlogs();
+  }
+
+  @Get('admin')
+  @ApiOperation({ summary: 'Get blogs' })
+  @ApiResponse({
+    status: 200,
+    description: 'blogs records for admin',
+    type: [GetBlogResponse],
+  })
+  async findAllBlogsForAdmin(): Promise<GetBlogResponseForAdmin[]> {
+    return await this.blogService.findAllBlogsForAdmin();
   }
 
   @UseGuards(IsAdminGuard)

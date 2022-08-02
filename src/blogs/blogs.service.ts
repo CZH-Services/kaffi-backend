@@ -7,6 +7,7 @@ import {
 import { BlogsRespository } from './blogs.repository';
 import { AddBlogRequest } from './dto/addBlogRequest';
 import { GetBlogResponse } from './dto/blogResponse';
+import { GetBlogResponseForAdmin } from './dto/blogResponseForAdmin';
 import { UpdateBlogRequest } from './dto/updateBlog';
 
 @Injectable()
@@ -15,6 +16,10 @@ export class BlogService {
 
   async findAllBlogs(): Promise<GetBlogResponse[]> {
     return await this.blogsRespository.findAllBlogs();
+  }
+
+  async findAllBlogsForAdmin(): Promise<GetBlogResponseForAdmin[]> {
+    return await this.blogsRespository.findAllBlogsForAdmin();
   }
 
   async createBlogs(data: AddBlogRequest, image: Object): Promise<boolean> {

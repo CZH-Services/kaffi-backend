@@ -9,7 +9,6 @@ export class MailService {
 
   constructor() {
     const env = process.env;
-    console.log(env);
     const options = {
       host: env.SENDGRID_HOST,
       secure: true,
@@ -24,7 +23,7 @@ export class MailService {
 
   public sendMail(to: string, subject: string, html: string) {
     const mailOptions = {
-      from: env.SENDGRID_FROM,
+      from: 'Kaffi-lb<' + env.SENDGRID_FROM + '>',
       to,
       subject,
       html: html,
@@ -37,5 +36,25 @@ export class MailService {
         );
       }
     });
+  }
+
+  public sendWelcomeOnBoardMail(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+  ) {
+    const link = `<p>Dear ${firstName} ${lastName},</p>
+    <p>An account in our platform have been created.</p>
+    <p>Please visit <a href='http://localhost:3001/login'> this link</a> and login with the following credentials:</p>
+    <p><b>Email:</b> ${email}</p>
+    <p><b>Password:</b> ${password}</p>
+    <br>
+    <p>It is highly recommended that you change your password using the following <a href='http://localhost:3001/request-reset-password'>link</a>.</p>
+    <br>
+    <p>Thank you,</p>
+    <p>Kaffi Team</p>
+    `;
+    this.sendMail(email, 'Welcome on board', link);
   }
 }

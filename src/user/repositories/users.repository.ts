@@ -5,6 +5,7 @@ import { ProfileInfoResponse } from '../dto/profileInfoResponse';
 import { UpdateUserInfoRequest } from '../dto/updateUserInfoRequest';
 import { UserResponse } from '../dto/userResponse';
 import { User } from '../entities/user';
+import { Role } from '../../roles/entities/role';
 
 @Injectable()
 export class UserRepository {
@@ -34,7 +35,12 @@ export class UserRepository {
 
   async findOne(email: string): Promise<UserResponse> {
     return this.database
-      .query(`SELECT * FROM kaffiuser WHERE email = $1`, [email])
+      .query(
+        `SELECT id, email, firstName AS "firstName", lastName AS "lastName", 
+        location, profileUrl AS "profileUrl" , password, authWithGoogle AS "authWithGoogle"
+        FROM kaffiuser WHERE email = $1`,
+        [email],
+      )
       .then((res) => {
         if (res.rowCount > 0) {
           return res.rows[0];
@@ -96,7 +102,7 @@ export class UserRepository {
   async getNonStaffWithSpecificRole(role: string): Promise<User[]> {
     return this.database
       .query(
-        `SELECT u.id AS id, u.firstName AS "firstName",
+        `SELECT distinct u.id AS id, u.firstName AS "firstName",
          u.lastName AS "lastName", u.location AS location,
          u.profileurl AS "profileUrl",  u.email AS email,
          u.authWithGoogle AS "authWithGoogle"
@@ -143,6 +149,23 @@ export class UserRepository {
       ])
       .then((res) => {
         return res.rowCount > 0;
+      });
+  }
+
+  async getEmailsGivenSpecificRoleAndIds(
+    role: string,
+    committee: string | null,
+  ): Promise<{ id: number; email: string }[]> {
+    const committeeCheck = committee ? `p.committee  = '${committee}'` : `TRUE`;
+    return this.database
+      .query(
+        `SELECT DISTINCT u.email AS email, u.id AS id
+         FROM kaffiuser AS u 
+         INNER JOIN permission AS p on p."userId" = u.id
+         WHERE p.role =  '${role}' AND ${committeeCheck}`,
+      )
+      .then((res) => {
+        return res.rows;
       });
   }
 }

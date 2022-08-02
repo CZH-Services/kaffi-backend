@@ -27,7 +27,7 @@ export class AddBlogRequest {
   })
   image: string;
 
-  @ApiProperty({ example: '2020-01-01' })
+  @ApiProperty({ example: '2020-01-01', type: Date })
   @IsNotEmpty({ message: 'date is required' })
   @IsDateString({ message: 'date should be a valid date' })
   date: Date;
@@ -38,7 +38,7 @@ export class AddBlogRequest {
       'https://drive.google.com/file/d/1tDlbVR9JDEDhB_lL-aprjeK11iAalaIR/view',
   })
   @IsOptional()
-  @ValidateIf((o) => !o.HTMLString || o.externalLink)
+  @ValidateIf((o) => !o.HTMLString)
   @IsString({ message: 'externalLink should be a string' })
   externalLink: string;
 
@@ -49,7 +49,7 @@ export class AddBlogRequest {
       de: '<div>html string here</div>',
     },
   })
-  @ValidateIf((o) => !o.externalLink || o.HTMLString)
+  @ValidateIf((o) => !o.externalLink)
   @IsOptional()
   @IsMultiLingual({ message: 'HTMLString must be multilingual' })
   HTMLString: object;
