@@ -7,10 +7,10 @@ export const faqsSwaggerConfiguration = (
   app: INestApplication,
 ) => {
   const options = new DocumentBuilder()
-    .setTitle('Donations')
+    .setTitle('Faqs')
     .setDescription('The faqs API description')
     .setVersion('1.0')
-    .addTag('Donations')
+    .addTag('Faqs')
     .build();
 
   const programDocument = SwaggerModule.createDocument(app, options, {

@@ -1,6 +1,6 @@
-DROP TABLE Permission;
-DROP TABLE KaffiRole;
-DROP TABLE Committee;
+DROP TABLE IF EXISTS Permission;
+DROP TABLE IF EXISTS KaffiRole;
+DROP TABLE IF EXISTS Committee;
 
 CREATE TABLE Permission (
     id serial PRIMARY KEY,
