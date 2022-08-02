@@ -8,6 +8,7 @@ import { faqsSwaggerConfiguration } from './faqs/faqs.swagger';
 import { programsSwaggerConfiguration } from './programs/programs.swagger';
 import { webinarsSwaggerConfiguration } from './webinars/webinars.swagger';
 import { blogsSwaggerConfiguration } from './blogs/blogs.swagger';
+import { storySwaggerConfiguration } from './stories/stories.swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,6 +28,7 @@ async function bootstrap() {
   faqsSwaggerConfiguration(`${baseRoute}/faqs`, app);
   faqcategoriesSwaggerConfiguration(`${baseRoute}/faq-categories`, app);
   blogsSwaggerConfiguration(`${baseRoute}/blogs`, app);
+  storySwaggerConfiguration(`${baseRoute}/stories`, app);
 
   await app.listen(process.env.PORT);
 }

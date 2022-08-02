@@ -11,6 +11,7 @@ import { CommitteeModule } from './committee/committee.module';
 import { AuthModule } from './auth/auth.module';
 import { ProgramsModule } from './programs/programs.module';
 import { PermissionModule } from './permissions/permission.module';
+import { StoryModule } from './stories/stories.module';
 import { BlogModule } from './blogs/blogs.module';
 
 @Module({
@@ -30,6 +31,7 @@ import { BlogModule } from './blogs/blogs.module';
     DonationModule,
     ProgramsModule,
     BlogModule,
+    StoryModule,
   ],
 })
 export class AppModule {}
