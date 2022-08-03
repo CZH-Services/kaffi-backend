@@ -111,4 +111,15 @@ export class UsersServices {
       committee,
     );
   }
+
+  async updateResetPasswordToken(
+    email: string,
+    token: string,
+  ): Promise<boolean> {
+    return await this.userRepository.updateResetPasswordToken(email, token);
+  }
+
+  async getUserResetPasswordToken(email: string): Promise<string> {
+    return await this.userRepository.getUserResetPasswordToken(email);
+  }
 }

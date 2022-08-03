@@ -19,13 +19,18 @@ export class AuthServices {
     private readonly mailService: MailService,
   ) {}
 
+  async createResetPassowrdToken(email: string) {
+    return await this.jwtService.signAsync(
+      { email },
+      { expiresIn: '48h', secret: 'reset-password' },
+    );
+  }
+
   async requestResetPassword(email: string) {
     const user = await this.usersServices.findOne(email);
     if (user) {
-      const token = await this.jwtService.signAsync(
-        { email },
-        { expiresIn: '48h', secret: 'reset-password' },
-      );
+      const token = await this.createResetPassowrdToken(email);
+      this.usersServices.updateResetPasswordToken(email, token);
       const link = `<p>Dear ${user.firstName},</p>
       <p>
        You have requested a password reset. Please click on 
@@ -53,14 +58,31 @@ export class AuthServices {
 
   async resetPassword(token: string, newPassword: string): Promise<boolean> {
     if (!this.verifyResetPasswordToken(token)) {
-      throw new HttpException('Invalid token', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Invalid token, please request a new reset password link',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const user = this.jwtService.decode(token);
-    const done = await this.usersServices.changePassword(
-      user['email'],
+
+    const email = user['email'];
+    const currentToken = await this.usersServices.getUserResetPasswordToken(
+      email,
+    );
+    if (currentToken !== token) {
+      throw new HttpException(
+        'This link is expired, please request a new reset password link',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const changePasswordResponse = await this.usersServices.changePassword(
+      email,
       newPassword,
     );
-    if (done) {
+    if (changePasswordResponse) {
+      const token = await this.createResetPassowrdToken(email);
+      this.usersServices.updateResetPasswordToken(email, token);
       const html = `<p>Hello,</p>
       <p>
        Your password has been changed. If that wasn't you, please go to the following 
@@ -70,7 +92,7 @@ export class AuthServices {
       <br>
       <p>Regards,</p>
       <p>Kaffi Support Team</p>`;
-      this.mailService.sendMail(user['email'], 'Password reset', html);
+      this.mailService.sendMail(email, 'Password reset', html);
       return true;
     }
     return false;
