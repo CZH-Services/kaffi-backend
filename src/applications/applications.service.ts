@@ -4,7 +4,7 @@ import { AddApplication } from './entities/AddApplication';
 import { Application } from './entities/Application';
 import { ApplicationResponse } from './entities/ApplicationResponse';
 import { Status } from './entities/Status';
-import { UpdateApplicationStatus } from './entities/UpdateApplicationStatus';
+import { UpdateApplication } from './entities/UpdateApplicationStatus';
 
 @Injectable()
 export class ApplicationService {
@@ -26,21 +26,11 @@ export class ApplicationService {
     );
   }
 
-  async updateApplicationStatus(
-    updateApplicationStatus: UpdateApplicationStatus,
+  async updateApplication(
+    updateApplication: UpdateApplication,
   ): Promise<boolean> {
     return await this.applicationsRepository.updateApplicationStatus(
-      updateApplicationStatus.id,
-      updateApplicationStatus.status,
-    );
-  }
-
-  async updateScholarshipStatus(
-    updateApplicationStatus: UpdateApplicationStatus,
-  ): Promise<boolean> {
-    return await this.applicationsRepository.updateScholarshipStatus(
-      updateApplicationStatus.id,
-      updateApplicationStatus.status,
+      updateApplication,
     );
   }
 }

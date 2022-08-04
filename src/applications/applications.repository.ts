@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
 import { Application } from './entities/Application';
+import { UpdateApplication } from './entities/UpdateApplicationStatus';
 
 @Injectable()
 export class ApplicationRepository {
@@ -24,29 +25,38 @@ export class ApplicationRepository {
       });
   }
 
-  async getApplications(): Promise<Application[]> {
-    return this.database.query('SELECT * FROM applications').then((res) => {
-      return <Application[]>res.rows;
-    });
-  }
-
-  async updateApplicationStatus(id: number, status: string): Promise<boolean> {
+  async getApplications() {
     return this.database
-      .query('UPDATE applications SET "applicationStatus" = $1 WHERE id = $2', [
-        status,
-        id,
-      ])
+      .query(
+        `
+    SELECT a.id, a."userId", k."firstname" || ' ' || k."lastname" as "fullname", 
+    a."programId", p."name" as "programname",
+    a."cycleId", pc."name" as "cyclename",
+    a."applicationId", a."applicationStatus", a."scholarshipStatus"
+    FROM public.applications a
+    INNER JOIN public.kaffiuser k on a."userId" = k.id   
+    INNER JOIN public.program p on a."programId" = p.id
+    INNER JOIN public.programcycle pc on a."cycleId" = pc.id
+    `,
+      )
       .then((res) => {
-        return res.rowCount > 0;
+        return res.rows;
       });
   }
 
-  async updateScholarshipStatus(id: number, status: string): Promise<boolean> {
+  async updateApplicationStatus(
+    updateApplication: UpdateApplication,
+  ): Promise<boolean> {
     return this.database
-      .query('UPDATE applications SET "scholarshipStatus" = $1 WHERE id = $2', [
-        status,
-        id,
-      ])
+      .query(
+        'UPDATE applications SET "applicationStatus" = $1, "scholarshipStatus" = $2, "applicationId" = $3 WHERE id = $4',
+        [
+          updateApplication.applicationStatus,
+          updateApplication.scholarshipStatus,
+          updateApplication.applicationId,
+          updateApplication.id,
+        ],
+      )
       .then((res) => {
         return res.rowCount > 0;
       });
