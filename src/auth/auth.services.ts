@@ -66,7 +66,6 @@ export class AuthServices {
       );
     }
     const user = this.jwtService.decode(token);
-
     const email = user['email'];
     const currentToken = await this.usersServices.getUserResetPasswordToken(
       email,
