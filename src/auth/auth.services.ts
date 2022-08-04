@@ -21,7 +21,9 @@ export class AuthServices {
 
   async requestResetPassword(email: string) {
     const user = await this.usersServices.findOne(email);
-    if (user) {
+    if (user.authWithGoogle)
+      throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
+    else if (user) {
       const token = await this.jwtService.signAsync(
         { email },
         { expiresIn: '48h', secret: 'reset-password' },
@@ -100,10 +102,14 @@ export class AuthServices {
 
   async getTokenAndNameForValidatedUser(info: Login) {
     const user = await this.usersServices.findOne(info.email);
-    return {
-      token: this.getJWTToken(user.email, user.id),
-      name: user.firstName,
-    };
+    console.log(info.email);
+    if (user.authWithGoogle) {
+      throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
+    } else
+      return {
+        token: this.getJWTToken(user.email, user.id),
+        name: user.firstName,
+      };
   }
 
   async signup(user: SignUp) {
@@ -152,10 +158,15 @@ export class AuthServices {
         location: null,
       });
     }
-
-    return {
-      token: this.getJWTToken(email, user.id),
-      name: given_name,
-    };
+    if (!user.authWithGoogle)
+      throw new HttpException(
+        { notauthWithGoogle: true },
+        HttpStatus.BAD_REQUEST,
+      );
+    else
+      return {
+        token: this.getJWTToken(email, user.id),
+        name: given_name,
+      };
   }
 }
