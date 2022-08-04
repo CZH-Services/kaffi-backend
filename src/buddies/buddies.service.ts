@@ -25,8 +25,8 @@ export class BuddyService {
     return await this.buddyRespository.findAllBuddies();
   }
 
-  async findUserBuddies(userId: number): Promise<GetBuddiesResponse[]> {
-    return await this.buddyRespository.findUserBuddies(userId);
+  async findUserBuddies(email: string): Promise<GetBuddiesResponse[]> {
+    return await this.buddyRespository.findUserBuddies(email);
   }
 
   async createBuddiesConnection(data: {

@@ -26,7 +26,7 @@ export class BuddyRespository {
       });
   }
 
-  async findUserBuddies(userId: number): Promise<GetBuddiesResponse[]> {
+  async findUserBuddies(email: string): Promise<GetBuddiesResponse[]> {
     return this.database
       .query(
         `SELECT b.id AS id, b."buddyId" AS "buddyId", b."studentId" AS "studentId",
@@ -38,9 +38,9 @@ export class BuddyRespository {
          INNER JOIN kaffiuser AS bu ON b."buddyId" = bu.id
          INNER JOIN kaffiuser AS su ON b."studentId" = su.id
          INNER JOIN kaffiuser AS cu ON b."connectedBy" = cu.id
-         WHERE b."studentId" = $1 or b."buddyId" = $1
+         WHERE bu.email = $1 or su.email = $1
          ORDER BY b."connectedOn" DESC`,
-        [userId],
+        [email],
       )
       .then((res) => {
         return res.rows;

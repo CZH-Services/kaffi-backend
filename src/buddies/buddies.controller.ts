@@ -45,22 +45,15 @@ export class BuddiesController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @SetPermission([
-    { role: Role.ADMIN, committee: null },
-    { role: Role.MEMBER, committee: Committee.ADVISING },
-  ])
-  @UseGuards(HasAccessGuard)
   @ApiBearerAuth()
-  @Get(':userId')
-  @ApiOperation({ summary: 'Get buddies connection' })
+  @Get('/for-auth-user')
+  @ApiOperation({ summary: 'Get uset buddies connection' })
   @ApiResponse({
     status: 200,
     type: [GetBuddiesResponse],
   })
-  async findUserBuddies(
-    @Param('userId') userId: number,
-  ): Promise<GetBuddiesResponse[]> {
-    return await this.blogService.findUserBuddies(userId);
+  async findUserBuddies(@Req() req: any): Promise<GetBuddiesResponse[]> {
+    return await this.blogService.findUserBuddies(req.user.email);
   }
 
   @UseGuards(JwtAuthGuard)
