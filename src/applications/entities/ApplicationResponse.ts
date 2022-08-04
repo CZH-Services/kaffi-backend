@@ -11,11 +11,20 @@ export class ApplicationResponse {
   @ApiProperty({ example: 1 })
   userId: number;
 
+  @ApiProperty({ example: 'Hussein Khamis' })
+  fullname: string;
+
   @ApiProperty({ example: 1 })
   programId: number;
 
+  @ApiProperty({ example: 'Program 1' })
+  programname: string;
+
   @ApiProperty({ example: 1 })
   cycleId: number;
+
+  @ApiProperty({ example: 'Cycle 1' })
+  cyclename: string;
 
   @ApiProperty({ example: Status.Approved })
   applicationStatus: string;
