@@ -8,7 +8,7 @@ import {
 import { ApplicationService } from './applications.service';
 import { AddApplication } from './entities/AddApplication';
 import { ApplicationResponse } from './entities/ApplicationResponse';
-import { UpdateApplicationStatus } from './entities/UpdateApplicationStatus';
+import { UpdateApplication } from './entities/UpdateApplicationStatus';
 
 @ApiTags('Applications')
 @Controller('applications')
@@ -49,45 +49,22 @@ export class ApplicationsController {
     return await this.applicationService.getApplications();
   }
 
-  @Put('applicationStatus')
+  @Put()
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Updates application status' })
+  @ApiOperation({ summary: 'Updates application' })
   @ApiResponse({
     status: 200,
-    description: 'Application status updated',
+    description: 'Application updated',
     type: Boolean,
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
   })
-  async updateApplicationStatus(
+  async updateApplication(
     @Body()
-    updateApplicationStatus: UpdateApplicationStatus,
+    updateApplication: UpdateApplication,
   ): Promise<boolean> {
-    return await this.applicationService.updateApplicationStatus(
-      updateApplicationStatus,
-    );
-  }
-
-  @Put('scholarshipStatus')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Updates scholarship status' })
-  @ApiResponse({
-    status: 200,
-    description: 'Scholarship status updated',
-    type: Boolean,
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  async updateScholarshipStatus(
-    @Body()
-    updateApplicationStatus: UpdateApplicationStatus,
-  ): Promise<boolean> {
-    return await this.applicationService.updateScholarshipStatus(
-      updateApplicationStatus,
-    );
+    return await this.applicationService.updateApplication(updateApplication);
   }
 }
