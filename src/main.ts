@@ -11,6 +11,7 @@ import { blogsSwaggerConfiguration } from './blogs/blogs.swagger';
 import { storySwaggerConfiguration } from './stories/stories.swagger';
 import { buddiesSwaggerConfiguration } from './buddies/buddies.swagger';
 import { applicationSwaggerConfiguration } from './applications/applications.swagger';
+import { initialValuesSwaggerConfiguration } from './initialValues/initialValues.swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -33,6 +34,7 @@ async function bootstrap() {
   storySwaggerConfiguration(`${baseRoute}/stories`, app);
   buddiesSwaggerConfiguration(`${baseRoute}/buddies`, app);
   applicationSwaggerConfiguration(`${baseRoute}/applications`, app);
+  initialValuesSwaggerConfiguration(`${baseRoute}/initial-values`, app);
   await app.listen(process.env.PORT);
 }
 bootstrap();

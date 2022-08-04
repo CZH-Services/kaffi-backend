@@ -168,4 +168,31 @@ export class UserRepository {
         return res.rows;
       });
   }
+
+  async updateResetPasswordToken(
+    email: string,
+    token: string,
+  ): Promise<boolean> {
+    return this.database
+      .query(
+        `UPDATE kaffiuser SET "resetPasswordToken" = $1 WHERE email = $2`,
+        [token, email],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
+  async getUserResetPasswordToken(email: string): Promise<string> {
+    return this.database
+      .query(`SELECT "resetPasswordToken" FROM kaffiuser WHERE email = $1`, [
+        email,
+      ])
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return res.rows[0].resetPasswordToken;
+        }
+        return undefined;
+      });
+  }
 }
