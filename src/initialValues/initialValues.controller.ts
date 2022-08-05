@@ -7,9 +7,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { BLOGS_MEDIA_PATH } from 'src/constants';
 import { IsAdminGuard } from 'src/guards/isAdmin.guard';
-import { FileStorageService } from 'src/services/FileStorageService';
 import { GetInitialValues } from './dto/getInitialValues';
 import { UpdateInitialValues } from './dto/updateInitialValues';
 import { InitialValuesService } from './initialValues.service';
@@ -33,17 +31,17 @@ export class InitialValuesController {
   @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @Put()
-  @ApiOperation({ summary: 'update Initial Values' })
+  @ApiOperation({ summary: 'Update Initial Values' })
   @ApiOkResponse({
     status: 200,
-    description: 'Initial Values added successfully',
+    description: 'Initial Values updated successfully',
     type: Boolean,
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
   })
-  async updateProfileImage(
+  async updateInitialValues(
     @Body() body: UpdateInitialValues,
   ): Promise<Boolean> {
     return await this.initialValuesService.updateInitialValues(body);

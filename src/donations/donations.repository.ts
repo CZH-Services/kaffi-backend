@@ -35,4 +35,15 @@ export class DonationRepository {
         return undefined;
       });
   }
+
+  async getDonationAmount(): Promise<string> {
+    return await this.database
+      .query('SELECT amount FROM Donation limit 1')
+      .then((res) => {
+        if (res.rowCount > 0) {
+          return <string>res.rows[0].amount;
+        }
+        return undefined;
+      });
+  }
 }

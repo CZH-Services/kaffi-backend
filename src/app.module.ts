@@ -16,6 +16,7 @@ import { BlogModule } from './blogs/blogs.module';
 import { BuddiesModule } from './buddies/buddies.module';
 import { ApplicationModule } from './applications/applications.module';
 import { InitialValuesModule } from './initialValues/initialValues.module';
+import { LandingModule } from './landing/Landing.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { InitialValuesModule } from './initialValues/initialValues.module';
     BuddiesModule,
     ApplicationModule,
     InitialValuesModule,
+    LandingModule
   ],
 })
 export class AppModule {}

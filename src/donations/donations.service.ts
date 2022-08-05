@@ -19,4 +19,8 @@ export class DonationsService {
       <Donation>donation,
     );
   }
+
+  async getDonationAmount(): Promise<string> {
+    return this.donationRepository.getDonationAmount();
+  }
 }

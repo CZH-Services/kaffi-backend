@@ -90,4 +90,12 @@ export class PermissionRepository {
         return res.rowCount > 0;
       });
   }
+
+  async getTotalNumberOfVolunteers(): Promise<number> {
+    return this.database
+      .query(`SELECT COUNT(*) FROM Permission WHERE role = '${Role.VOLUNTEER}'`)
+      .then((res) => {
+        return res.rows[0].count;
+      });
+  }
 }

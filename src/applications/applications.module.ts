@@ -10,5 +10,6 @@ import { ApplicationService } from './applications.service';
   imports: [PostgresModule, UserModule, PermissionModule],
   controllers: [ApplicationsController],
   providers: [ApplicationService, ApplicationRepository],
+  exports: [ApplicationService],
 })
 export class ApplicationModule {}
