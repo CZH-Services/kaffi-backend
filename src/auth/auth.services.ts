@@ -123,7 +123,6 @@ export class AuthServices {
 
   async getTokenAndNameForValidatedUser(info: Login) {
     const user = await this.usersServices.findOne(info.email);
-    console.log(info.email);
     if (user.authWithGoogle) {
       throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
     } else

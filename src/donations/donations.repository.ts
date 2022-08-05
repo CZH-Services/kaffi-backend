@@ -36,6 +36,26 @@ export class DonationRepository {
       });
   }
 
+  async seedDonation(donation: Donation): Promise<boolean> {
+    if (await this.getDonationInformation()) return true;
+    return this.database
+      .query(
+        'INSERT INTO Donation ("accountName", iban, swift, "bankName", currency, "externalPayments", amount) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [
+          donation.accountName,
+          donation.iban,
+          donation.swift,
+          donation.bankName,
+          donation.currency,
+          donation.externalPayments,
+          donation.amount,
+        ],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
   async getDonationAmount(): Promise<string> {
     return await this.database
       .query('SELECT amount FROM Donation limit 1')

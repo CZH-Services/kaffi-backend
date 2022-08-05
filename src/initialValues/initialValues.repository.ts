@@ -18,20 +18,22 @@ export class InitialValuesRespository {
       });
   }
 
-  async updateInitialValues(data: UpdateInitialValues): Promise<boolean> {
-    if (await this.getInitialValues()) {
-      return this.database
-        .query(
-          'UPDATE "initialValues" SET volunteers = $1, "scholarshipRecipients" = $2',
-          [data.volunteers, data.scholarshipRecipients],
-        )
-        .then((res) => {
-          return res.rowCount > 0;
-        });
-    }
+  async addInitialValues(data: UpdateInitialValues): Promise<boolean> {
+    if (await this.getInitialValues()) return true;
     return this.database
       .query(
-        'INSERT INTO "initialValues" (volunteers, "scholarshipRecipients") VALUES ($1, $2)',
+        'INSERT INTO "initialValues" ("volunteers", "scholarshipRecipients") VALUES ($1, $2)',
+        [data.volunteers, data.scholarshipRecipients],
+      )
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
+  async updateInitialValues(data: UpdateInitialValues): Promise<boolean> {
+    return this.database
+      .query(
+        'UPDATE "initialValues" SET volunteers = $1, "scholarshipRecipients" = $2',
         [data.volunteers, data.scholarshipRecipients],
       )
       .then((res) => {
