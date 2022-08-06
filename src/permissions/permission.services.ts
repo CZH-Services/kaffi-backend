@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CommitteesServices } from 'src/committee/committees.service';
+import { Role } from 'src/roles/entities/role';
 import { RolesServices } from 'src/roles/roles.service';
 import { UsersServices } from 'src/user/services/users.services';
 import { AssignPermission } from './dto/assignPermission';
@@ -15,6 +16,33 @@ export class PermissionServices {
     private readonly rolesServices: RolesServices,
     private readonly committeeServices: CommitteesServices,
   ) {}
+
+  validatePermission(permission: AssignPermission): boolean {
+    const role = <string>permission.role;
+    if (
+      [<string>Role.ADMIN, <string>Role.BUDDY, <string>Role.VOLUNTEER].includes(
+        role,
+      )
+    ) {
+      if (permission.committee) {
+        throw new HttpException(
+          role + ' cannot have a committee',
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        return true;
+      }
+    } else if ([<string>Role.MEMBER, <string>Role.STUDENT].includes(role)) {
+      if (permission.committee) {
+        return true;
+      } else {
+        throw new HttpException(
+          role + ' must have a committee',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+  }
 
   async assignPermissionToUser(permission: AssignPermission): Promise<boolean> {
     await this.userServices.findOneById(permission.userId);
@@ -39,6 +67,7 @@ export class PermissionServices {
         HttpStatus.BAD_REQUEST,
       );
     }
+    this.validatePermission(permission);
     return await this.permissionRepository.assignPermissionToUser(
       <Permission>permission,
     );
