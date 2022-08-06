@@ -14,8 +14,8 @@ export const blogsSwaggerConfiguration = (
     .addBearerAuth()
     .build();
 
-  const programDocument = SwaggerModule.createDocument(app, options, {
+  const blogDocument = SwaggerModule.createDocument(app, options, {
     include: [BlogModule],
   });
-  SwaggerModule.setup(route, app, programDocument);
+  SwaggerModule.setup(route, app, blogDocument);
 };
