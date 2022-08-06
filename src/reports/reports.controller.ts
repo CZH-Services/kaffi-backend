@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -124,5 +125,19 @@ export class ReportsController {
   })
   async delete(@Param('id') id: number): Promise<boolean> {
     return await this.reportsServices.delete(id);
+  }
+
+  @Get('reportImage/:image')
+  @ApiOperation({ summary: 'Returns report image' })
+  @ApiResponse({
+    status: 200,
+    description: 'The report image has been successfully returned.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Report image not found.',
+  })
+  async getBlogImage(@Param('image') image: string, @Res() res): Promise<any> {
+    res.sendFile(image, { root: REPORTS_MEDIA_PATH });
   }
 }
