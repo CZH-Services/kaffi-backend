@@ -13,7 +13,7 @@ import { buddiesSwaggerConfiguration } from './buddies/buddies.swagger';
 import { applicationSwaggerConfiguration } from './applications/applications.swagger';
 import { initialValuesSwaggerConfiguration } from './initialValues/initialValues.swagger';
 import { landingSwaggerConfiguration } from './landing/Landing.swagger';
-import { seeding } from './seeding';
+import { seeding } from './seeding/seeding';
 import { reportsSwaggerConfiguration } from './reports/reports.swagger';
 
 async function bootstrap() {

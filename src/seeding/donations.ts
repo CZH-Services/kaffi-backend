@@ -1,15 +1,6 @@
-import { PostgresService } from './postgres/postgres.service';
-import { InitialValuesRespository } from './initialValues/initialValues.repository';
-import { DonationRepository } from './donations/donations.repository';
+import { DonationRepository } from 'src/donations/donations.repository';
 
-export async function seeding() {
-  const postgresService = new PostgresService();
-  const initialValuesRepository = new InitialValuesRespository(postgresService);
-  const donationRepository = new DonationRepository(postgresService);
-  await initialValuesRepository.addInitialValues({
-    volunteers: 0,
-    scholarshipRecipients: 0,
-  });
+export const initiateDonations = async (postgresService) => {
   const donationInitialRecord = {
     id: 1,
     accountName: 'Kaffi e.V.',
@@ -26,5 +17,6 @@ export async function seeding() {
     },
     amount: '27,000€ +',
   };
+  const donationRepository = new DonationRepository(postgresService);
   await donationRepository.seedDonation(donationInitialRecord);
-}
+};
