@@ -26,6 +26,14 @@ export class ApplicationRepository {
       });
   }
 
+  async deleteApplication(id: number): Promise<boolean> {
+    return this.database
+      .query('DELETE FROM applications WHERE id = $1', [id])
+      .then((res) => {
+        return res.rowCount > 0;
+      });
+  }
+
   async getApplications() {
     return this.database
       .query(
@@ -39,6 +47,23 @@ export class ApplicationRepository {
     INNER JOIN public.program p on a."programId" = p.id
     INNER JOIN public.programcycle pc on a."cycleId" = pc.id
     `,
+      )
+      .then((res) => {
+        return res.rows;
+      });
+  }
+
+  async getProfileApplications(user: string): Promise<Application[]> {
+    return this.database
+      .query(
+        `
+    SELECT a.id, a."userId", k."firstname" || ' ' || k."lastname" as "fullname",
+    a."applicationId", a."applicationStatus", a."scholarshipStatus"
+    FROM public.applications a
+    INNER JOIN public.kaffiuser k on a."userId" = k.id
+    WHERE k.email = $1
+    `,
+        [user],
       )
       .then((res) => {
         return res.rows;

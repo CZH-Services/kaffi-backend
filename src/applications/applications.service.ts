@@ -57,6 +57,16 @@ export class ApplicationService {
     );
   }
 
+  async deleteApplication(id: number): Promise<boolean> {
+    return await this.applicationsRepository.deleteApplication(id);
+  }
+
+  async getProfileApplications(email: string): Promise<ApplicationResponse[]> {
+    return <ApplicationResponse[]>(
+      await this.applicationsRepository.getProfileApplications(email)
+    );
+  }
+
   async updateApplication(
     updateApplication: UpdateApplication,
   ): Promise<boolean> {
