@@ -49,4 +49,12 @@ export class ReportsRepository {
         return res.rowCount > 0;
       });
   }
+
+  async getById(id: number): Promise<Report> {
+    return this.database
+      .query(`SELECT * FROM reports WHERE id = $1`, [id])
+      .then((res) => {
+        return <Report>res.rows[0];
+      });
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReport } from './dto/createReport';
 import { ReportResponse } from './dto/reportResponse';
 import { UpdateReport } from './dto/updateReport';
@@ -34,10 +34,20 @@ export class ReportsServices {
       externalLink: report.externalLink,
       image: image['image'][0].filename,
     };
+    await this.getById(report.id);
     return await this.reportsRepository.update(updatedReport);
   }
 
   async delete(id: number): Promise<boolean> {
+    await this.getById(id);
     return await this.reportsRepository.delete(id);
+  }
+
+  async getById(id: number): Promise<ReportResponse> {
+    const report = <ReportResponse>await this.reportsRepository.getById(id);
+    if (!report) {
+      throw new NotFoundException('Report not found');
+    }
+    return report;
   }
 }
