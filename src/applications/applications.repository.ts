@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostgresService } from 'src/postgres/postgres.service';
 import { Application } from './entities/Application';
+import { Status } from './entities/Status';
 import { UpdateApplication } from './entities/UpdateApplicationStatus';
 
 @Injectable()
@@ -59,6 +60,17 @@ export class ApplicationRepository {
       )
       .then((res) => {
         return res.rowCount > 0;
+      });
+  }
+
+  async getTotalScholarshipRecipients(): Promise<number> {
+    return this.database
+      .query(
+        'SELECT COUNT(*) FROM applications WHERE "scholarshipStatus" = $1',
+        [Status.Approved],
+      )
+      .then((res) => {
+        return res.rows[0].count;
       });
   }
 }

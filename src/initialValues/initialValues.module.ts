@@ -10,5 +10,6 @@ import { InitialValuesService } from './initialValues.service';
   imports: [PostgresModule, UserModule, PermissionModule],
   controllers: [InitialValuesController],
   providers: [InitialValuesService, InitialValuesRespository, JwtService],
+  exports: [InitialValuesService],
 })
 export class InitialValuesModule {}

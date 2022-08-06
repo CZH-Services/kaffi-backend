@@ -11,5 +11,6 @@ import { JwtService } from '@nestjs/jwt';
   imports: [PostgresModule, UserModule, PermissionModule],
   controllers: [DonationsController],
   providers: [DonationsService, DonationRepository, JwtService],
+  exports: [DonationsService],
 })
 export class DonationModule {}

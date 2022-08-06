@@ -64,4 +64,8 @@ export class ApplicationService {
       updateApplication,
     );
   }
+
+  async getTotalScholarshipRecipients(): Promise<number> {
+    return await this.applicationsRepository.getTotalScholarshipRecipients();
+  }
 }

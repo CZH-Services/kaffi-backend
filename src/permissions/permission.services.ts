@@ -94,4 +94,8 @@ export class PermissionServices {
       staffRoles,
     );
   }
+
+  async getTotalNumberOfVolunteers(): Promise<number> {
+    return await this.permissionRepository.getTotalNumberOfVolunteers();
+  }
 }

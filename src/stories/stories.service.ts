@@ -20,7 +20,6 @@ export class StoryService {
       primary: Boolean(story.primary),
       ...story,
     };
-    console.log('herreeee');
     return await this.storyRepository.createStory(<Story>newStory);
   }
 
