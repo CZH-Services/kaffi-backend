@@ -44,6 +44,7 @@ export class ReportsController {
     return await this.reportsServices.findAll();
   }
 
+  @ApiBearerAuth()
   @Get('admin')
   @UseGuards(IsAdminGuard)
   @ApiOperation({ summary: 'Get admin reports' })
