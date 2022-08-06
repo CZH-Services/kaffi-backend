@@ -99,6 +99,7 @@ export class ApplicationsController {
   }
 
   @Put()
+  @UseGuards(IsAdminGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Updates application' })
   @ApiResponse({

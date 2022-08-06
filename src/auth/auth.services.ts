@@ -104,6 +104,7 @@ export class AuthServices {
     if (!user) {
       return null;
     }
+    console.log('hasshhhhh' + user.password);
     const isValid = await this.equalsHash(password, user.password);
     if (!isValid) {
       return null;
@@ -118,6 +119,7 @@ export class AuthServices {
   }
 
   async equalsHash(password: string, hash: string) {
+    console.log('myy' + password + hash);
     return await bcrypt.compare(password, hash);
   }
 
@@ -174,7 +176,7 @@ export class AuthServices {
         lastName: family_name,
         authWithGoogle: true,
         profile: null,
-        password: null,
+        password: await hashString(email),
         location: null,
       });
     }

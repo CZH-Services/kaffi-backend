@@ -6,6 +6,7 @@ import {
   Post,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiOkResponse,
@@ -19,6 +20,7 @@ import { GetCountryRequest } from './dto/getCountryRequest';
 import { GetCountryResponse } from './dto/getCountryResponse';
 import { InsertCountryRequest } from './dto/insertCountryRequest';
 import { UpdateCountryRequest } from './dto/updateCountryRequest';
+import { IsAdminGuard } from 'src/guards/isAdmin.guard';
 
 @ApiTags('Countries')
 @Controller('countries')
@@ -48,6 +50,7 @@ export class CountriesController {
   }
 
   @Post()
+  @UseGuards(IsAdminGuard)
   @ApiOperation({ summary: 'create a new country' })
   @ApiOkResponse({
     status: 200,
@@ -65,6 +68,7 @@ export class CountriesController {
   }
 
   @Put()
+  @UseGuards(IsAdminGuard)
   @ApiOperation({ summary: 'update an existing country' })
   @ApiOkResponse({
     status: 200,
@@ -82,6 +86,7 @@ export class CountriesController {
   }
 
   @Delete(':id')
+  @UseGuards(IsAdminGuard)
   @ApiOperation({ summary: 'delete a country' })
   @ApiOkResponse({
     status: 200,
