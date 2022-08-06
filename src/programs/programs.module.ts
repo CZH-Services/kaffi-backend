@@ -35,5 +35,6 @@ import { ProgramServices } from './services/programs.service';
     ProgramCriteriaServices,
     ProgramCriteriaRepository,
   ],
+  exports: [ProgramServices, ProgramCyclesService],
 })
 export class ProgramsModule {}

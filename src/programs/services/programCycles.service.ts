@@ -71,4 +71,12 @@ export class ProgramCyclesService {
     }
     return this.cyclesRepository.deleteCycle(id);
   }
+
+  async getProgramCycle(id: number): Promise<ProgramCycleResponse> {
+    const exists = await this.cyclesRepository.getCycle(id);
+    if (!exists) {
+      throw new NotFoundException('Cycle does not exist');
+    }
+    return <ProgramCycleResponse>exists;
+  }
 }
