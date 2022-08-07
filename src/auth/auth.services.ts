@@ -104,8 +104,10 @@ export class AuthServices {
     if (!user) {
       return null;
     }
-    console.log('hasshhhhh' + user.password);
-    const isValid = await this.equalsHash(password, user.password);
+    if (user.authWithGoogle)
+      throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
+    const isValid =
+      user.password && (await this.equalsHash(password, user.password));
     if (!isValid) {
       return null;
     }
@@ -125,13 +127,10 @@ export class AuthServices {
 
   async getTokenAndNameForValidatedUser(info: Login) {
     const user = await this.usersServices.findOne(info.email);
-    if (user.authWithGoogle) {
-      throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
-    } else
-      return {
-        token: this.getJWTToken(user.email, user.id),
-        name: user.firstName,
-      };
+    return {
+      token: this.getJWTToken(user.email, user.id),
+      name: user.firstName,
+    };
   }
 
   async signup(user: SignUp) {
