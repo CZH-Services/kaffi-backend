@@ -121,7 +121,6 @@ export class AuthServices {
   }
 
   async equalsHash(password: string, hash: string) {
-    console.log('myy' + password + hash);
     return await bcrypt.compare(password, hash);
   }
 
