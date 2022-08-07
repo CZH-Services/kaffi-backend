@@ -44,6 +44,7 @@ export class MailService {
     email: string,
     password: string,
   ) {
+    email = email.toLowerCase();
     const env = process.env;
     const link = `<p>Dear ${firstName} ${lastName},</p>
     <p>An account in our platform have been created.</p>

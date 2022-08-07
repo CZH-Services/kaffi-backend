@@ -85,7 +85,9 @@ export class PermissionController {
     description: 'Unauthorized',
   })
   async getPermissionsByEmail(@Req() req): Promise<PermissionResponse[]> {
-    return this.permissionServices.getPermissionsByEmail(req.user.email);
+    return this.permissionServices.getPermissionsByEmail(
+      req.user.email.toLowerCase(),
+    );
   }
 
   @SetPermission([

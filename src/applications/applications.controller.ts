@@ -113,7 +113,7 @@ export class ApplicationsController {
   async getProfileApplications(
     @Request() req: any,
   ): Promise<ApplicationResponse[]> {
-    const userEmail = req.user['email'];
+    const userEmail = req.user['email'].toLowerCase();
     return await this.applicationService.getProfileApplications(userEmail);
   }
 

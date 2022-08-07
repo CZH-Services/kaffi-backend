@@ -20,13 +20,15 @@ export class AuthServices {
   ) {}
 
   async createResetPassowrdToken(email: string) {
+    email = email.toLowerCase();
     return await this.jwtService.signAsync(
-      { email },
+      { email: email },
       { expiresIn: '48h', secret: 'reset-password' },
     );
   }
 
   async requestResetPassword(email: string) {
+    email = email.toLowerCase();
     const user = await this.usersServices.findOne(email);
     if (user.authWithGoogle)
       throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
@@ -67,7 +69,7 @@ export class AuthServices {
       );
     }
     const user = this.jwtService.decode(token);
-    const email = user['email'];
+    const email = user['email'].toLowerCase();
     const currentToken = await this.usersServices.getUserResetPasswordToken(
       email,
     );
@@ -102,6 +104,7 @@ export class AuthServices {
   }
 
   async validateUser(email: string, password: string): Promise<any> {
+    email = email.toLowerCase();
     const user = await this.usersServices.findOne(email);
     if (!user) {
       return null;
@@ -118,7 +121,8 @@ export class AuthServices {
   }
 
   getJWTToken(email: string, id: number) {
-    const payload = { email: email, sub: id };
+    email = email.toLowerCase();
+    const payload = { email: email.toLowerCase(), sub: id };
     return this.jwtService.sign(payload);
   }
 
@@ -127,6 +131,7 @@ export class AuthServices {
   }
 
   async getTokenAndNameForValidatedUser(info: Login) {
+    info.email = info.email.toLowerCase();
     const user = await this.usersServices.findOne(info.email);
     return {
       token: this.getJWTToken(user.email, user.id),
@@ -135,6 +140,7 @@ export class AuthServices {
   }
 
   async signup(user: SignUp) {
+    user.email = user.email.toLowerCase();
     if (await this.usersServices.findOne(user.email)) {
       throw new HttpException({ emailTaken: true }, HttpStatus.BAD_REQUEST);
     }
@@ -163,10 +169,10 @@ export class AuthServices {
   }
 
   async googleAuthentication(accessToken: string): Promise<AuthResponse> {
-    const { email, given_name, family_name } = await axios
+    let { email, given_name, family_name } = await axios
       .get(GET_GOOGLE_USER_INFO_URL(accessToken))
       .then((res) => res.data);
-
+    email = email.toLowerCase();
     let user = <UserResponse>await this.usersServices.findOne(email);
 
     if (!user) {

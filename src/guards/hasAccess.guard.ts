@@ -36,25 +36,27 @@ export class HasAccessGuard implements CanActivate {
       return false;
     }
 
-    return this.userServices.findOne(token['email']).then(async (user) => {
-      if (!user) {
-        return false;
-      }
+    return this.userServices
+      .findOne(token['email'].toLowerCase())
+      .then(async (user) => {
+        if (!user) {
+          return false;
+        }
 
-      const checks = await Promise.all(
-        permissions.map(
-          async (permission: { role: string; committee: string | null }) => {
-            return this.permissionServices.getPermission(
-              user.id,
-              permission.role,
-              permission.committee,
-            );
-          },
-        ),
-      );
+        const checks = await Promise.all(
+          permissions.map(
+            async (permission: { role: string; committee: string | null }) => {
+              return this.permissionServices.getPermission(
+                user.id,
+                permission.role,
+                permission.committee,
+              );
+            },
+          ),
+        );
 
-      const hasPermission = checks.some((check) => check !== undefined);
-      return hasPermission;
-    });
+        const hasPermission = checks.some((check) => check !== undefined);
+        return hasPermission;
+      });
   }
 }

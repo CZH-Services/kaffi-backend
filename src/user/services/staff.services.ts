@@ -57,7 +57,7 @@ export class StaffServices {
     const hashedPassword = await hashString(generatedPassword);
 
     const user = await this.userServices.createAndGetUser({
-      email: staffUser.email,
+      email: staffUser.email.toLowerCase(),
       password: hashedPassword,
       firstName: staffUser.firstName,
       lastName: staffUser.lastName,
@@ -77,7 +77,7 @@ export class StaffServices {
     this.mailService.sendWelcomeOnBoardMail(
       staffUser.firstName,
       staffUser.lastName,
-      staffUser.email,
+      staffUser.email.toLowerCase(),
       generatedPassword,
     );
     return Boolean(user);

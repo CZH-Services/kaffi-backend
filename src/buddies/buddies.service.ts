@@ -26,7 +26,7 @@ export class BuddyService {
   }
 
   async findUserBuddies(email: string): Promise<GetBuddiesResponse[]> {
-    return await this.buddyRespository.findUserBuddies(email);
+    return await this.buddyRespository.findUserBuddies(email.toLowerCase());
   }
 
   async createBuddiesConnection(data: {
@@ -77,7 +77,9 @@ export class BuddyService {
       );
     }
 
-    const connectedBy = await this.userServices.findOne(data.connectedByEmail);
+    const connectedBy = await this.userServices.findOne(
+      data.connectedByEmail.toLowerCase(),
+    );
 
     if (!connectedBy) {
       throw new HttpException(
