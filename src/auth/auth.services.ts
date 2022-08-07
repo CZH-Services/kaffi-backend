@@ -28,12 +28,14 @@ export class AuthServices {
 
   async requestResetPassword(email: string) {
     const user = await this.usersServices.findOne(email);
-    if (user.authWithGoogle)
+    if (!user) {
+      throw new HttpException({ emailNotFound: true }, HttpStatus.BAD_REQUEST);
+    } else if (user.authWithGoogle)
       throw new HttpException({ authWithGoogle: true }, HttpStatus.BAD_REQUEST);
-    else if (user) {
-      const token = await this.createResetPassowrdToken(email);
-      this.usersServices.updateResetPasswordToken(email, token);
-      const link = `<p>Dear ${user.firstName},</p>
+
+    const token = await this.createResetPassowrdToken(email);
+    this.usersServices.updateResetPasswordToken(email, token);
+    const link = `<p>Dear ${user.firstName},</p>
       <p>
        You have requested a password reset. Please click on 
        <a href='http://localhost:3001/reset-password?token=${token}'>this link</a>
@@ -42,8 +44,7 @@ export class AuthServices {
       <br>
       <p>Regards,</p>
       <p>Kaffi Support Team</p>`;
-      this.mailService.sendMail(user.email, 'Reset password', link);
-    }
+    this.mailService.sendMail(user.email, 'Reset password', link);
     return true;
   }
 

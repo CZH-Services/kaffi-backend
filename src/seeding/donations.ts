@@ -5,9 +5,9 @@ export const initiateDonations = async (postgresService) => {
     id: 1,
     accountName: 'Kaffi e.V.',
     iban: 'DE51430609671262435500',
-    swift: 'SWIFT must be a string',
-    bankName: 'Bank name must be a string',
-    currency: 'Currency must be a string',
+    swift: 'GENODEM1GLS',
+    bankName: 'GLS Bank',
+    currency: 'EUR',
     externalPayments: {
       benevity: {
         de: 'Wir sind jetzt auf Benevity, einer Spendenplattform, die mehrere Unternehmen nutzen\n  Partner sind, wie Google & Microsoft. Diese Unternehmen\n  in der Regel mit Mitarbeiterspenden verdoppeln und so Ihren Beitrag verdoppeln\n  zu uns. Wenn Ihr Unternehmen Partner von Benevity ist, ziehen Sie uns in Betracht\n  Ihre Spende.',
