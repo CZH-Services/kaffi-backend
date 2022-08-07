@@ -53,6 +53,7 @@ export class BuddiesController {
     type: [GetBuddiesResponse],
   })
   async findUserBuddies(@Req() req: any): Promise<GetBuddiesResponse[]> {
+    req.user.email = req.user.email.toLowerCase();
     return await this.blogService.findUserBuddies(req.user.email);
   }
 
@@ -74,6 +75,7 @@ export class BuddiesController {
     @Body() data: CreateBuddiesRequest,
     @Req() req: any,
   ): Promise<boolean> {
+    req.user.email = req.user.email.toLowerCase();
     return await this.blogService.createBuddiesConnection({
       ...data,
       connectedByEmail: req.user.email,

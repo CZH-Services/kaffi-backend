@@ -16,7 +16,7 @@ export class UsersServices {
   ) {}
 
   async findOne(email: string): Promise<UserResponse> {
-    return this.userRepository.findOne(email);
+    return this.userRepository.findOne(email.toLowerCase());
   }
 
   async findOneById(id: number): Promise<UserResponse> {
@@ -28,11 +28,11 @@ export class UsersServices {
   }
 
   async getUserProfileInfo(email: string): Promise<ProfileInfoResponse> {
-    return await this.userRepository.getUserProfileInfo(email);
+    return await this.userRepository.getUserProfileInfo(email.toLowerCase());
   }
 
   async createUser(info: CreateUser): Promise<Boolean> {
-    if (await this.findOne(info.email)) {
+    if (await this.findOne(info.email.toLowerCase())) {
       throw new HttpException(
         'User with this email already exists',
         HttpStatus.BAD_REQUEST,
@@ -46,7 +46,7 @@ export class UsersServices {
     const hashedPassword = await hashString(generatedPassword);
 
     return await this.createUser({
-      email: info.email,
+      email: info.email.toLowerCase(),
       password: hashedPassword,
       firstName: info.firstName,
       lastName: info.lastName,
@@ -57,7 +57,7 @@ export class UsersServices {
       this.mailService.sendWelcomeOnBoardMail(
         info.firstName,
         info.lastName,
-        info.email,
+        info.email.toLowerCase(),
         generatedPassword,
       );
       return true;
@@ -66,19 +66,19 @@ export class UsersServices {
 
   async createAndGetUser(info: CreateUser): Promise<UserResponse> {
     await this.createUser(info);
-    return await this.findOne(info.email);
+    return await this.findOne(info.email.toLowerCase());
   }
 
   async updateUser(
     email: string,
     data: UpdateUserInfoRequest,
   ): Promise<Boolean> {
-    return await this.userRepository.updateUser(email, data);
+    return await this.userRepository.updateUser(email.toLowerCase(), data);
   }
 
   async updateProfileImage(email: string, profile: Object): Promise<Boolean> {
     return await this.userRepository.updateProfileImage(
-      email,
+      email.toLowerCase(),
       profile['profile'][0].filename,
     );
   }
@@ -99,7 +99,10 @@ export class UsersServices {
 
   async changePassword(email: string, newPassword): Promise<boolean> {
     const hashedPassword = await hashString(newPassword);
-    return await this.userRepository.changePassword(email, hashedPassword);
+    return await this.userRepository.changePassword(
+      email.toLowerCase(),
+      hashedPassword,
+    );
   }
 
   async getEmailsGivenSpecificRoleAndIds(
@@ -116,10 +119,15 @@ export class UsersServices {
     email: string,
     token: string,
   ): Promise<boolean> {
-    return await this.userRepository.updateResetPasswordToken(email, token);
+    return await this.userRepository.updateResetPasswordToken(
+      email.toLowerCase(),
+      token,
+    );
   }
 
   async getUserResetPasswordToken(email: string): Promise<string> {
-    return await this.userRepository.getUserResetPasswordToken(email);
+    return await this.userRepository.getUserResetPasswordToken(
+      email.toLowerCase(),
+    );
   }
 }

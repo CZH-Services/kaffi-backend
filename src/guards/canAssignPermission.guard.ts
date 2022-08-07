@@ -32,12 +32,14 @@ export class CanAssignOrRevokePermission implements CanActivate {
 
     if (!unsignedToken) return false;
 
-    const user = await this.userServices.findOne(unsignedToken['email']);
+    const user = await this.userServices.findOne(
+      unsignedToken['email'].toLowerCase(),
+    );
 
     if (!user) return false;
 
     const userPermissions = await this.permissionServices.getPermissionsByEmail(
-      unsignedToken['email'],
+      unsignedToken['email'].toLowerCase(),
     );
 
     return (

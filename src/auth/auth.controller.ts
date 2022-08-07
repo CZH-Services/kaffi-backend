@@ -51,7 +51,9 @@ export class AuthController {
     description: 'Reset password link sent to email',
   })
   async requestResetPassword(@Body() body: RequestResetPassword) {
-    return await this.authServices.requestResetPassword(body.email);
+    return await this.authServices.requestResetPassword(
+      body.email.toLowerCase(),
+    );
   }
 
   @Post('verify-reset-password-token')

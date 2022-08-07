@@ -63,7 +63,9 @@ export class ApplicationService {
 
   async getProfileApplications(email: string): Promise<ApplicationResponse[]> {
     return <ApplicationResponse[]>(
-      await this.applicationsRepository.getProfileApplications(email)
+      await this.applicationsRepository.getProfileApplications(
+        email.toLowerCase(),
+      )
     );
   }
 

@@ -88,6 +88,7 @@ export class PermissionServices {
   }
 
   async getPermissionsByEmail(email: string): Promise<PermissionResponse[]> {
+    email = email.toLowerCase();
     const user = await this.userServices.findOne(email);
     return <PermissionResponse[]>(
       await this.permissionRepository.getPermissions(user.id)

@@ -20,11 +20,13 @@ export class IsAdminGuard implements CanActivate {
       return false;
     }
 
-    return this.userServices.findOne(token['email']).then(async (user) => {
-      if (!user) {
-        return false;
-      }
-      return await this.permissionServices.isAdmin(user.id);
-    });
+    return this.userServices
+      .findOne(token['email'].toLowerCase())
+      .then(async (user) => {
+        if (!user) {
+          return false;
+        }
+        return await this.permissionServices.isAdmin(user.id);
+      });
   }
 }
