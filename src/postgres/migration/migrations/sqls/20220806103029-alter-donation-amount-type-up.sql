@@ -1,2 +1,0 @@
-ALTER TABLE donation 
-ALTER amount TYPE VARCHAR(100);

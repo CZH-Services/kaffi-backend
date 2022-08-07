@@ -16,7 +16,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
+import { Committee } from 'src/committee/entities/committee';
+import { HasAccessGuard, SetPermission } from 'src/guards/hasAccess.guard';
 import { IsAdminGuard } from 'src/guards/isAdmin.guard';
+import { Role } from 'src/roles/entities/role';
 import { ApplicationService } from './applications.service';
 import { AddApplication } from './entities/AddApplication';
 import { ApplicationResponse } from './entities/ApplicationResponse';
@@ -28,7 +31,12 @@ export class ApplicationsController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
-  @UseGuards(IsAdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Creates a user application' })
   @ApiResponse({
@@ -46,7 +54,12 @@ export class ApplicationsController {
     return this.applicationService.addApplication(newApplication);
   }
 
-  @UseGuards(IsAdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
   @Delete('/:id')
   @ApiOperation({ summary: 'Deletes an application' })
   @ApiResponse({
@@ -62,6 +75,12 @@ export class ApplicationsController {
     return await this.applicationService.deleteApplication(id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
   @Get()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Gets applications' })
@@ -99,7 +118,12 @@ export class ApplicationsController {
   }
 
   @Put()
-  @UseGuards(IsAdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Updates application' })
   @ApiResponse({

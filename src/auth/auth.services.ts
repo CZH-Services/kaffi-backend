@@ -176,7 +176,7 @@ export class AuthServices {
         lastName: family_name,
         authWithGoogle: true,
         profile: null,
-        password: await hashString(email),
+        password: null,
         location: null,
       });
     }
