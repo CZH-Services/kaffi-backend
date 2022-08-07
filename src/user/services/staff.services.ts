@@ -92,8 +92,8 @@ export class StaffServices {
   }
 
   async getstaffGroupedByTagWithCommitteeHeads(): Promise<GetStaffByTagWithCommitteesHead> {
-    const boardStaff = await this.getStaffByTag('Board');
-    const memberStaff = await this.getStaffByTag('Member');
+    const boardStaff = (await this.getStaffByTag('Board')) || [];
+    const memberStaff = (await this.getStaffByTag('Member')) || [];
 
     let boardStaffWithCommitteeHeads = [];
     for (let staff of boardStaff) {
