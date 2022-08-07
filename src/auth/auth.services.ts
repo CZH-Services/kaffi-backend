@@ -33,10 +33,11 @@ export class AuthServices {
     else if (user) {
       const token = await this.createResetPassowrdToken(email);
       this.usersServices.updateResetPasswordToken(email, token);
+      const env = process.env;
       const link = `<p>Dear ${user.firstName},</p>
       <p>
        You have requested a password reset. Please click on 
-       <a href='http://localhost:3001/reset-password?token=${token}'>this link</a>
+       <a href='${env.CLIENT_URL}/reset-password?token=${token}'>this link</a>
        to reset your password.
       </p>
       <br>
@@ -84,10 +85,11 @@ export class AuthServices {
     if (changePasswordResponse) {
       const token = await this.createResetPassowrdToken(email);
       this.usersServices.updateResetPasswordToken(email, token);
+      const env = process.env;
       const html = `<p>Hello,</p>
       <p>
        Your password has been changed. If that wasn't you, please go to the following 
-       <a href='${'http://localhost:3001/request-reset-password'}'>link</a> 
+       <a href='${env.CLIENT_URL + '/request-reset-password'}'>link</a> 
        and change it back!
       </p>
       <br>

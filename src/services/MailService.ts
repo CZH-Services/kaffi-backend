@@ -44,13 +44,14 @@ export class MailService {
     email: string,
     password: string,
   ) {
+    const env = process.env;
     const link = `<p>Dear ${firstName} ${lastName},</p>
     <p>An account in our platform have been created.</p>
-    <p>Please visit <a href='http://localhost:3001/login'> this link</a> and login with the following credentials:</p>
+    <p>Please visit <a href='${env.CLIENT_URL}/login'> this link</a> and login with the following credentials:</p>
     <p><b>Email:</b> ${email}</p>
     <p><b>Password:</b> ${password}</p>
     <br>
-    <p>It is highly recommended that you change your password using the following <a href='http://localhost:3001/request-reset-password'>link</a>.</p>
+    <p>It is highly recommended that you change your password using the following <a href='${env.CLIENT_URL}/request-reset-password'>link</a>.</p>
     <br>
     <p>Thank you,</p>
     <p>Kaffi Team</p>
