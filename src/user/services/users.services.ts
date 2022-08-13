@@ -130,4 +130,8 @@ export class UsersServices {
       email.toLowerCase(),
     );
   }
+
+  async getScholarshipStudents(): Promise<UserResponse[]> {
+    return <UserResponse[]>await this.userRepository.getScholarshipStudents();
+  }
 }

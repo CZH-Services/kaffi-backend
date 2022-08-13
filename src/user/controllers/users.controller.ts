@@ -48,7 +48,9 @@ export class UsersController {
   @ApiOperation({ summary: 'Get user profile info' })
   @ApiResponse({ status: 200, description: 'Success' })
   async getUserProfileInfo(@Req() req: any): Promise<ProfileInfoResponse> {
-    return await this.userServices.getUserProfileInfo(<string>req.user.email);
+    return await this.userServices.getUserProfileInfo(
+      <string>req.user.email.toLowerCase(),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -60,7 +62,10 @@ export class UsersController {
     @Req() req: any,
     @Body() info: UpdateUserInfoRequest,
   ): Promise<Boolean> {
-    return await this.userServices.updateUser(req.user.email, info);
+    return await this.userServices.updateUser(
+      req.user.email.toLowerCase(),
+      info,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -91,7 +96,10 @@ export class UsersController {
       profile?: Express.Multer.File[];
     },
   ): Promise<Boolean> {
-    return await this.userServices.updateProfileImage(req.user.email, profile);
+    return await this.userServices.updateProfileImage(
+      req.user.email.toLowerCase(),
+      profile,
+    );
   }
 
   @Get('profileImage/:profile')
@@ -202,7 +210,7 @@ export class UsersController {
     @Req() req: any,
     @Body() info: UpdateUserInfoRequestByAdmin,
   ): Promise<Boolean> {
-    return await this.userServices.updateUser(info.email, info);
+    return await this.userServices.updateUser(info.email.toLowerCase(), info);
   }
 
   @Delete('admin/:id')
@@ -249,7 +257,10 @@ export class UsersController {
       profile?: Express.Multer.File[];
     },
   ): Promise<Boolean> {
-    return await this.userServices.updateProfileImage(info.email, profile);
+    return await this.userServices.updateProfileImage(
+      info.email.toLowerCase(),
+      profile,
+    );
   }
 
   @SetPermission([
@@ -293,5 +304,23 @@ export class UsersController {
       Role.STUDENT,
       Committee.ADVISING,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SetPermission([
+    { role: Role.ADMIN, committee: null },
+    { role: Role.MEMBER, committee: Committee.SCHOLARSHIP },
+  ])
+  @UseGuards(HasAccessGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Returns students list in scholarship committee' })
+  @ApiResponse({
+    status: 200,
+    description: 'Students list in scholarship committee returned.',
+    type: [String],
+  })
+  @Get('admin/non-staff/scholarship-students')
+  async getScholarshipStudents(): Promise<UserResponse[]> {
+    return await this.userServices.getScholarshipStudents();
   }
 }

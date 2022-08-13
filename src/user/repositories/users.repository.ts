@@ -6,6 +6,7 @@ import { UpdateUserInfoRequest } from '../dto/updateUserInfoRequest';
 import { UserResponse } from '../dto/userResponse';
 import { User } from '../entities/user';
 import { Role } from '../../roles/entities/role';
+import { Committee } from 'src/committee/entities/committee';
 
 @Injectable()
 export class UserRepository {
@@ -110,6 +111,23 @@ export class UserRepository {
          LEFT JOIN staff AS s on u.id = s.user_id
          INNER JOIN permission AS p on p."userId" = u.id
          WHERE p.role = '${role}' AND s.id IS NULL `,
+      )
+      .then((res) => {
+        return res.rows;
+      });
+  }
+
+  async getScholarshipStudents(): Promise<User[]> {
+    return this.database
+      .query(
+        `SELECT distinct u.id AS id, u.firstName AS "firstName",
+        u.lastName AS "lastName", u.location AS location,
+        u.profileurl AS "profileUrl",  u.email AS email,
+        u.authWithGoogle AS "authWithGoogle"
+        FROM kaffiuser AS u 
+        LEFT JOIN staff AS s on u.id = s.user_id
+        INNER JOIN permission AS p on p."userId" = u.id
+        WHERE p.role = '${Role.STUDENT}' AND p.committee = '${Committee.SCHOLARSHIP}' AND s.id IS NULL `,
       )
       .then((res) => {
         return res.rows;
